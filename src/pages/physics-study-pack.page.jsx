@@ -1,6 +1,12 @@
 import { useState } from "react";
 import DataButton from "../components/DataButton";
 import Navigation from "@/components/Navigation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,} from "@/components/ui/select"
 
 function PhysicsStudyPackPage() {
 
@@ -41,6 +47,94 @@ function PhysicsStudyPackPage() {
             />
           ))}
         </div>
+
+        <div className="flex flex-col pt-20 items-center h-screen ">
+          <Select className="w-20">
+          <SelectTrigger className="w-[1000px] h-[64px] border-2 border-black rounded-lg text-lg font-medium focus:ring-2 focus:ring-black focus:outline-none py-10 ">
+          <SelectValue placeholder="Select Theme" />
+          </SelectTrigger>
+          <SelectContent className="w-[1000px] border-2 border-black rounded-lg text-base">
+          <SelectItem value="light">Light</SelectItem>
+          <SelectItem value="dark">Dark</SelectItem>
+          <SelectItem value="system">System</SelectItem>
+          </SelectContent>
+          </Select>
+
+
+          <Select className="w-20">
+          <SelectTrigger className="w-[1000px] h-[100px] border-2 border-black rounded-lg text-lg font-medium focus:ring-2 focus:ring-black focus:outline-none py-10 mt-5 ">
+          <SelectValue placeholder="Select Theme" />
+          </SelectTrigger>
+          <SelectContent className="w-[1000px] border-2 border-black rounded-lg text-base">
+          <SelectItem value="light">Light</SelectItem>
+          <SelectItem value="dark">Dark</SelectItem>
+          <SelectItem value="system">System</SelectItem>
+          </SelectContent>
+          </Select>
+
+
+          <Select className="w-20">
+          <SelectTrigger className="w-[1000px] h-[100px] border-2 border-black rounded-lg text-lg font-medium focus:ring-2 focus:ring-black focus:outline-none py-10 mt-5 ">
+          <SelectValue placeholder="Select Theme" />
+          </SelectTrigger>
+          <SelectContent className="w-[1000px] border-2 border-black rounded-lg text-base">
+          <SelectItem value="light">Light</SelectItem>
+          <SelectItem value="dark">Dark</SelectItem>
+          <SelectItem value="system">System</SelectItem>
+          </SelectContent>
+          </Select>
+
+
+          <Select className="w-20">
+          <SelectTrigger className="w-[1000px] h-[100px] border-2 border-black rounded-lg text-lg font-medium focus:ring-2 focus:ring-black focus:outline-none py-10 mt-5 ">
+          <SelectValue placeholder="Select Theme" />
+          </SelectTrigger>
+          <SelectContent className="w-[1000px] border-2 border-black rounded-lg text-base">
+          <SelectItem value="light">Light</SelectItem>
+          <SelectItem value="dark">Dark</SelectItem>
+          <SelectItem value="system">System</SelectItem>
+          </SelectContent>
+          </Select>
+
+
+          <Select className="w-20">
+          <SelectTrigger className="w-[1000px] h-[100px] border-2 border-black rounded-lg text-lg font-medium focus:ring-2 focus:ring-black focus:outline-none py-10 mt-5 ">
+          <SelectValue placeholder="Select Theme" />
+          </SelectTrigger>
+          <SelectContent className="w-[1000px] border-2 border-black rounded-lg text-base">
+          <SelectItem value="light">Light</SelectItem>
+          <SelectItem value="dark">Dark</SelectItem>
+          <SelectItem value="system">System</SelectItem>
+          </SelectContent>
+          </Select>
+
+
+          <Select className="w-20">
+          <SelectTrigger className="w-[1000px] h-[100px] border-2 border-black rounded-lg text-lg font-medium focus:ring-2 focus:ring-black focus:outline-none py-10 mt-5 ">
+          <SelectValue placeholder="Select Theme" />
+          </SelectTrigger>
+          <SelectContent className="w-[1000px] border-2 border-black rounded-lg text-base">
+          <SelectItem value="light">Light</SelectItem>
+          <SelectItem value="dark">Dark</SelectItem>
+          <SelectItem value="system">System</SelectItem>
+          </SelectContent>
+          </Select>
+
+
+          <Select className="w-20">
+          <SelectTrigger className="w-[1000px] h-[100px] border-2 border-black rounded-lg text-lg font-medium focus:ring-2 focus:ring-black focus:outline-none py-10 mt-5 ">
+          <SelectValue placeholder="Select Theme" />
+          </SelectTrigger>
+          <SelectContent className="w-[1000px] border-2 border-black rounded-lg text-base">
+          <SelectItem value="light">Light</SelectItem>
+          <SelectItem value="dark">Dark</SelectItem>
+          <SelectItem value="system">System</SelectItem>
+          </SelectContent>
+          </Select>
+
+        </div>
+        
+
 
 
 
