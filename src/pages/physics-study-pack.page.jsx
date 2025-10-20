@@ -8,6 +8,13 @@ import {
   SelectTrigger,
   SelectValue,} from "@/components/ui/select"
 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+
 function PhysicsStudyPackPage() {
 
     const Physics = [
@@ -48,89 +55,136 @@ function PhysicsStudyPackPage() {
           ))}
         </div>
 
-        <div className="flex flex-col pt-20 items-center h-screen ">
-          <Select className="w-20">
-          <SelectTrigger className="w-[1000px] h-[64px] border-2 border-black rounded-lg text-lg font-medium focus:ring-2 focus:ring-black focus:outline-none py-10 ">
-          <SelectValue placeholder="Select Theme" />
-          </SelectTrigger>
-          <SelectContent className="w-[1000px] border-2 border-black rounded-lg text-base">
-          <SelectItem value="light">Light</SelectItem>
-          <SelectItem value="dark">Dark</SelectItem>
-          <SelectItem value="system">System</SelectItem>
-          </SelectContent>
-          </Select>
+        <div className="flex flex-col pt-16 items-center h-screen gap-6">
+
+          <div className="border-2 border-black rounded-lg p-2 w-[850px] mx-auto mt-5 shadow-md">
+          <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+          <AccordionTrigger>01. මිනුම - Measurement</AccordionTrigger>
+          <AccordionContent>
+               Yes. It adheres to the WAI-ARIA design pattern.
+          </AccordionContent>
+          </AccordionItem>
+          </Accordion>
+          </div>
+
+          <div className="border-2 border-black rounded-lg p-2 w-[850px] mx-auto mt-5 shadow-md">
+          <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+          <AccordionTrigger>02. යාන්ත්‍ර විද්‍යාව - Mechanics</AccordionTrigger>
+          <AccordionContent>
+               Yes. It adheres to the WAI-ARIA design pattern.
+          </AccordionContent>
+          </AccordionItem>
+          </Accordion>
+          </div>
 
 
-          <Select className="w-20">
-          <SelectTrigger className="w-[1000px] h-[100px] border-2 border-black rounded-lg text-lg font-medium focus:ring-2 focus:ring-black focus:outline-none py-10 mt-5 ">
-          <SelectValue placeholder="Select Theme" />
-          </SelectTrigger>
-          <SelectContent className="w-[1000px] border-2 border-black rounded-lg text-base">
-          <SelectItem value="light">Light</SelectItem>
-          <SelectItem value="dark">Dark</SelectItem>
-          <SelectItem value="system">System</SelectItem>
-          </SelectContent>
-          </Select>
+          <div className="border-2 border-black rounded-lg p-2 w-[850px] mx-auto mt-5 shadow-md">
+          <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+          <AccordionTrigger>03. දෝලන හා තරංග- Oscillations and Waves</AccordionTrigger>
+          <AccordionContent>
+               Yes. It adheres to the WAI-ARIA design pattern.
+          </AccordionContent>
+          </AccordionItem>
+          </Accordion>
+          </div>
 
 
-          <Select className="w-20">
-          <SelectTrigger className="w-[1000px] h-[100px] border-2 border-black rounded-lg text-lg font-medium focus:ring-2 focus:ring-black focus:outline-none py-10 mt-5 ">
-          <SelectValue placeholder="Select Theme" />
-          </SelectTrigger>
-          <SelectContent className="w-[1000px] border-2 border-black rounded-lg text-base">
-          <SelectItem value="light">Light</SelectItem>
-          <SelectItem value="dark">Dark</SelectItem>
-          <SelectItem value="system">System</SelectItem>
-          </SelectContent>
-          </Select>
+          <div className="border-2 border-black rounded-lg p-2 w-[850px] mx-auto mt-5 shadow-md">
+          <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+          <AccordionTrigger>04. තාප භෞතිකය - Thermal Physics</AccordionTrigger>
+          <AccordionContent>
+               Yes. It adheres to the WAI-ARIA design pattern.
+          </AccordionContent>
+          </AccordionItem>
+          </Accordion>
+          </div>
 
 
-          <Select className="w-20">
-          <SelectTrigger className="w-[1000px] h-[100px] border-2 border-black rounded-lg text-lg font-medium focus:ring-2 focus:ring-black focus:outline-none py-10 mt-5 ">
-          <SelectValue placeholder="Select Theme" />
-          </SelectTrigger>
-          <SelectContent className="w-[1000px] border-2 border-black rounded-lg text-base">
-          <SelectItem value="light">Light</SelectItem>
-          <SelectItem value="dark">Dark</SelectItem>
-          <SelectItem value="system">System</SelectItem>
-          </SelectContent>
-          </Select>
+          <div className="border-2 border-black rounded-lg p-2 w-[850px] mx-auto mt-5 shadow-md">
+          <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+          <AccordionTrigger>05. ගුරුත්වජ ක්ෂේත්‍රය - Measurement</AccordionTrigger>
+          <AccordionContent>
+               Yes. It adheres to the WAI-ARIA design pattern.
+          </AccordionContent>
+          </AccordionItem>
+          </Accordion>
+          </div>
+
+          <div className="border-2 border-black rounded-lg p-2 w-[850px] mx-auto mt-5 shadow-md">
+          <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+          <AccordionTrigger>06. ස්ථිති විද්‍යුත් ක්ෂේත්‍රය- Mechanics</AccordionTrigger>
+          <AccordionContent>
+               Yes. It adheres to the WAI-ARIA design pattern.
+          </AccordionContent>
+          </AccordionItem>
+          </Accordion>
+          </div>
 
 
-          <Select className="w-20">
-          <SelectTrigger className="w-[1000px] h-[100px] border-2 border-black rounded-lg text-lg font-medium focus:ring-2 focus:ring-black focus:outline-none py-10 mt-5 ">
-          <SelectValue placeholder="Select Theme" />
-          </SelectTrigger>
-          <SelectContent className="w-[1000px] border-2 border-black rounded-lg text-base">
-          <SelectItem value="light">Light</SelectItem>
-          <SelectItem value="dark">Dark</SelectItem>
-          <SelectItem value="system">System</SelectItem>
-          </SelectContent>
-          </Select>
+         <div className="border-2 border-black rounded-lg p-2 w-[850px] mx-auto mt-5 shadow-md">
+          <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+          <AccordionTrigger>07. - චුම්භක ක්ෂේත්‍රය - Magnetic Fields</AccordionTrigger>
+          <AccordionContent>
+               Yes. It adheres to the WAI-ARIA design pattern.
+          </AccordionContent>
+          </AccordionItem>
+          </Accordion>
+          </div>
 
 
-          <Select className="w-20">
-          <SelectTrigger className="w-[1000px] h-[100px] border-2 border-black rounded-lg text-lg font-medium focus:ring-2 focus:ring-black focus:outline-none py-10 mt-5 ">
-          <SelectValue placeholder="Select Theme" />
-          </SelectTrigger>
-          <SelectContent className="w-[1000px] border-2 border-black rounded-lg text-base">
-          <SelectItem value="light">Light</SelectItem>
-          <SelectItem value="dark">Dark</SelectItem>
-          <SelectItem value="system">System</SelectItem>
-          </SelectContent>
-          </Select>
+          <div className="border-2 border-black rounded-lg p-2 w-[850px] mx-auto mt-5 shadow-md">
+          <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+          <AccordionTrigger>08. ධාරා විද්‍යුතය - Current Electricity</AccordionTrigger>
+          <AccordionContent>
+               Yes. It adheres to the WAI-ARIA design pattern.
+          </AccordionContent>
+          </AccordionItem>
+          </Accordion>
+          </div>
+
+        
+
+          <div className="border-2 border-black rounded-lg p-2 w-[850px] mx-auto mt-5 shadow-md">
+          <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+          <AccordionTrigger>09. ඉලෙක්ට්‍රොනික විද්‍යාව- Electronics</AccordionTrigger>
+          <AccordionContent>
+               Yes. It adheres to the WAI-ARIA design pattern.
+          </AccordionContent>
+          </AccordionItem>
+          </Accordion>
+          </div>
+
+          <div className="border-2 border-black rounded-lg p-2 w-[850px] mx-auto mt-5 shadow-md">
+          <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+          <AccordionTrigger>10. පදාර්ථයේ යාන්ත්‍රික ගුණ- Mechanical Properties of Matter</AccordionTrigger>
+          <AccordionContent>
+               Yes. It adheres to the WAI-ARIA design pattern.
+          </AccordionContent>
+          </AccordionItem>
+          </Accordion>
+          </div>
 
 
-          <Select className="w-20">
-          <SelectTrigger className="w-[1000px] h-[100px] border-2 border-black rounded-lg text-lg font-medium focus:ring-2 focus:ring-black focus:outline-none py-10 mt-5 ">
-          <SelectValue placeholder="Select Theme" />
-          </SelectTrigger>
-          <SelectContent className="w-[1000px] border-2 border-black rounded-lg text-base">
-          <SelectItem value="light">Light</SelectItem>
-          <SelectItem value="dark">Dark</SelectItem>
-          <SelectItem value="system">System</SelectItem>
-          </SelectContent>
-          </Select>
+          <div className="border-2 border-black rounded-lg p-2 w-[850px] mx-auto mt-5 shadow-md">
+          <Accordion type="single" collapsible>
+          <AccordionItem value="item-1">
+          <AccordionTrigger>11. පදාර්ථ හා විකිරණ- Matter and Radiation</AccordionTrigger>
+          <AccordionContent>
+               Yes. It adheres to the WAI-ARIA design pattern.
+          </AccordionContent>
+          </AccordionItem>
+          </Accordion>
+          </div>
 
         </div>
         

@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter , Route , Routes} from 'react-router'
 import './index.css'
 import LoadingPage from './pages/loading.page'
 import HomePage from './pages/home.page'
@@ -13,10 +14,15 @@ import PhysicsStudyPackPage from './pages/physics-study-pack.page'
 
 
 
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-
-    <PhysicsStudyPackPage />
-
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoadingPage />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/advanced-level" element={<AdvancedLevelPage />} />
+      </Routes>
+    </BrowserRouter>
   </StrictMode>,
 )

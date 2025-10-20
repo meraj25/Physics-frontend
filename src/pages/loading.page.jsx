@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router";
 
 function LoadingPage() {
  return (
@@ -17,8 +18,10 @@ function LoadingPage() {
           <p className="text-gray-600 mb-25 ">
             "If I have seen further than others, it is by standing upon the shoulders of giants.": - Isaac Newton 
           </p>
+          <Link to="/home">
           <Button className="mt-26 ml-10 cursor-pointer">Get Started</Button>
-          
+          </Link>
+
         </div>
       </div>
     </div>
