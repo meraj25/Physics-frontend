@@ -26,8 +26,9 @@ createRoot(document.getElementById('root')).render(
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} >
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<LoadingPage />} />
         <Route element={<RootLayout />}>
-            <Route path="/" element={<LoadingPage />} />
+            
             <Route path="/home" element={<HomePage />} />
             <Route path="/advanced-level" element={<AdvancedLevelPage />} />
             <Route path="/physics-2026" element={<Physics2026Page />} />
@@ -36,6 +37,7 @@ createRoot(document.getElementById('root')).render(
             <Route path="/physics-study-pack" element={<PhysicsStudyPackPage />} />
             <Route path="/sign-in" element={<SignInPage />} />
             <Route path="/sign-up" element={<SignUpPage />} />
+
         </Route>
       </Routes>
     </BrowserRouter>
