@@ -15,18 +15,7 @@ function HomePage() {
   return (
     <div className="relative bg-[url('/assets/images/bg1.jpg')] bg-cover bg-center bg-no-repeat h-screen w-screen">
       <div className="absolute inset-0 bg-white/90">
-      <nav className="bg-white rounded-2xl shadow-sm px-2 py-2 flex items-center justify-between w-[80%] mx-auto mt-8">
-      <a href="/dashboard" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
-        Welcome user...
-      </a>
-
-      <div className="text-lg font-semibold text-gray-900">Dashboard</div>
-
-      <a href="/signout" className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors">
-        Sign out
-      </a>
       
-    </nav>
       <main className="content-center grid grid-cols-1 md:grid-cols-3 gap-4 mt-20">
         <div>
        <Card className="w-full max-w-md ml-15">
