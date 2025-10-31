@@ -33,8 +33,7 @@ function Physics2027Page() {
     <div className="relative bg-[url('/assets/images/bg1.jpg')] bg-cover bg-center bg-no-repeat h-screen w-screen">
       <div className="absolute inset-0 bg-white/90">
        
-       <Navigation back="&larr; Back" Type="Advance Level Physics 2027" />
-       <br />
+      
         <div className="flex flex-wrap items-center gap-2 sm:gap-x-4 max-w-full overflow-x-auto pb-2 ml-6">
           {Physics2027.map((data) => (
             <DataButton

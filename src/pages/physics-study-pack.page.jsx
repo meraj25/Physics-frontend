@@ -42,8 +42,7 @@ function PhysicsStudyPackPage() {
     <div className="relative bg-[url('/assets/images/bg1.jpg')] bg-cover bg-center bg-no-repeat h-screen w-screen">
       <div className="absolute inset-0 bg-white/90">
 
-       <Navigation back="&larr; Back" Type="Physics Study Pack" />
-       <br />
+     
         <div className="flex flex-wrap items-center gap-2 sm:gap-x-4 max-w-full overflow-x-auto pb-2 ml-6">
           {Physics.map((data) => (
             <DataButton
