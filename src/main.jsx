@@ -26,10 +26,10 @@ createRoot(document.getElementById('root')).render(
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} >
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LoadingPage />} />
+        <Route path="/loading-page" element={<LoadingPage />} />
         <Route element={<RootLayout />}>
             
-            <Route path="/home" element={<HomePage />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/advanced-level" element={<AdvancedLevelPage />} />
             <Route path="/physics-2026" element={<Physics2026Page />} />
             <Route path="/physics-2027" element={<Physics2027Page />} />

@@ -2,34 +2,72 @@ import { SignedIn } from "@clerk/clerk-react";
 import { SignedOut } from "@clerk/clerk-react";
 import { UserButton } from "@clerk/clerk-react";
 import { Link, useNavigate } from "react-router";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 
-function Navigation(prop) {
+
+function Navigation() {
   const navigate = useNavigate();
 
-    return (
+    const [isOpen, setIsOpen] = useState(false)
 
-    <nav className="bg-white rounded-2xl shadow-sm px-2 py-2 flex items-center justify-between w-[80%] mx-auto mt-8">
-      <button
-        type="button"
-        onClick={() => navigate(-1)}
-        className="text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
-      >
-      Back
-      </button>
+  const navItems = [
+    { label: "Home", href: "#" },
+    { label: "Courses", href: "#" },
+    { label: "About", href: "#" },
+    { label: "Contact", href: "#" },
+  ]
 
-    <div className="text-lg font-semibold text-gray-900">
-      <Link to="/home">
-      Physics by Sanjaya
-      </Link>
-    </div>
+  return (
+    <nav className="bg-background p-4">
+      <div className="bg-primary text-primary-foreground shadow-md rounded-2xl">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+           <Link to="/" className="font-bold text-2xl m-8 ">
+            Mebius
+          </Link>
 
-    <SignedIn>
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center gap-8">
+             {[
+              {
+                path: "/home",
+                label: "Home",
+              },
+              {
+                path: "/physics-study-pack",
+                label: "Physics Study Pack",
+              },
+              {
+                path: "/contact",
+                label: "Contact",
+              },
+              {
+                path: "/about",
+                label: "About",
+              },
+             
+            ].map((item) => {
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className="font-medium hover:text-gray-600 "
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+            </nav>
 
-      <UserButton size={36} />
-
-    </SignedIn>
-
-     <div className="hidden md:block">
+            {/* User Menu Desktop */}
+            <SignedIn>
+              
+                <UserButton size={36} />
+              
+            </SignedIn>
+            <div className="hidden md:block">
               <SignedOut>
                 <div className="flex items-center gap-4">
                   <Link to="/sign-in">Sign In</Link>
@@ -37,10 +75,64 @@ function Navigation(prop) {
                 </div>
               </SignedOut>
             </div>
-      
-    </nav>
-    );
-};
 
+            {/* Mobile Menu Button */}
+            <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2">
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+
+          {/* Mobile Navigation */}
+          {isOpen && (
+            <div className="md:hidden pb-4 space-y-2">
+              {[
+              {
+                path: "/home",
+                label: "Home",
+              },
+              {
+                path: "/physics-study-pack",
+                label: "Physics Study Pack",
+              },
+              {
+                path: "/contact",
+                label: "Contact",
+              },
+              {
+                path: "/about",
+                label: "About",
+              },
+             
+            ].map((item) => {
+              return (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className="font-medium hover:text-gray-600 "
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+               <SignedIn>
+              
+                <UserButton size={36} />
+              
+            </SignedIn>
+            <div className="hidden md:block">
+              <SignedOut>
+                <div className="flex items-center gap-4">
+                  <Link to="/sign-in">Sign In</Link>
+                  <Link to="/sign-up">Sign Up</Link>
+                </div>
+              </SignedOut>
+            </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </nav>
+  )
+}
 
 export default Navigation;
