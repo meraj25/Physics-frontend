@@ -25,7 +25,7 @@ function Navigation() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
            <Link to="/" className="font-bold text-2xl m-8 ">
-            Mebius
+            Sanjaya
           </Link>
 
             {/* Desktop Navigation */}
