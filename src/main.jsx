@@ -13,6 +13,7 @@ import PhysicsStudyPackPage from './pages/physics-study-pack.page'
 import { ClerkProvider } from '@clerk/clerk-react'
 import SignInPage from './pages/sign-in.page'
 import SignUpPage from './pages/sign-up.page'
+import Dashboard from './pages/dashboard'
 
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
@@ -28,8 +29,8 @@ createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path="/loading-page" element={<LoadingPage />} />
         <Route element={<RootLayout />}>
-            
-            <Route path="/" element={<HomePage />} />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/home" element={<HomePage />} />
             <Route path="/advanced-level" element={<AdvancedLevelPage />} />
             <Route path="/physics-2026" element={<Physics2026Page />} />
             <Route path="/physics-2027" element={<Physics2027Page />} />

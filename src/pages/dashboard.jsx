@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { BookOpen, ArrowRight, Users, Zap, Award, CheckCircle2, Menu, X, MessageSquare, Calendar, FileText } from 'lucide-react';
 import { useState } from 'react';
 
-function App() {
+function Dashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -175,4 +175,4 @@ function App() {
   );
 }
 
-export default App;
+export default Dashboard;
