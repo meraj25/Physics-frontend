@@ -20,7 +20,7 @@ function AdvancedLevelPage() {
         <div className="max-w-6xl mx-auto">
           <section className="mb-16">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">2026 Physics</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">2028 Physics</h2>
               
                <br/>
               <div className="flex justify-center gap-4 flex-wrap">
@@ -42,7 +42,7 @@ function AdvancedLevelPage() {
 
             <div className="grid md:grid-cols-2 gap-8 mb-16">
               <SimpleCards
-                topic="2028-Theory"
+                topic={`2028-${selectedOption}`}
                 image="al.jpg"
               />
               

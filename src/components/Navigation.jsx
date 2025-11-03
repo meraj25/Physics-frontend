@@ -19,8 +19,8 @@ function Navigation() {
   ]
 
   return (
-    <nav className="bg-background p-4">
-      <div className="bg-primary text-primary-foreground shadow-md rounded-2xl">
+    
+      <div className=" bg-gradient-to-r from-blue-600 to-cyan-600 text-primary-foreground shadow-md rounded-2xl mt-4 mx-12">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -131,7 +131,7 @@ function Navigation() {
           )}
         </div>
       </div>
-    </nav>
+    
   )
 }
 

@@ -42,7 +42,7 @@ function AdvancedLevelPage() {
 
             <div className="grid md:grid-cols-2 gap-8 mb-16">
               <SimpleCards
-                topic="2026-Theory"
+                topic={`2026-${selectedOption}`}
                 image="al.jpg"
               />
               
