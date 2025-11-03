@@ -1,57 +1,60 @@
+
 import { useState } from "react";
-import DataButton from "../components/DataButton";
-import Navigation from "@/components/Navigation";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Sidebar } from "@/components/SideBar";
+import SimpleCards from "@/components/SimpleCards";
 
-function Physics2028Page() {
+function AdvancedLevelPage() {
 
-    const Physics2028 = [
+ const [selectedOption, setSelectedOption] = useState('Theory');
+  const options = ['Theory', 'Revision', 'Papers'];
 
-        {
-            id: 1,
-            topic: "2028-Theory",
-            
-        },
-        {
-            id: 2,
-            topic: "2028-Revision",
-           
-        },
-        {
-            id: 3,
-            topic: "2028-Papers",
-           
-        },
-        {
-            id: 4,
-            topic: "Study Pack - Lesson wise Revision",
-            
-        }
-    ]
 
-    const [selectedDataId, setselectedDataId] = useState("");
-  return (
-    <div className="relative bg-[url('/assets/images/bg1.jpg')] bg-cover bg-center bg-no-repeat h-screen w-screen">
-      <div className="absolute inset-0 bg-white/90">
-       
-    
-        <div className="flex flex-wrap items-center gap-2 sm:gap-x-4 max-w-full overflow-x-auto pb-2 ml-6">
-          {Physics2028.map((data) => (
-            <DataButton
-              key={data.id}
-              data={data}
-              selectedDataId={selectedDataId}
-              onClick={() => setselectedDataId(data.id)}
-            />
-          ))}
+
+   return (
+     <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-blue-100">
+
+
+      <main className="flex-grow container mx-auto px-4 py-12">
+        <div className="max-w-6xl mx-auto">
+          <section className="mb-16">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">2026 Physics</h2>
+              
+               <br/>
+              <div className="flex justify-center gap-4 flex-wrap">
+                {options.map((option) => (
+                  <button
+                    key={option}
+                    onClick={() => setSelectedOption(option)}
+                    className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                      selectedOption === option
+                        ? 'bg-blue-600 text-white shadow-lg scale-105'
+                        : 'bg-white text-gray-700 border-2 border-blue-200 hover:border-blue-400'
+                    }`}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 mb-16">
+              <SimpleCards
+                topic="2028-Theory"
+                image="al.jpg"
+              />
+              
+            </div>
+          </section>
+          
         </div>
+      </main>
 
-
-
-
-
-      </div>
+      
     </div>
+ 
   );
 }
-
-export default Physics2028Page;
+export default AdvancedLevelPage;
