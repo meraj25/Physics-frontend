@@ -12,6 +12,8 @@ import { ClerkProvider } from '@clerk/clerk-react'
 import SignInPage from './pages/sign-in.page'
 import SignUpPage from './pages/sign-up.page'
 import Dashboard from './pages/dashboard'
+import { store } from './lib/store'
+import { Provider } from 'react-redux'
 
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
@@ -23,6 +25,7 @@ if (!PUBLISHABLE_KEY) {
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} >
+      <Provider store={store}>
     <BrowserRouter>
       <Routes>
         <Route element={<RootLayout />}>
@@ -38,6 +41,7 @@ createRoot(document.getElementById('root')).render(
         </Route>
       </Routes>
     </BrowserRouter>
+    </Provider>
     </ClerkProvider>
   </StrictMode>,
 )
