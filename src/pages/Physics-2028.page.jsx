@@ -46,7 +46,10 @@ function AdvancedLevelPage() {
                 topic={`2028-${selectedOption}`}
                 image="al.jpg"
               />
-              <Popup />
+              <Popup
+                yearName={`2028`}
+                categoryName={selectedOption}
+              />
               
             </div>
           </section>

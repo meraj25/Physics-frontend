@@ -11,6 +11,13 @@ export const Api = createApi({
     getAllContent: build.query({
       query: () => `/contents`,
     }),
+     createContent: build.mutation({
+      query: (content) => ({
+        url: "/contents",
+        method: "POST",
+        body: content,
+      }),
+    }),
     getAllCategories: build.query({
       query: () => `/categories`,
     }),
@@ -25,4 +32,4 @@ export const Api = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetAllContentQuery, useGetAllCategoriesQuery, useGetAllYearsQuery } = Api
+export const { useGetAllContentQuery, useCreateContentMutation, useGetAllCategoriesQuery, useGetAllYearsQuery } = Api
