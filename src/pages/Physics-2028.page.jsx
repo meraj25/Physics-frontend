@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Sidebar } from "@/components/SideBar";
 import SimpleCards from "@/components/SimpleCards";
-import Popup from "@/components/Popup";
+import CreateContent from "@/components/CreateContent";
 
 function AdvancedLevelPage() {
 
@@ -46,7 +46,7 @@ function AdvancedLevelPage() {
                 topic={`2028-${selectedOption}`}
                 image="al.jpg"
               />
-              <Popup
+              <CreateContent
                 yearName={`2028`}
                 categoryName={selectedOption}
               />

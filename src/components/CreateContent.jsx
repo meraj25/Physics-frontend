@@ -24,10 +24,10 @@ import {
 import { useCreateContentMutation, useGetAllCategoriesQuery,useGetAllYearsQuery } from "../lib/api"
 
 // ...existing code...
-export function Popup({
+export function CreateContent({
   yearId: propYearId,
   categoryId: propCategoryId,
-  yearName: propYearName,
+  yearNumber: propYearNumber,    // changed: accept numeric year from props
   categoryName: propCategoryName,
 }) {
   const [createContent, { isLoading }] = useCreateContentMutation()
@@ -41,39 +41,38 @@ export function Popup({
   const [link, setLink] = useState("https://example.com")
   const [assignment, setAssignment] = useState("Assignment")
   const [description, setDescription] = useState("Description of the content")
-  const [paymentStatus, setPaymentStatus] = useState("Free")
+  const [paymentstatus, setPaymentstatus] = useState("Free")
 
-  // labels for display (read-only). start from passed names if provided
-  const [yearLabel, setYearLabel] = useState(propYearName ?? "")
+  // labels for display (read-only). start from passed values if provided
+  const [yearLabel, setYearLabel] = useState(
+    propYearNumber !== undefined && propYearNumber !== null ? String(propYearNumber) : ""
+  )
   const [categoryLabel, setCategoryLabel] = useState(propCategoryName ?? "")
 
   useEffect(() => {
-    // if caller passed ids, initialize them
-    if (propYearId) setYearId(propYearId)
-    if (propCategoryId) setCategoryId(propCategoryId)
-
-    // if caller passed names, show them immediately (ids will be resolved once data loads)
-    if (propYearName) setYearLabel(propYearName)
+    // if caller passed a year number or category name, show them immediately
+    if (propYearNumber !== undefined && propYearNumber !== null) setYearLabel(String(propYearNumber))
     if (propCategoryName) setCategoryLabel(propCategoryName)
-  }, [propYearId, propCategoryId, propYearName, propCategoryName])
+  }, [propYearNumber, propCategoryName])
 
   useEffect(() => {
-    // resolve yearName -> yearId OR ensure label matches resolved name when yearId provided
+    // resolve yearNumber -> yearId OR ensure label matches resolved number when yearId provided
     if (years) {
-      if (propYearName) {
-        const found = years.find((yy) => Number(yy.year).toString().toLowerCase() === String(propYearName).toLowerCase())
+      if (propYearNumber !== undefined && propYearNumber !== null) {
+        const found = years.find((yy) => Number(yy.number) === Number(propYearNumber))
         if (found) {
           setYearId(found.id)
-          setYearLabel(found.name)
+          setYearLabel(String(found.number))
         }
       } else if (yearId) {
         const y = years.find((yy) => String(yy.id) === String(yearId))
-        setYearLabel(y?.name ?? String(yearId))
+        // show the year's number if available, fall back to id
+        setYearLabel(y?.number !== undefined ? String(y.number) : String(yearId))
       } else {
         setYearLabel(String(yearId ?? ""))
       }
     }
-  }, [years, propYearName, yearId])
+  }, [years, propYearNumber, yearId])
 
   useEffect(() => {
     // resolve categoryName -> categoryId OR ensure label matches resolved name when categoryId provided
@@ -95,14 +94,15 @@ export function Popup({
 
   const onSubmit = async (e) => {
     e.preventDefault()
+    console.log("Submit triggered")
     try {
-      // ensure we submit ids (not names). If ids are not resolved yet, try to resolve from loaded data.
+      // ensure we submit ids (not names/numbers). If ids are not resolved yet, try to resolve from loaded data.
       let finalYearId = yearId
       let finalCategoryId = categoryId
 
       if ((!finalYearId || !finalCategoryId) && years && categories) {
         if (!finalYearId && yearLabel) {
-          const y = years.find((yy) => Number(yy.year).toString().toLowerCase() === String(yearLabel).toLowerCase())
+          const y = years.find((yy) => Number(yy.number) === Number(yearLabel))
           if (y) finalYearId = y.id
         }
         if (!finalCategoryId && categoryLabel) {
@@ -118,7 +118,7 @@ export function Popup({
         link,
         assignment,
         description,
-        paymentStatus,
+        paymentstatus,
       }
 
       console.log("create payload:", content)
@@ -131,7 +131,7 @@ export function Popup({
 
   return (
     <Dialog>
-      <form onSubmit={onSubmit}>
+      
         <DialogTrigger asChild>
           {/* big rectangle with a plus mark and "Add Content" text */}
           <button
@@ -150,6 +150,8 @@ export function Popup({
               Make changes to your content here. Click save when you&apos;re done.
             </DialogDescription>
           </DialogHeader>
+
+          <form onSubmit={onSubmit}>
 
           <div className="grid gap-4">
             {/* Year (read-only) */}
@@ -192,8 +194,8 @@ export function Popup({
                 id="paymentStatus"
                 name="paymentStatus"
                 className="w-[180px] rounded border px-2 py-1"
-                value={paymentStatus}
-                onChange={(e) => setPaymentStatus(e.target.value)}
+                value={paymentstatus}
+                onChange={(e) => setPaymentstatus(e.target.value)}
               >
                 <option value="Free">Free</option>
                 <option value="Paid">Paid</option>
@@ -209,9 +211,10 @@ export function Popup({
               {isLoading ? "Saving..." : "Save changes"}
             </Button>
           </DialogFooter>
+          </form>
         </DialogContent>
-      </form>
+      
     </Dialog>
   )
 }
-export default Popup
+export default CreateContent
