@@ -47,7 +47,7 @@ function AdvancedLevelPage() {
                 image="al.jpg"
               />
               <CreateContent  
-                yearName={2026}
+                yearName={'2026'}
                 categoryName={selectedOption}
               />  
             </div>

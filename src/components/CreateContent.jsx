@@ -22,17 +22,21 @@ import {
   SelectValue,
 } from "./ui/select"
 import { useCreateContentMutation, useGetAllCategoriesQuery,useGetAllYearsQuery } from "../lib/api"
+import { Alert,AlertDescription,AlertTitle } from "./ui/alert"
+import { CheckCircle2Icon } from "lucide-react"
 
 // ...existing code...
 export function CreateContent({
   yearId: propYearId,
   categoryId: propCategoryId,
-  yearNumber: propYearNumber,    // changed: accept numeric year from props
+  yearName: propYearName,    // now expecting a string prop for year name
   categoryName: propCategoryName,
 }) {
   const [createContent, { isLoading }] = useCreateContentMutation()
   const { data: years } = useGetAllYearsQuery()
   const { data: categories } = useGetAllCategoriesQuery()
+
+  console.log(years, categories)
 
   // controlled form state
   const [yearId, setYearId] = useState(propYearId ?? "")
@@ -44,35 +48,36 @@ export function CreateContent({
   const [paymentstatus, setPaymentstatus] = useState("Free")
 
   // labels for display (read-only). start from passed values if provided
-  const [yearLabel, setYearLabel] = useState(
-    propYearNumber !== undefined && propYearNumber !== null ? String(propYearNumber) : ""
-  )
+  const [yearLabel, setYearLabel] = useState(propYearName ?? "")
   const [categoryLabel, setCategoryLabel] = useState(propCategoryName ?? "")
 
-  useEffect(() => {
-    // if caller passed a year number or category name, show them immediately
-    if (propYearNumber !== undefined && propYearNumber !== null) setYearLabel(String(propYearNumber))
-    if (propCategoryName) setCategoryLabel(propCategoryName)
-  }, [propYearNumber, propCategoryName])
+  const [showSuccess, setShowSuccess] = useState(false)
+
 
   useEffect(() => {
-    // resolve yearNumber -> yearId OR ensure label matches resolved number when yearId provided
+    // if caller passed a year name or category name, show them immediately
+    if (propYearName) setYearLabel(String(propYearName))
+    if (propCategoryName) setCategoryLabel(propCategoryName)
+  }, [propYearName, propCategoryName])
+
+  useEffect(() => {
+    // resolve yearName -> yearId OR ensure label matches resolved name when yearId provided
     if (years) {
-      if (propYearNumber !== undefined && propYearNumber !== null) {
-        const found = years.find((yy) => Number(yy.number) === Number(propYearNumber))
+      if (propYearName) {
+        const found = years.find((yy) => String(yy.name).toLowerCase() === String(propYearName).toLowerCase())
         if (found) {
-          setYearId(found.id)
-          setYearLabel(String(found.number))
+          setYearId(found._id)
+          setYearLabel(found.name)
         }
       } else if (yearId) {
         const y = years.find((yy) => String(yy.id) === String(yearId))
-        // show the year's number if available, fall back to id
-        setYearLabel(y?.number !== undefined ? String(y.number) : String(yearId))
+        // show the year's name if available, fall back to id
+        setYearLabel(y?.name ?? String(yearId))
       } else {
         setYearLabel(String(yearId ?? ""))
       }
     }
-  }, [years, propYearNumber, yearId])
+  }, [years, propYearName, yearId])
 
   useEffect(() => {
     // resolve categoryName -> categoryId OR ensure label matches resolved name when categoryId provided
@@ -80,7 +85,7 @@ export function CreateContent({
       if (propCategoryName) {
         const found = categories.find((cc) => String(cc.name).toLowerCase() === String(propCategoryName).toLowerCase())
         if (found) {
-          setCategoryId(found.id)
+          setCategoryId(found._id)
           setCategoryLabel(found.name)
         }
       } else if (categoryId) {
@@ -96,24 +101,11 @@ export function CreateContent({
     e.preventDefault()
     console.log("Submit triggered")
     try {
-      // ensure we submit ids (not names/numbers). If ids are not resolved yet, try to resolve from loaded data.
-      let finalYearId = yearId
-      let finalCategoryId = categoryId
-
-      if ((!finalYearId || !finalCategoryId) && years && categories) {
-        if (!finalYearId && yearLabel) {
-          const y = years.find((yy) => Number(yy.number) === Number(yearLabel))
-          if (y) finalYearId = y.id
-        }
-        if (!finalCategoryId && categoryLabel) {
-          const c = categories.find((cc) => String(cc.name).toLowerCase() === String(categoryLabel).toLowerCase())
-          if (c) finalCategoryId = c.id
-        }
-      }
-
+      // ensure we submit ids (not names). If ids are not resolved yet, try to resolve from loaded data.
+     
       const content = {
-        yearId: finalYearId,
-        categoryId: finalCategoryId,
+        yearId,
+        categoryId,
         topic,
         link,
         assignment,
@@ -123,7 +115,21 @@ export function CreateContent({
 
       console.log("create payload:", content)
       await createContent(content).unwrap()
-      // optionally reset fields here
+      
+  
+    setTopic("")
+    setLink("")
+    setAssignment("")
+    setDescription("")
+    setPaymentstatus("Free")
+
+    console.log("✅ Content created successfully")
+      
+    setShowSuccess(true)
+
+    // Optionally auto-hide after a few seconds
+    setTimeout(() => setShowSuccess(false), 4000)
+
     } catch (error) {
       console.error(error)
     }
@@ -203,6 +209,16 @@ export function CreateContent({
             </div>
           </div>
 
+          {showSuccess && (
+    <Alert className="mt-4 border-green-500 text-green-700 bg-green-50">
+      <CheckCircle2Icon className="h-5 w-5" />
+      <AlertTitle>Success! Your changes have been saved</AlertTitle>
+      <AlertDescription>
+        The new content has been successfully added.
+      </AlertDescription>
+    </Alert>
+  )}
+
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
@@ -218,3 +234,4 @@ export function CreateContent({
   )
 }
 export default CreateContent
+// ...existing code...
