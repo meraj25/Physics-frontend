@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { BookOpen, ArrowRight, Users, Zap, Award, CheckCircle2, Menu, X, MessageSquare, Calendar, FileText } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // ...existing code... (added useEffect)
 import { SignedOut } from '@clerk/clerk-react';
 import { 
     Card,
@@ -13,16 +13,42 @@ import {
 import { Link } from 'react-router-dom';
 import Footer from '@/components/Footer';
 
+// ...existing code...
 function Dashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const els = document.querySelectorAll('.fade-in-on-scroll');
+    if (!els.length) return;
+
+    const io = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('opacity-100', 'translate-y-0');
+            entry.target.classList.remove('opacity-0', 'translate-y-6');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    els.forEach((el) => {
+      el.classList.add('opacity-0', 'translate-y-6', 'transition-all', 'duration-700', 'ease-out');
+      io.observe(el);
+    });
+
+    return () => io.disconnect();
+  }, []);
 
   return (
     <div className="min-h-screen bg-white">
      
-      <section className="bg-gradient-to-br from-blue-50 via-white to-slate-50 py-20">
+      <section className="bg-gradient-to-br from-blue-50 via-white to-slate-50 py-20 fade-in-on-scroll">
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
+            <div className="ml-25">
               <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight">
                 Master New Skills, Achieve Your Goals
               </h1>
@@ -38,22 +64,20 @@ function Dashboard() {
             </div>
             </div>
 
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-3xl blur-3xl opacity-50"></div>
-              <div className="relative bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
-                <div className="aspect-video bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
-                  <div className="text-center">
-                    <BookOpen className="w-16 h-16 text-white mx-auto mb-4" />
-                    <p className="text-white font-semibold">Start Learning Now</p>
-                  </div>
-                </div>
-              </div>
+          
+            <div className="relative flex justify-end">
+              <img
+                src="/assets/images/s.png"
+                alt="Hero"
+                className="w-full max-w-xs md:max-w-md lg:max-w-lg object-cover translate-x-6 md:translate-x-12 mr-25"
+              />
             </div>
+
           </div>
         </div>
       </section>
 
-      <section className="py-20 bg-slate-50">
+      <section className="py-20 bg-slate-50 fade-in-on-scroll">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold text-slate-900 text-center mb-6">Learn Directly From Your Instructor</h2>
           <p className="text-xl text-slate-600 text-center mb-16 max-w-2xl mx-auto">Experience personalized education with direct access to your teacher</p>
@@ -61,7 +85,7 @@ function Dashboard() {
           <main className="content-center grid grid-cols-1 md:grid-cols-3 gap-4 mt-20">
         <div>
 
-       <Card className="w-full max-w-md ml-15">
+       <Card className="w-full max-w-md ml-15 fade-in-on-scroll">
       <CardHeader>
         <CardTitle className="text-center mb-5">Advance Level</CardTitle>
         <img src="/assets/images/al.jpg" alt="Advance Level" />
@@ -76,7 +100,7 @@ function Dashboard() {
         </div>
 
         <div>
-    <Card className="w-full max-w-md ml-7">
+    <Card className="w-full max-w-md ml-7 fade-in-on-scroll">
       <CardHeader>
         <CardTitle className="text-center mb-5">Pre Engineering</CardTitle>
         <img src="/assets/images/pe.jpg" alt="Pre Engineering" />
@@ -93,7 +117,7 @@ function Dashboard() {
         </div>
 
         <div>
-    <Card className="w-full max-w-md">
+    <Card className="w-full max-w-md fade-in-on-scroll">
       <CardHeader>
         <CardTitle className="text-center mb-3">Other Courses</CardTitle>
         <img src="/assets/images/other.jpg" alt="Other Courses" />
@@ -111,7 +135,7 @@ function Dashboard() {
         </div>
       </section>
 
-      <section className="py-20 bg-slate-50">
+      <section className="py-20 bg-slate-50 fade-in-on-scroll">
         <div className="container mx-auto px-6">
           <h2 className="text-4xl font-bold text-slate-900 text-center mb-16">What You'll Get</h2>
           <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
@@ -125,7 +149,7 @@ function Dashboard() {
         </div>
       </section>
 
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-cyan-600">
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-cyan-600 fade-in-on-scroll">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold text-white mb-6">Ready to Transform Your Future?</h2>
           <p className="text-blue-100 text-xl mb-8 max-w-2xl mx-auto">
@@ -143,3 +167,4 @@ function Dashboard() {
 }
 
 export default Dashboard;
+// ...existing code...

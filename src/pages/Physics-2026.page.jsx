@@ -5,13 +5,38 @@ import { Button } from "@/components/ui/button";
 import { Sidebar } from "@/components/SideBar";
 import SimpleCards from "@/components/SimpleCards";
 import { CreateContent } from "@/components/CreateContent";
+import ContentCards from "@/components/contentCard";
+import { useGetAllContentQuery } from "@/lib/api";
+import { useGetAllCategoriesQuery } from "@/lib/api";
+import { useGetAllYearsQuery } from "@/lib/api";
+import { useUser } from "@clerk/clerk-react";
 
 function AdvancedLevelPage() {
+
+   const { user, isLoaded } = useUser();
 
  const [selectedOption, setSelectedOption] = useState('Theory');
   const options = ['Theory', 'Revision', 'Papers'];
 
+  const { data : contents, error, isLoading } = useGetAllContentQuery();
+  const { data: categories } = useGetAllCategoriesQuery();
+  const { data: years } = useGetAllYearsQuery();
 
+console.log("categories:", categories);
+console.log("years:", years); 
+
+const filteredCategory = categories?.find((cat) => cat.name === selectedOption);
+const filteredYear = years?.find((yr) => yr.name === '2026');
+const filteredContents = contents?.filter((content) =>
+  filteredCategory && filteredYear
+    ? content.categoryId === filteredCategory._id &&
+      content.yearId === filteredYear._id
+    : false
+);
+
+console.log("Filtered Contents:", filteredContents);
+
+const isAdmin = user?.publicMetadata?.role === "admin";
 
    return (
      <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-blue-100">
@@ -41,16 +66,24 @@ function AdvancedLevelPage() {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 mb-16">
-              <SimpleCards
-                topic={`2026-${selectedOption}`}
-                image="al.jpg"
-              />
-              <CreateContent  
-                yearName={'2026'}
-                categoryName={selectedOption}
-              />  
-            </div>
+
+            {/* Place CreateContent at the bottom */}
+             {/* ✅ Show CreateContent only for admins */}
+            {isLoaded && isAdmin && (
+              <div className="flex justify-center">
+                <CreateContent
+                  yearName={"2026"}
+                  categoryName={selectedOption}
+                />
+              </div>
+            )}
+
+        
+             <div className="mb-8">
+             <ContentCards contents={filteredContents} error={error} isLoading={isLoading} />
+             </div>
+
+             
           </section>
           
         </div>

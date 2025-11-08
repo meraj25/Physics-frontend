@@ -5,13 +5,23 @@ import { Button } from "@/components/ui/button";
 import { Sidebar } from "@/components/SideBar";
 import SimpleCards from "@/components/SimpleCards";
 import CreateContent from "@/components/CreateContent";
+import ContentCards from "@/components/contentCard";
+import { useGetAllContentQuery } from "@/lib/api";
+import { useGetAllCategoriesQuery } from "@/lib/api";
+import { useGetAllYearsQuery } from "@/lib/api";
 
 function AdvancedLevelPage() {
 
  const [selectedOption, setSelectedOption] = useState('Theory');
   const options = ['Theory', 'Revision', 'Papers'];
 
+ const { data : contents, error, isLoading } = useGetAllContentQuery();
+  const { data: categories } = useGetAllCategoriesQuery();
+  const { data: years } = useGetAllYearsQuery();
 
+const filteredCategory = categories?.find((cat) => cat.name === selectedOption);
+const filteredYear = years?.find((yr) => yr.name === '2027');
+const filteredContents = contents?.filter((content) => content.categoryId === filteredCategory._id && content.yearId === filteredYear._id);
 
    return (
      <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-blue-100">
@@ -41,18 +51,18 @@ function AdvancedLevelPage() {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8 mb-16">
-              <SimpleCards
-                topic={`2027-${selectedOption}`}
-                image="al.jpg"
-              />
-              <CreateContent
-                yearName={`2027`}
-                categoryName={selectedOption} 
-              
-              />
-              
+           {/* Place CreateContent at the bottom */}
+            <div className="flex justify-center">
+            <CreateContent  
+             yearName={'2027'}
+             categoryName={selectedOption}
+             />
             </div>
+
+        
+             <div className="mb-8">
+             <ContentCards contents={filteredContents} error={error} isLoading={isLoading} />
+             </div>
           </section>
           
         </div>

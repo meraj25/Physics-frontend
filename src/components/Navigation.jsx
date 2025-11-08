@@ -11,12 +11,7 @@ function Navigation() {
 
     const [isOpen, setIsOpen] = useState(false)
 
-  const navItems = [
-    { label: "Home", href: "#" },
-    { label: "Courses", href: "#" },
-    { label: "About", href: "#" },
-    { label: "Contact", href: "#" },
-  ]
+  
 
   return (
     
@@ -32,7 +27,7 @@ function Navigation() {
             <nav className="hidden md:flex items-center gap-8">
              {[
               {
-                path: "/home",
+                path: "/",
                 label: "Home",
               },
               {

@@ -8,6 +8,7 @@ import Physics2026Page from './pages/Physics-2026.page'
 import Physics2027Page from './pages/Physics-2027.page'
 import Physics2028Page from './pages/Physics-2028.page'
 import PhysicsStudyPackPage from './pages/physics-study-pack.page'
+import StudyPackContentPage from './pages/studypack-content.page'
 import { ClerkProvider } from '@clerk/clerk-react'
 import SignInPage from './pages/sign-in.page'
 import SignUpPage from './pages/sign-up.page'
@@ -34,7 +35,9 @@ createRoot(document.getElementById('root')).render(
             <Route path="/physics-2026" element={<Physics2026Page />} />
             <Route path="/physics-2027" element={<Physics2027Page />} />
             <Route path="/physics-2028" element={<Physics2028Page />} />
-            <Route path="/physics-study-pack" element={<PhysicsStudyPackPage />} />
+            <Route path="/physics-study-pack" element={<PhysicsStudyPackPage />} >
+              <Route path=":topic" element={<StudyPackContentPage />} />
+            </Route>
             <Route path="/sign-in" element={<SignInPage />} />
             <Route path="/sign-up" element={<SignUpPage />} />
 
