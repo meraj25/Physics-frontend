@@ -31,7 +31,7 @@ function Navigation() {
                 label: "Home",
               },
               {
-                path: "/physics-study-pack",
+                path: "/studypack",
                 label: "Physics Study Pack",
               },
               {

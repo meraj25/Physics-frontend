@@ -6,24 +6,40 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 const topics = [
   { 
     id: '1',
-    title: '01. මිනුම් - Measurement',
-    subtitle: 'Measurement',
+    title: '01. මිනුම් - studypack',
+    subtitle: 'studypack',
     content: 'Yes. It adheres to the WAI-ARIA design pattern.',
     links: [
-      { label: 'Introduction to Measurement', url: '/measurement/intro' },
-      { label: 'Units and Standards', url: '/measurement/units' },
-      { label: 'Practice Problems', url: '/measurement/practice' },
+      { label: 'භෞතික විද්‍යාව හැඳින්වීම', url: '/studypack/භෞතික-විද්‍යාව-හැඳින්වීම' },
+      { label: 'ඒකක', url: '/studypack/ඒකක' },
+      { label: 'මාන ', url: '/studypack/මාන' },
+      { label: 'මිනුම හැඳින්වීම ', url: '/studypack/මිනුම-හැඳින්වීම' },
+      { label: 'භාගික දෝෂය හා ප්‍රතිශත දෝෂය ', url: '/studypack/භාගික-දෝෂය-හා-ප්‍රතිශත-දෝෂය' },
+      { label: 'වර්නියර් කැලිපරය ', url: '/studypack/වර්නියර්-කැලිපරය' },
+      { label: 'චල අන්වීක්ෂය ', url: '/studypack/චල-අන්වීක්ෂය' },
+      { label: 'මයික්‍රෝමීටර ඉස්කුරුප්පු ආමානය ', url: '/studypack/මයික්‍රෝමීටර-ඉස්කුරුප්පු-ආමානය' },
+      { label: 'ගෝලමානය ', url: '/studypack/ගෝලමානය' },
+      { label: 'දෛශික', url: '/studypack/දෛශික' },
     ],
   },
   {
     id: '2',
-    title: '02. යාන්ත්‍රික විද්‍යාව - Mechanics',
-    subtitle: 'Mechanics',
+    title: '02. යාන්ත්‍ර විද්‍යාව - studypack',
+    subtitle: 'studypack',
     content: 'Study of motion and forces.',
     links: [
-      { label: "Newton's Laws", url: '/mechanics/newtons-laws' },
-      { label: 'Kinematics', url: '/mechanics/kinematics' },
-      { label: 'Dynamics', url: '/mechanics/dynamics' },
+      { label: "චලිතය", url: '/studypack/චලිතය' },
+      { label: 'නිවුටන් නියම', url: '/studypack/නිවුටන්-නියම' },
+      { label: 'ආවේගය සහ ගම්‍යතාව', url: '/studypack/ආවේගය-සහ-ගම්‍යතාව' },
+      { label: 'කාර්‍යය හා ශක්තිය', url: '/studypack/කාර්‍යය-හා-ශක්තිය' },
+      { label: 'දෛශික , ස්ථිති විද්‍යාව', url: '/studypack/දෛශික-ස්ථිති-විද්‍යාව' },
+      { label: 'ඝර්ෂණය', url: '/studypack/ඝර්ෂණය' },
+      { label: 'ගුරුත්ව කේන්ද්‍රය', url: '/studypack/ගුරුත්ව-කේන්ද්‍රය' },
+      { label: 'භ්‍රමණ චලිතය', url: '/studypack/භ්‍රමණ-චලිතය' },
+      { label: 'ද්‍රවස්ථිති විද්‍යාව', url: '/studypack/ද්‍රවස්ථිති-විද්‍යාව' },
+      { label: 'ද්‍රව ගති විද්‍යාව', url: '/studypack/ද්‍රව-ගති-විද්‍යාව' },
+      
+      
     ],
   },
   {
@@ -32,9 +48,9 @@ const topics = [
     subtitle: 'Oscillations and Waves',
     content: 'Study of periodic motion and wave phenomena.',
     links: [
-      { label: 'Simple Harmonic Motion', url: '/waves/shm' },
-      { label: 'Wave Properties', url: '/waves/properties' },
-      { label: 'Sound Waves', url: '/waves/sound' },
+      { label: 'කම්පන, තරංග', url: '/waves/shm' },
+      { label: 'සරල අනුවර්තිය චලිතය', url: '/waves/properties' },
+      { label: 'තරංග හා තරංග ආකෘතිය', url: '/waves/sound' },
     ],
   },
   {
@@ -50,9 +66,9 @@ const topics = [
   },
   {
     id: '5',
-    title: '05. ගුරුත්වීය ස්ථිතීය - Measurement',
-    subtitle: 'Measurement',
-    content: 'Advanced measurement concepts.',
+    title: '05. ගුරුත්වීය ස්ථිතීය - studypack',
+    subtitle: 'studypack',
+    content: 'Advanced studypack concepts.',
     links: [
       { label: 'Gravitational Fields', url: '/gravity/fields' },
       { label: 'Orbital Motion', url: '/gravity/orbital' },
@@ -61,9 +77,9 @@ const topics = [
   },
   {
     id: '6',
-    title: '06. ස්ථිති විද්‍යුත් ක්ෂේත්‍රය- Mechanics',
-    subtitle: 'Mechanics',
-    content: 'Advanced mechanics concepts.',
+    title: '06. ස්ථිති විද්‍යුත් ක්ෂේත්‍රය- studypack',
+    subtitle: 'studypack',
+    content: 'Advanced studypack concepts.',
     links: [
       { label: 'Gravitational Fields', url: '/gravity/fields' },
       { label: 'Orbital Motion', url: '/gravity/orbital' },

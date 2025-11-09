@@ -35,7 +35,7 @@ createRoot(document.getElementById('root')).render(
             <Route path="/physics-2026" element={<Physics2026Page />} />
             <Route path="/physics-2027" element={<Physics2027Page />} />
             <Route path="/physics-2028" element={<Physics2028Page />} />
-            <Route path="/physics-study-pack" element={<PhysicsStudyPackPage />} >
+            <Route path="/studypack" element={<PhysicsStudyPackPage />} >
               <Route path=":subheading" element={<StudyPackContentPage />} />
             </Route>
             <Route path="/sign-in" element={<SignInPage />} />
