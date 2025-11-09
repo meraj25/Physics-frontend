@@ -120,6 +120,9 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
       setLink("")
       setAssignment("")
       setPaymentstatus("Free")
+
+        console.log("✅ Content created successfully")
+        
       setShowSuccess(true)
       setTimeout(() => setShowSuccess(false), 3500)
     } catch (err) {
