@@ -18,13 +18,20 @@ import { useCreateStudyPackMutation, useGetAllHeadingsQuery } from "../lib/api"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { CheckCircle2Icon } from "lucide-react"
 
-export function CreateSP({ headingName: propHeadingName, headingId: propHeadingId }) {
+// ...existing code...
+export function CreateSP({ heading: propHeading, headingName: propHeadingName, headingId: propHeadingId }) {
   const [createStudyPack, { isLoading }] = useCreateStudyPackMutation()
   const { data: headings } = useGetAllHeadingsQuery()
 
   // form state
-  const [headingId, setHeadingId] = useState(propHeadingId ?? "")
-  const [headingLabel, setHeadingLabel] = useState(propHeadingName ?? "")
+  // headingId holds the id string; headingLabel holds display name
+  const [headingId, setHeadingId] = useState(
+    // prefer full object prop, then explicit id prop, then name resolution later
+    propHeading ? String(propHeading._id ?? propHeading.id ?? "") : (propHeadingId ?? "")
+  )
+  const [headingLabel, setHeadingLabel] = useState(
+    propHeading ? String(propHeading.name ?? "") : (propHeadingName ?? "")
+  )
   const [link, setLink] = useState("")
   const [assignment, setAssignment] = useState("")
   const [paymentstatus, setPaymentstatus] = useState("Free")
@@ -32,20 +39,28 @@ export function CreateSP({ headingName: propHeadingName, headingId: propHeadingI
   const [errors, setErrors] = useState({})
   const [showSuccess, setShowSuccess] = useState(false)
 
+  // validate payload where `heading` is the id string (what the API expects)
   const schema = z.object({
-    headingId: z.string().min(1, "Heading is required"),
+    heading: z.string().min(1, "Heading is required"),
     link: z.string().url("Link must be a valid URL").optional(),
     assignment: z.string().min(1, "Assignment is required"),
     paymentstatus: z.string().min(1, "Payment status is required"),
   })
 
   useEffect(() => {
-    // prefer explicit id prop if provided
+    // prefer explicit object prop if provided
+    if (propHeading) {
+      setHeadingId(String(propHeading._id ?? propHeading.id ?? ""))
+      setHeadingLabel(String(propHeading.name ?? ""))
+      return
+    }
+
+    // otherwise prefer explicit id/name props
     if (propHeadingId) {
       setHeadingId(propHeadingId)
     }
     if (propHeadingName) setHeadingLabel(propHeadingName)
-  }, [propHeadingId, propHeadingName])
+  }, [propHeading, propHeadingId, propHeadingName])
 
   useEffect(() => {
     if (!headings) return
@@ -74,7 +89,7 @@ export function CreateSP({ headingName: propHeadingName, headingId: propHeadingI
 
     const linkForValidation = link?.trim() === "" ? undefined : link?.trim()
     const payloadForValidation = {
-      headingId: String(headingId ?? "").trim(),
+      heading: String(headingId ?? "").trim(),
       link: linkForValidation,
       assignment: String(assignment ?? "").trim(),
       paymentstatus: String(paymentstatus ?? "").trim(),
@@ -92,14 +107,15 @@ export function CreateSP({ headingName: propHeadingName, headingId: propHeadingI
     }
 
     try {
-      const payload = {
-        headingId: payloadForValidation.headingId,
+      const studypack = {
+        heading: payloadForValidation.heading,
         link: payloadForValidation.link,
         assignment: payloadForValidation.assignment,
         paymentstatus: payloadForValidation.paymentstatus,
       }
-
-      await createStudyPack(payload).unwrap()
+      
+      console.log("Creating study pack:", studypack);
+      await createStudyPack(studypack).unwrap()
 
       setLink("")
       setAssignment("")
@@ -136,9 +152,10 @@ export function CreateSP({ headingName: propHeadingName, headingId: propHeadingI
           <div className="grid gap-4">
             <div className="grid gap-3">
               <Label htmlFor="heading">Heading</Label>
-              <Input id="heading" name="heading" value={headingLabel} readOnly disabled />
-              <input type="hidden" name="headingId" value={headingId} />
-              {errors.headingId && <p className="text-sm text-red-600">{errors.headingId}</p>}
+              {/* display label but submit the id */}
+              <Input id="heading" name="headingLabel" value={headingLabel} readOnly disabled />
+              <input type="hidden" name="heading" value={headingId} />
+              {errors.heading && <p className="text-sm text-red-600">{errors.heading}</p>}
             </div>
 
             <div className="grid gap-3">
@@ -193,5 +210,5 @@ export function CreateSP({ headingName: propHeadingName, headingId: propHeadingI
   )
 }
 
-export default CreateSP
+export default CreateSP;
 // ...existing code...

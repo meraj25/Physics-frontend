@@ -4,6 +4,7 @@ import { useGetAllHeadingsQuery } from "@/lib/api"
 import CreateSP from "@/components/CreateSP"
 import StudyPackCards from "@/components/StudypackCard"
 import { useGetAllStudyPacksQuery } from "@/lib/api"
+import { useUser } from "@clerk/clerk-react"
 
 function StudyPackContentPage() {
   const { subheading } = useParams() // this will receive the slug from the URL: /studypack/:subheading
@@ -11,6 +12,8 @@ function StudyPackContentPage() {
   const { data: studyPacks } = useGetAllStudyPacksQuery()
   const [selectedHeading, setSelectedHeading] = useState(null)
 
+  const { user, isLoaded } = useUser();
+  const isAdmin = user?.publicMetadata?.role === "admin";
   useEffect(() => {
     if (!headings || !subheading) return
 
@@ -36,19 +39,26 @@ function StudyPackContentPage() {
   )
   // pass resolved id and name into CreateSP (heading input will be read-only inside CreateSP)
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold mb-4">Create / View Study Pack — {selectedHeading.name}</h2>
-      <CreateSP
-        headingName={selectedHeading.name}
-        headingId={selectedHeading._id ?? selectedHeading.id}
-      />
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-blue-100">
+      <main className="flex-grow container mx-auto px-4 py-12">
+      <h2 className="text-2xl font-semibold mb-4">{selectedHeading.main} — {selectedHeading.name}</h2>
+      
+
+      {isLoaded && isAdmin && (
+                    <div className="flex justify-center">
+                      <CreateSP
+                       
+                       heading={selectedHeading}
+                       />
+                    </div>
+                  )}
 
 
       <div className="mb-8">
        <StudyPackCards contents={filteredContents} error={error} isLoading={isLoading} />
        </div>
 
-
+      </main>
     </div>
   )
 }
