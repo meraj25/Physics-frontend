@@ -107,15 +107,15 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
     }
 
     try {
-      const studypack = {
+      const studyPack = {
         heading: payloadForValidation.heading,
         link: payloadForValidation.link,
         assignment: payloadForValidation.assignment,
         paymentstatus: payloadForValidation.paymentstatus,
       }
       
-      console.log("Creating study pack:", studypack);
-      await createStudyPack(studypack).unwrap()
+      console.log("Creating study pack:", studyPack);
+      await createStudyPack(studyPack).unwrap()
 
       setLink("")
       setAssignment("")
