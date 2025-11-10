@@ -18,6 +18,7 @@ import ContactPage from './pages/contact'
 import { store } from './lib/store'
 import { Provider } from 'react-redux'
 import HeaderLayout from './layouts/Header.layout'
+import ProtectedLayout from './layouts/protected.layout'
 
 
 
@@ -35,6 +36,7 @@ createRoot(document.getElementById('root')).render(
       <Routes>
         <Route element={<RootLayout />}>
             <Route path="/" element={<Dashboard />} />
+        <Route element={<ProtectedLayout/>}>
             <Route path="/advanced-level" element={<AdvancedLevelPage />} />
             <Route path="/physics-2026" element={<Physics2026Page />} />
             <Route path="/physics-2027" element={<Physics2027Page />} />
@@ -47,13 +49,16 @@ createRoot(document.getElementById('root')).render(
            
             <Route path="/sign-in" element={<SignInPage />} />
             <Route path="/sign-up" element={<SignUpPage />} />
-
+        </Route>
         </Route>
 
-        <Route element={<HeaderLayout />}>
+        
+        <Route element={<ProtectedLayout/>}>
+         <Route element={<HeaderLayout />}>
             <Route path="/studypack">
                <Route path=":subheading" element={<StudyPackContentPage />} />
             </Route>
+         </Route>
         </Route>
 
       </Routes>
