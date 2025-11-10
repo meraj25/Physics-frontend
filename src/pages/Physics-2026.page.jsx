@@ -1,10 +1,6 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-
-import SimpleCards from "@/components/SimpleCards";
 import { CreateContent } from "@/components/CreateContent";
-import {ContentCards} from "@/components/contentCard";
+import ContentCards from "@/components/ContentCard";
 import { useGetAllContentQuery } from "@/lib/api";
 import { useGetAllCategoriesQuery } from "@/lib/api";
 import { useGetAllYearsQuery } from "@/lib/api";
