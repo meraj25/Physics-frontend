@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 
@@ -6,9 +6,9 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 const topics = [
   { 
     id: '1',
-    title: '01. මිනුම් - studypack',
+    title: '01. මිනුම් - Measurements',
     subtitle: 'studypack',
-    content: 'Yes. It adheres to the WAI-ARIA design pattern.',
+    content: '',
     links: [
       { label: 'භෞතික විද්‍යාව හැඳින්වීම', url: '/studypack/භෞතික-විද්‍යාව-හැඳින්වීම' },
       { label: 'ඒකක', url: '/studypack/ඒකක' },
@@ -24,9 +24,9 @@ const topics = [
   },
   {
     id: '2',
-    title: '02. යාන්ත්‍ර විද්‍යාව - studypack',
+    title: '02. යාන්ත්‍ර විද්‍යාව - Meachanics',
     subtitle: 'studypack',
-    content: 'Study of motion and forces.',
+    content: '.',
     links: [
       { label: "චලිතය", url: '/studypack/චලිතය' },
       { label: 'නිවුටන් නියම', url: '/studypack/නිවුටන්-නියම' },
@@ -46,11 +46,9 @@ const topics = [
     id: '3',
     title: '03. දෝලන හා තරංග - Oscillations and Waves',
     subtitle: 'Oscillations and Waves',
-    content: 'Study of periodic motion and wave phenomena.',
+    content: '',
     links: [
-      { label: 'කම්පන, තරංග', url: '/waves/shm' },
-      { label: 'සරල අනුවර්තිය චලිතය', url: '/waves/properties' },
-      { label: 'තරංග හා තරංග ආකෘතිය', url: '/waves/sound' },
+      
     ],
   },
   {
@@ -59,92 +57,78 @@ const topics = [
     subtitle: 'Thermal Physics',
     content: 'Study of heat and temperature.',
     links: [
-      { label: 'Temperature Scales', url: '/thermal/temperature' },
-      { label: 'Heat Transfer', url: '/thermal/transfer' },
-      { label: 'Thermodynamics', url: '/thermal/thermodynamics' },
+  
     ],
   },
   {
     id: '5',
     title: '05. ගුරුත්වීය ස්ථිතීය - studypack',
     subtitle: 'studypack',
-    content: 'Advanced studypack concepts.',
+    content: '.',
     links: [
-      { label: 'Gravitational Fields', url: '/gravity/fields' },
-      { label: 'Orbital Motion', url: '/gravity/orbital' },
-      { label: 'Gravitational Potential', url: '/gravity/potential' },
+    
     ],
   },
   {
     id: '6',
     title: '06. ස්ථිති විද්‍යුත් ක්ෂේත්‍රය- studypack',
     subtitle: 'studypack',
-    content: 'Advanced studypack concepts.',
+    content: '.',
     links: [
-      { label: 'Gravitational Fields', url: '/gravity/fields' },
-      { label: 'Orbital Motion', url: '/gravity/orbital' },
-      { label: 'Gravitational Potential', url: '/gravity/potential' },
+     
     ],
   },
   {
     id: '7',
     title: '07. - චුම්භක ක්ෂේත්‍රය - Magnetic Fields',
     subtitle: 'Magnetic Fields',
-    content: 'Advanced magnetic fields concepts.',
+    content: '',
     links: [
-      { label: 'Gravitational Fields', url: '/gravity/fields' },
-      { label: 'Orbital Motion', url: '/gravity/orbital' },
-      { label: 'Gravitational Potential', url: '/gravity/potential' },
+     
     ],
   },
   {
     id: '8',
     title: '08. ධාරා විද්‍යුතය - Current Electricity',
     subtitle: 'Current Electricity',
-    content: 'Advanced current electricity concepts.',
+    content: '',
     links: [
-      { label: 'Gravitational Fields', url: '/gravity/fields' },
-      { label: 'Orbital Motion', url: '/gravity/orbital' },
-      { label: 'Gravitational Potential', url: '/gravity/potential' },
+     
     ],
   },
   {
     id: '9',
     title: '09. ඉලෙක්ට්‍රොනික විද්‍යාව- Electronics',
     subtitle: 'Electronics',
-    content: 'Advanced electronics concepts.',
+    content: '',
     links: [
-      { label: 'Gravitational Fields', url: '/gravity/fields' },
-      { label: 'Orbital Motion', url: '/gravity/orbital' },
-      { label: 'Gravitational Potential', url: '/gravity/potential' },
+    
     ],
   },
   {
     id: '10',
     title: '10. පදාර්ථයේ යාන්ත්‍රික ගුණ- Mechanical Properties of Matter',
     subtitle: 'Mechanical Properties of Matter',
-    content: 'Advanced mechanical properties concepts.',
+    content: '',
     links: [
-      { label: 'Gravitational Fields', url: '/gravity/fields' },
-      { label: 'Orbital Motion', url: '/gravity/orbital' },
-      { label: 'Gravitational Potential', url: '/gravity/potential' },
+    
     ],
   },
   {
     id: '11',
     title: '11. පදාර්ථ හා විකිරණ- Matter and Radiation',
     subtitle: 'Matter and Radiation',
-    content: 'Advanced concepts in matter and radiation.',
+    content: '',
     links: [
-      { label: 'Gravitational Fields', url: '/gravity/fields' },
-      { label: 'Orbital Motion', url: '/gravity/orbital' },
-      { label: 'Gravitational Potential', url: '/gravity/potential' },
+
     ],
   },
   
 ];
 
 function App() {
+  
+
   
   const [expandedId, setExpandedId] = useState('1');
 
@@ -154,8 +138,34 @@ function App() {
     setExpandedId(expandedId === id ? null : id);
   };
 
+  useEffect(() => {
+    const els = document.querySelectorAll('.fade-in-on-scroll')
+    if (!els.length) return
+
+    els.forEach((el) =>
+      el.classList.add('opacity-0', 'translate-y-6', 'transition-all', 'duration-700', 'ease-out')
+    )
+
+    const io = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('opacity-100', 'translate-y-0')
+            entry.target.classList.remove('opacity-0', 'translate-y-6')
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.12 }
+    )
+
+    els.forEach((el) => io.observe(el))
+    return () => io.disconnect()
+  }, [])
+
+  
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
+    <div className="min-h-screen bg-white py-12 px-4">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-center mb-8 text-gray-900">Explore the exclusive Physics Study Pack</h1>
 
@@ -163,7 +173,7 @@ function App() {
           {topics.map((topic) => (
             <div
               key={topic.id}
-              className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200"
+              className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200 fade-in-on-scroll"
             >
               <button
                 onClick={() => toggleExpand(topic.id)}

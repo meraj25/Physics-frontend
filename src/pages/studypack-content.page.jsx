@@ -5,6 +5,7 @@ import CreateSP from "@/components/CreateSP"
 import StudyPackCards from "@/components/StudypackCard"
 import { useGetAllStudyPacksQuery } from "@/lib/api"
 import { useUser } from "@clerk/clerk-react"
+import Footer from "@/components/Footer"
 
 function StudyPackContentPage() {
   const { subheading } = useParams() // this will receive the slug from the URL: /studypack/:subheading
@@ -39,15 +40,18 @@ function StudyPackContentPage() {
   )
   // pass resolved id and name into CreateSP (heading input will be read-only inside CreateSP)
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-blue-100">
-      <main className="flex-grow container mx-auto px-4 py-12">
-      <h2 className="text-2xl font-semibold mb-4">{selectedHeading.main} — {selectedHeading.name}</h2>
+    <div className="min-h-screen flex flex-col bg-white">
+      
+      <main className="flex-grow container mx-auto px-4 py-0">
+        <div className="max-w-6xl mx-auto">
+        <section className="mb-16">
+          <div className="text-center mb-12">
+         <h2 className="text-2xl font-semibold mb-10">{selectedHeading.main} — {selectedHeading.name}</h2>
       
 
-      {isLoaded && isAdmin && (
+          {isLoaded && isAdmin && (
                     <div className="flex justify-center">
                       <CreateSP
-                       
                        heading={selectedHeading}
                        />
                     </div>
@@ -58,7 +62,11 @@ function StudyPackContentPage() {
        <StudyPackCards contents={filteredContents} error={error} isLoading={isLoading} />
        </div>
 
+       </div>
+      </section>
+      </div>
       </main>
+      <Footer/>
     </div>
   )
 }

@@ -13,8 +13,12 @@ import { ClerkProvider } from '@clerk/clerk-react'
 import SignInPage from './pages/sign-in.page'
 import SignUpPage from './pages/sign-up.page'
 import Dashboard from './pages/dashboard'
+import About from './pages/about.page'
+import ContactPage from './pages/contact'
 import { store } from './lib/store'
 import { Provider } from 'react-redux'
+import HeaderLayout from './layouts/Header.layout'
+
 
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
@@ -36,16 +40,22 @@ createRoot(document.getElementById('root')).render(
             <Route path="/physics-2027" element={<Physics2027Page />} />
             <Route path="/physics-2028" element={<Physics2028Page />} />
             <Route path="/physics-study-pack" element={<PhysicsStudyPackPage />} />
-            <Route path="/studypack">
-
-              <Route path=":subheading" element={<StudyPackContentPage />} />
-
-            </Route>
+           
+            <Route path="/about" element={<About/>}/>
+            <Route path="/contact" element={<ContactPage/>}/>
+            
            
             <Route path="/sign-in" element={<SignInPage />} />
             <Route path="/sign-up" element={<SignUpPage />} />
 
         </Route>
+
+        <Route element={<HeaderLayout />}>
+            <Route path="/studypack">
+               <Route path=":subheading" element={<StudyPackContentPage />} />
+            </Route>
+        </Route>
+
       </Routes>
     </BrowserRouter>
     </Provider>

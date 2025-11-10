@@ -147,19 +147,19 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
           className="flex items-center justify-center gap-4 h-28 w-80 rounded-lg border-2 border-dashed border-gray-300 bg-white text-gray-800 hover:bg-gray-50"
         >
           <span className="text-6xl leading-none">+</span>
-          <span className="text-xl font-medium">Add Study Pack</span>
+          <span className="text-xl font-medium">Add Study Pack content</span>
         </button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[625px]">
         <DialogHeader>
-          <DialogTitle>Create Study Pack</DialogTitle>
+          <DialogTitle>Create new Study Pack content</DialogTitle>
           <DialogDescription>
-            Add a new study pack. The heading is preselected and read-only.
+            Add a new study pack content. The heading is preselected and read-only.
           </DialogDescription>
         </DialogHeader>
 
-        // ...existing code...
+       
         <form onSubmit={onSubmit}>
           <div className="grid gap-4">
             <div className="grid gap-3">
@@ -171,11 +171,11 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
             </div>
 
 
-               <div className="grid gap-3">
-+              <Label htmlFor="topic">Topic</Label>
-+              <Input id="topic" name="topic" value={topic} onChange={(e) => setTopic(e.target.value)} />
-+              {errors.topic && <p className="text-sm text-red-600">{errors.topic}</p>}
-+            </div>
+             <div className="grid gap-3">
+               <Label htmlFor="topic">Topic</Label>
+               <Input id="topic" name="topic" value={topic} onChange={(e) => setTopic(e.target.value)} />
+               {errors.topic && <p className="text-sm text-red-600">{errors.topic}</p>}
+             </div>
 
 
             <div className="grid gap-3">

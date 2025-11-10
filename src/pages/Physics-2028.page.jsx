@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Sidebar } from "@/components/SideBar";
@@ -11,7 +11,9 @@ import { useGetAllCategoriesQuery } from "@/lib/api";
 import { useGetAllYearsQuery } from "@/lib/api";
 
 function AdvancedLevelPage() {
-
+useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, []);
  const [selectedOption, setSelectedOption] = useState('Theory');
   const options = ['Theory', 'Revision', 'Papers'];
 
@@ -25,7 +27,7 @@ const filteredContents = contents?.filter((content) => content.categoryId === fi
 
 
    return (
-     <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-blue-100">
+     <div className="min-h-screen flex flex-col bg-white">
 
 
       <main className="flex-grow container mx-auto px-4 py-12">

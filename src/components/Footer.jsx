@@ -1,48 +1,77 @@
-import { BookOpen } from "lucide-react"
+
+import React, { useEffect } from 'react';
+import { BookOpen, Mail, Phone, MapPin } from 'lucide-react';
+
+function useFadeIn() {
+  useEffect(() => {
+    const el = document.querySelector('.fade-in-footer');
+    if (!el) return;
+
+    el.classList.add('opacity-0', 'translate-y-4', 'transition-all', 'duration-700', 'ease-out');
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('opacity-0', 'translate-y-4');
+          entry.target.classList.add('opacity-100', 'translate-y-0');
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+}
+
+
+
 
 function Footer() {
+  
   return (
     <footer className="bg-slate-900 text-slate-400 py-12">
-        <div className="container mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h3 className="text-white font-bold mb-4">Platform</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="hover:text-white transition">Courses</a></li>
-                <li><a href="#" className="hover:text-white transition">Teachers</a></li>
-                <li><a href="#" className="hover:text-white transition">Community</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-white font-bold mb-4">Company</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="hover:text-white transition">About Us</a></li>
-                <li><a href="#" className="hover:text-white transition">Blog</a></li>
-                <li><a href="#" className="hover:text-white transition">Careers</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-white font-bold mb-4">Legal</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="hover:text-white transition">Privacy</a></li>
-                <li><a href="#" className="hover:text-white transition">Terms</a></li>
-                <li><a href="#" className="hover:text-white transition">Contact</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-white font-bold mb-4">Follow</h3>
-              <ul className="space-y-2">
-                <li><a href="#" className="hover:text-white transition">Twitter</a></li>
-                <li><a href="#" className="hover:text-white transition">LinkedIn</a></li>
-                <li><a href="#" className="hover:text-white transition">Facebook</a></li>
-              </ul>
-            </div>
+        <div className="max-w-6xl mx-auto px-4">
+        <div className="fade-in-footer text-center space-y-4">
+          {/* Logo & Title */}
+          <div className="flex items-center justify-center gap-2 mb-3">
+            
+            <h3 className="text-xl font-bold">Physics by 
+              <span className="text-cyan-300"> Sanajaya</span>
+              </h3>
           </div>
-          <div className="border-t border-slate-700 pt-8 text-center">
-            <p>&copy; 2024 EduHub. All rights reserved.</p>
+
+          {/* Tagline */}
+          <p className="text-blue-200 text-sm">
+            සරලව • පැහැදිලිව • සිංහලෙන්
+          </p>
+
+          {/* Contact */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-blue-300">
+            <a href="mailto:physics@studypack.lk" className="flex items-center gap-2 hover:text-white transition">
+              <Mail className="w-4 h-4" />
+              physics@studypack.lk
+            </a>
+            <span className="hidden sm:inline">•</span>
+            <a href="tel:+94771234567" className="flex items-center gap-2 hover:text-white transition">
+              <Phone className="w-4 h-4" />
+              +94 77 123 4567
+            </a>
+            <span className="hidden sm:inline">•</span>
+            <span className="flex items-center gap-2">
+              <MapPin className="w-4 h-4" />
+              කොළඹ, ශ්‍රී ලංකා
+            </span>
           </div>
+
+          {/* Copyright */}
+          <p className="text-xs text-blue-400 pt-4 border-t border-blue-800">
+            ©2025 Physics by Sanjaya. සියලුම හිමිකම් ඇවිරිණි.
+          </p>
         </div>
-      </footer>
+      </div>
+            
+    </footer>
   )
 }
 export default Footer;

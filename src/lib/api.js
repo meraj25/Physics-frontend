@@ -38,6 +38,12 @@ export const Api = createApi({
         body: content,
       }),
     }),
+        deleteContent: build.mutation({
+     query: (id) => ({
+       url: `/contents/${id}`,
+        method: "DELETE",
+      }),
+    }),
     getAllCategories: build.query({
       query: () => `/categories`,
     }),
@@ -54,6 +60,15 @@ export const Api = createApi({
         body: studypack,
       }),
     }),
+
+    deleteStudyPack: build.mutation({
+     query: (id) => ({
+       url: `/studyPacks/${id}`,
+        method: "DELETE",
+      }),
+    }),
+    
+
    getAllHeadings: build.query({
       query: () => `/headings`,
     }),
@@ -70,4 +85,6 @@ export const { useGetAllContentQuery,
     useGetAllYearsQuery,
     useGetAllStudyPacksQuery,
     useCreateStudyPackMutation,
-    useGetAllHeadingsQuery} = Api
+    useGetAllHeadingsQuery,
+    useDeleteContentMutation,
+  useDeleteStudyPackMutation } = Api
