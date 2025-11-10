@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Sidebar } from "@/components/SideBar";
+
 import SimpleCards from "@/components/SimpleCards";
 import { useEffect } from "react";
 
