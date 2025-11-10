@@ -32,6 +32,7 @@ export function CreateContent({
   categoryId: propCategoryId,
   yearName: propYearName,    // now expecting a string prop for year name
   categoryName: propCategoryName,
+  
 }) {
   const [createContent, { isLoading }] = useCreateContentMutation()
   const { data: years } = useGetAllYearsQuery()

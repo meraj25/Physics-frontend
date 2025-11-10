@@ -1,5 +1,8 @@
 import React, { useState } from "react"
+import { useGetAllHeadingsQuery } from "@/lib/api"
 
+
+// ...existing code...
 export default function StudyPackCards({ contents, error, isLoading }) {
   const [unlockedMap, setUnlockedMap] = useState({}) // { [id]: true }
 
@@ -28,25 +31,28 @@ export default function StudyPackCards({ contents, error, isLoading }) {
           sp.heading?.name ?? sp.headingName ?? sp.heading ?? sp.headingLabel ?? sp.headingId ?? "Untitled"
         const link = sp.link ?? ""
         const assignment = sp.assignment ?? ""
+        const topic = sp.topic ?? ""
         const image = sp.image ?? sp.cover ?? "" // optional image fields
         const paymentstatus = (sp.paymentstatus ?? "Free").toLowerCase()
         const isFree = paymentstatus === "free"
         const isPaid = paymentstatus === "paid"
         const unlocked = !!unlockedMap[id]
 
+        console.log(heading);
+       
         return (
           <article key={id} className="rounded-lg overflow-hidden border shadow-sm bg-white">
             <div className="h-44 bg-gray-100 flex items-center justify-center">
               <img
                 src={image || "https://via.placeholder.com/640x360?text=No+Image"}
-                alt={heading}
+                alt={heading.name}
                 className="h-full w-full object-cover"
               />
             </div>
 
             <div className="p-4">
               <div className="flex items-start justify-between gap-3">
-                <h4 className="text-lg font-semibold text-gray-900">{heading}</h4>
+                <h4 className="text-lg font-semibold text-gray-900">{topic}</h4>
                 <span
                   className={`text-xs font-medium px-2 py-1 rounded-full ${
                     isFree ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"
@@ -56,7 +62,7 @@ export default function StudyPackCards({ contents, error, isLoading }) {
                 </span>
               </div>
 
-              {description && <p className="mt-2 text-sm text-gray-600 line-clamp-3">{description}</p>}
+            
 
               <div className="mt-4 flex flex-wrap gap-2">
                 {isFree && link && (
@@ -69,7 +75,8 @@ export default function StudyPackCards({ contents, error, isLoading }) {
                   </button>
                 )}
 
-                {isFree && assignment && (
+                {/* assignment visible only when free OR when paid+unlocked */}
+                {(isFree && assignment) || (isPaid && unlocked && assignment) ? (
                   <button
                     type="button"
                     onClick={() => openUrl(assignment)}
@@ -77,7 +84,7 @@ export default function StudyPackCards({ contents, error, isLoading }) {
                   >
                     Assignment
                   </button>
-                )}
+                ) : null}
 
                 {isPaid && (
                   <>
@@ -90,16 +97,6 @@ export default function StudyPackCards({ contents, error, isLoading }) {
                     >
                       {unlocked ? "Unlocked" : "Pay to unlock"}
                     </button>
-
-                    {assignment && (
-                      <button
-                        type="button"
-                        onClick={() => openUrl(assignment)}
-                        className="inline-flex items-center px-3 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700"
-                      >
-                        Assignment
-                      </button>
-                    )}
 
                     {unlocked && link && (
                       <button
@@ -120,3 +117,4 @@ export default function StudyPackCards({ contents, error, isLoading }) {
     </div>
   )
 }
+// ...existing code...

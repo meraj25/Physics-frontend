@@ -17,33 +17,38 @@ import { Label } from "./ui/label"
 import { useCreateStudyPackMutation, useGetAllHeadingsQuery } from "../lib/api"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { CheckCircle2Icon } from "lucide-react"
-
 // ...existing code...
+
 export function CreateSP({ heading: propHeading, headingName: propHeadingName, headingId: propHeadingId }) {
   const [createStudyPack, { isLoading }] = useCreateStudyPackMutation()
   const { data: headings } = useGetAllHeadingsQuery()
 
-  // form state
+  // controlled form state
+  
   // headingId holds the id string; headingLabel holds display name
   const [headingId, setHeadingId] = useState(
-    // prefer full object prop, then explicit id prop, then name resolution later
     propHeading ? String(propHeading._id ?? propHeading.id ?? "") : (propHeadingId ?? "")
   )
   const [headingLabel, setHeadingLabel] = useState(
     propHeading ? String(propHeading.name ?? "") : (propHeadingName ?? "")
   )
-  const [link, setLink] = useState("")
-  const [assignment, setAssignment] = useState("")
+  const [link, setLink] = useState("https://example.com")
+  const [assignment, setAssignment] = useState("Assignment")
+  const [topic, setTopic] = useState("Topic")
   const [paymentstatus, setPaymentstatus] = useState("Free")
 
-  const [errors, setErrors] = useState({})
+  // UI state
   const [showSuccess, setShowSuccess] = useState(false)
 
-  // validate payload where `heading` is the id string (what the API expects)
+  // validation errors map: { fieldName: message }
+  const [errors, setErrors] = useState({})
+
+  // Zod schema (validation)
   const schema = z.object({
     heading: z.string().min(1, "Heading is required"),
     link: z.string().url("Link must be a valid URL").optional(),
     assignment: z.string().min(1, "Assignment is required"),
+    topic: z.string().min(1, "Topic is required"),
     paymentstatus: z.string().min(1, "Payment status is required"),
   })
 
@@ -67,9 +72,7 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
 
     // if we don't yet have an id but a name prop was provided, try to resolve it
     if (!headingId && propHeadingName) {
-      const found = headings.find(
-        (h) => String(h.name).toLowerCase() === String(propHeadingName).toLowerCase()
-      )
+      const found = headings.find((h) => String(h.name).toLowerCase() === String(propHeadingName).toLowerCase())
       if (found) {
         setHeadingId(found._id ?? found.id ?? "")
         setHeadingLabel(found.name)
@@ -87,16 +90,20 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
     e.preventDefault()
     setErrors({})
 
+    // prepare link for validation: pass undefined when empty so schema.optional() accepts it
     const linkForValidation = link?.trim() === "" ? undefined : link?.trim()
-    const payloadForValidation = {
+
+    const toValidate = {
       heading: String(headingId ?? "").trim(),
       link: linkForValidation,
+      topic: String(topic ?? "").trim(),
       assignment: String(assignment ?? "").trim(),
       paymentstatus: String(paymentstatus ?? "").trim(),
     }
 
-    const result = schema.safeParse(payloadForValidation)
+    const result = schema.safeParse(toValidate)
     if (!result.success) {
+      // map zod issues to a simple object for the UI
       const errObj = {}
       result.error.issues.forEach((issue) => {
         const key = issue.path[0] ?? "form"
@@ -108,21 +115,22 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
 
     try {
       const studyPack = {
-        heading: payloadForValidation.heading,
-        link: payloadForValidation.link,
-        assignment: payloadForValidation.assignment,
-        paymentstatus: payloadForValidation.paymentstatus,
+        heading: toValidate.heading,
+        link: toValidate.link,
+        assignment: toValidate.assignment,
+        topic: toValidate.topic,
+        paymentstatus: toValidate.paymentstatus,
       }
-      
-      console.log("Creating study pack:", studyPack);
+
+      console.log("create payload:", studyPack)
       await createStudyPack(studyPack).unwrap()
 
-      setLink("")
-      setAssignment("")
+      // reset inputs
+      setLink("https://example.com")
+      setAssignment("Assignment")
+      setTopic("Topic")
       setPaymentstatus("Free")
 
-        console.log("✅ Content created successfully")
-        
       setShowSuccess(true)
       setTimeout(() => setShowSuccess(false), 3500)
     } catch (err) {
@@ -151,6 +159,7 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
           </DialogDescription>
         </DialogHeader>
 
+        // ...existing code...
         <form onSubmit={onSubmit}>
           <div className="grid gap-4">
             <div className="grid gap-3">
@@ -160,6 +169,14 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
               <input type="hidden" name="heading" value={headingId} />
               {errors.heading && <p className="text-sm text-red-600">{errors.heading}</p>}
             </div>
+
+
+               <div className="grid gap-3">
++              <Label htmlFor="topic">Topic</Label>
++              <Input id="topic" name="topic" value={topic} onChange={(e) => setTopic(e.target.value)} />
++              {errors.topic && <p className="text-sm text-red-600">{errors.topic}</p>}
++            </div>
+
 
             <div className="grid gap-3">
               <Label htmlFor="link">Link</Label>
@@ -172,6 +189,7 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
               <Input id="assignment" name="assignment" value={assignment} onChange={(e) => setAssignment(e.target.value)} />
               {errors.assignment && <p className="text-sm text-red-600">{errors.assignment}</p>}
             </div>
+
 
             <div className="grid gap-3">
               <Label htmlFor="paymentStatus">Payment status</Label>
@@ -188,6 +206,7 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
               {errors.paymentstatus && <p className="text-sm text-red-600">{errors.paymentstatus}</p>}
             </div>
           </div>
+
 
           {errors.form && <p className="mt-3 text-sm text-red-600">{errors.form}</p>}
 
@@ -213,5 +232,5 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
   )
 }
 
-export default CreateSP;
+export default CreateSP
 // ...existing code...
