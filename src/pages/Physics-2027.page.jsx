@@ -1,16 +1,13 @@
 import { useState, useEffect } from "react";
-import CreateContent from "@/components/CreateContent";
+import { CreateContent } from "@/components/CreateContent";
 import ContentCards from "@/components/ContentCard";
 import { useGetAllContentQuery } from "@/lib/api";
 import { useGetAllCategoriesQuery } from "@/lib/api";
 import { useGetAllYearsQuery } from "@/lib/api";
-
-// ...existing code...
+import { useUser } from "@clerk/clerk-react";
 
 function AdvancedLevelPage() {
-
-  // ensure page scrolls to top when mounted
-
+  const { user, isLoaded } = useUser();
 
   const [selectedOption, setSelectedOption] = useState('Theory');
   const options = ['Theory', 'Revision', 'Papers'];
@@ -19,6 +16,8 @@ function AdvancedLevelPage() {
   const { data: categories } = useGetAllCategoriesQuery();
   const { data: years } = useGetAllYearsQuery();
 
+  console.log("categories:", categories);
+  console.log("years:", years); 
 
   const filteredCategory = categories?.find((cat) => cat.name === selectedOption);
   const filteredYear = years?.find((yr) => yr.name === '2027');
@@ -28,6 +27,40 @@ function AdvancedLevelPage() {
         content.yearId === filteredYear._id
       : false
   );
+
+  console.log("Filtered Contents:", filteredContents);
+
+  const isAdmin = user?.publicMetadata?.role === "admin";
+
+  // scroll to top when page mounts (fixes landing mid-page after navigation)
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
+    const els = document.querySelectorAll('.fade-in-on-scroll')
+    if (!els.length) return
+
+    els.forEach((el) =>
+      el.classList.add('opacity-0', 'translate-y-6', 'transition-all', 'duration-700', 'ease-out')
+    )
+
+    const io = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('opacity-100', 'translate-y-0')
+            entry.target.classList.remove('opacity-0', 'translate-y-6')
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.12 }
+    )
+
+    els.forEach((el) => io.observe(el))
+    return () => io.disconnect()
+  }, [])
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -54,9 +87,16 @@ function AdvancedLevelPage() {
               </div>
             </div>
 
-            <div className="flex justify-center">
-              <CreateContent yearName={'2027'} categoryName={selectedOption} />
-            </div>
+            {/* Place CreateContent at the bottom */}
+            {/* ✅ Show CreateContent only for admins */}
+            {isLoaded && isAdmin && (
+              <div className="flex justify-center">
+                <CreateContent
+                  yearName={"2027"}
+                  categoryName={selectedOption}
+                />
+              </div>
+            )}
 
             <div className="mb-8">
               <ContentCards contents={filteredContents} error={error} isLoading={isLoading} />
