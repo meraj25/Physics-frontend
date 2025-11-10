@@ -64,7 +64,7 @@ function Dashboard() {
          <Link to="/sign-in">
         <Button
            variant="outline"
-           className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-3 text-lg rounded-xl cursor-pointer"
+           className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-16 py-8 text-lg rounded-xl cursor-pointer"
         >
         Sign In
         </Button>
