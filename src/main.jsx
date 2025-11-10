@@ -34,22 +34,22 @@ createRoot(document.getElementById('root')).render(
       <Provider store={store}>
     <BrowserRouter>
       <Routes>
-        <Route element={<RootLayout />}>
-            <Route path="/" element={<Dashboard />} />
-        <Route element={<ProtectedLayout/>}>
-            <Route path="/advanced-level" element={<AdvancedLevelPage />} />
-            <Route path="/physics-2026" element={<Physics2026Page />} />
-            <Route path="/physics-2027" element={<Physics2027Page />} />
-            <Route path="/physics-2028" element={<Physics2028Page />} />
-            <Route path="/physics-study-pack" element={<PhysicsStudyPackPage />} />
-           
+           <Route element={<RootLayout />}>
+             <Route path="/" element={<Dashboard />} />
+             <Route element={<ProtectedLayout/>}>
+             <Route path="/advanced-level" element={<AdvancedLevelPage />} />
+             <Route path="/physics-2026" element={<Physics2026Page />} />
+             <Route path="/physics-2027" element={<Physics2027Page />} />
+             <Route path="/physics-2028" element={<Physics2028Page />} />
+             <Route path="/physics-study-pack" element={<PhysicsStudyPackPage />} />
+           </Route>
             <Route path="/about" element={<About/>}/>
             <Route path="/contact" element={<ContactPage/>}/>
             
            
             <Route path="/sign-in" element={<SignInPage />} />
             <Route path="/sign-up" element={<SignUpPage />} />
-        </Route>
+        
         </Route>
 
         

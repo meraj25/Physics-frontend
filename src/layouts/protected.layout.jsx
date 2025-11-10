@@ -15,6 +15,7 @@ const ProtectedLayout = () => {
   // console.log(user);
 
   return <Outlet />;
+  
 };
 
 export default ProtectedLayout;
