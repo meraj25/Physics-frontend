@@ -60,13 +60,16 @@ function Dashboard() {
           Learn from an experienced instructor in a structured, interactive environment designed for your success. Get personalized guidance every step of the way.
         </p>
         <div className="hidden md:block">
-          <SignedOut>
-            <Link to="/sign-in">
-              <Button variant="outline" className="bg-gradient-to-r from-blue-600 to-cyan-600">
-                Sign In
-              </Button>
-            </Link>
-          </SignedOut>
+         <SignedOut>
+         <Link to="/sign-in">
+        <Button
+           variant="outline"
+           className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-3 text-lg rounded-xl cursor-pointer"
+        >
+        Sign In
+        </Button>
+        </Link>
+        </SignedOut>
         </div>
       </div>
 
