@@ -18,9 +18,7 @@ function AdvancedLevelPage() {
   const { data : contents, error, isLoading } = useGetAllContentQuery();
   const { data: categories } = useGetAllCategoriesQuery();
   const { data: years } = useGetAllYearsQuery();
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
-  }, [])
+
 
   const filteredCategory = categories?.find((cat) => cat.name === selectedOption);
   const filteredYear = years?.find((yr) => yr.name === '2027');
