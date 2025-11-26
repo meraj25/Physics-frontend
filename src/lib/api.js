@@ -60,7 +60,7 @@ export const Api = createApi({
         body: studypack,
       }),
     }),
-
+    
     deleteStudyPack: build.mutation({
      query: (id) => ({
        url: `/studyPacks/${id}`,
@@ -68,6 +68,23 @@ export const Api = createApi({
       }),
     }),
     
+    initiatePayment: build.mutation({
+      query: (contentId) => ({
+        url: '/payments/initiate',
+        method: 'POST',
+        body: { contentId },
+      }),
+    }),
+
+    checkPurchaseStatus: build.query({
+      query: (contentId) => `/payments/check/${contentId}`,
+      providesTags: ['Purchase'],
+    }),
+
+    getUserPurchases: build.query({
+      query: () => '/payments/user-purchases',
+      providesTags: ['Purchase'],
+    }),
 
    getAllHeadings: build.query({
       query: () => `/headings`,
@@ -87,4 +104,7 @@ export const { useGetAllContentQuery,
     useCreateStudyPackMutation,
     useGetAllHeadingsQuery,
     useDeleteContentMutation,
-  useDeleteStudyPackMutation } = Api
+  useDeleteStudyPackMutation,
+useInitiatePaymentMutation,
+  useCheckPurchaseStatusQuery,
+  useGetUserPurchasesQuery, } = Api
