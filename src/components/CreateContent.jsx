@@ -22,17 +22,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select"
-import { useCreateContentMutation, useGetAllCategoriesQuery,useGetAllYearsQuery } from "../lib/api"
-import { Alert,AlertDescription,AlertTitle } from "./ui/alert"
+import { useCreateContentMutation, useGetAllCategoriesQuery, useGetAllYearsQuery } from "../lib/api"
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { CheckCircle2Icon } from "lucide-react"
 
-// ...existing code...
 export function CreateContent({
   yearId: propYearId,
   categoryId: propCategoryId,
-  yearName: propYearName,    // now expecting a string prop for year name
+  yearName: propYearName,
   categoryName: propCategoryName,
-  
 }) {
   const [createContent, { isLoading }] = useCreateContentMutation()
   const { data: years } = useGetAllYearsQuery()
@@ -48,36 +46,35 @@ export function CreateContent({
   const [assignment, setAssignment] = useState("Assignment")
   const [description, setDescription] = useState("Description of the content")
   const [paymentstatus, setPaymentstatus] = useState("Free")
+  const [price, setPrice] = useState(0) // ADD THIS - default price is 0
 
-  // labels for display (read-only). start from passed values if provided
+  // labels for display (read-only)
   const [yearLabel, setYearLabel] = useState(propYearName ?? "")
   const [categoryLabel, setCategoryLabel] = useState(propCategoryName ?? "")
 
   const [showSuccess, setShowSuccess] = useState(false)
 
-  // validation errors map: { fieldName: message }
+  // validation errors map
   const [errors, setErrors] = useState({})
 
-  // Zod schema
+  // Zod schema - ADD PRICE VALIDATION
   const schema = z.object({
     yearId: z.string().min(1, "Year is required"),
     categoryId: z.string().min(1, "Category is required"),
     topic: z.string().min(1, "Topic is required"),
-    // link is optional; we'll pass undefined when empty so zod's optional() accepts it
     link: z.string().url("Link must be a valid URL").optional(),
     assignment: z.string().min(1, "Assignment is required"),
     description: z.string().min(1, "Description is required"),
     paymentstatus: z.string().min(1, "Payment status is required"),
+    price: z.number().min(0, "Price must be 0 or greater"), // ADD THIS
   })
 
   useEffect(() => {
-    // if caller passed a year name or category name, show them immediately
     if (propYearName) setYearLabel(String(propYearName))
     if (propCategoryName) setCategoryLabel(propCategoryName)
   }, [propYearName, propCategoryName])
 
   useEffect(() => {
-    // resolve yearName -> yearId OR ensure label matches resolved name when yearId provided
     if (years) {
       if (propYearName) {
         const found = years.find((yy) => String(yy.name).toLowerCase() === String(propYearName).toLowerCase())
@@ -87,7 +84,6 @@ export function CreateContent({
         }
       } else if (yearId) {
         const y = years.find((yy) => String(yy.id) === String(yearId) || String(yy._id) === String(yearId))
-        // show the year's name if available, fall back to id
         setYearLabel(y?.name ?? String(yearId))
       } else {
         setYearLabel(String(yearId ?? ""))
@@ -96,7 +92,6 @@ export function CreateContent({
   }, [years, propYearName, yearId])
 
   useEffect(() => {
-    // resolve categoryName -> categoryId OR ensure label matches resolved name when categoryId provided
     if (categories) {
       if (propCategoryName) {
         const found = categories.find((cc) => String(cc.name).toLowerCase() === String(propCategoryName).toLowerCase())
@@ -117,7 +112,6 @@ export function CreateContent({
     e.preventDefault()
     setErrors({})
 
-    // prepare link for validation: pass undefined when empty so schema.optional() accepts it
     const linkForValidation = link?.trim() === "" ? undefined : link?.trim()
 
     const toValidate = {
@@ -128,11 +122,11 @@ export function CreateContent({
       assignment: String(assignment ?? "").trim(),
       description: String(description ?? "").trim(),
       paymentstatus: String(paymentstatus ?? "").trim(),
+      price: Number(price), // ADD THIS - convert to number
     }
 
     const result = schema.safeParse(toValidate)
     if (!result.success) {
-      // map zod issues to a simple object for the UI
       const errObj = {}
       result.error.issues.forEach((issue) => {
         const key = issue.path[0] ?? "form"
@@ -151,6 +145,7 @@ export function CreateContent({
         assignment: toValidate.assignment,
         description: toValidate.description,
         paymentstatus: toValidate.paymentstatus,
+        price: toValidate.price, // ADD THIS
       }
 
       console.log("create payload:", content)
@@ -161,6 +156,7 @@ export function CreateContent({
       setAssignment("")
       setDescription("")
       setPaymentstatus("Free")
+      setPrice(0) // ADD THIS - reset price
 
       console.log("✅ Content created successfully")
 
@@ -175,7 +171,6 @@ export function CreateContent({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        {/* big rectangle with a plus mark and "Add Content" text */}
         <button
           type="button"
           className="flex items-center justify-center gap-4 h-28 w-80 rounded-lg border-2 border-dashed border-gray-300 bg-white text-gray-800 hover:bg-gray-50"
@@ -249,6 +244,24 @@ export function CreateContent({
               </select>
               {errors.paymentstatus && <p className="text-sm text-red-600">{errors.paymentstatus}</p>}
             </div>
+
+            {/* ADD THIS - PRICE FIELD (only show when Paid is selected) */}
+            {paymentstatus === "Paid" && (
+              <div className="grid gap-3">
+                <Label htmlFor="price">Price (LKR)</Label>
+                <Input
+                  id="price"
+                  name="price"
+                  type="number"
+                  min="0"
+                  step="100"
+                  value={price}
+                  onChange={(e) => setPrice(Number(e.target.value))}
+                  placeholder="Enter price in LKR"
+                />
+                {errors.price && <p className="text-sm text-red-600">{errors.price}</p>}
+              </div>
+            )}
           </div>
 
           {errors.form && <p className="mt-3 text-sm text-red-600">{errors.form}</p>}
@@ -276,5 +289,5 @@ export function CreateContent({
     </Dialog>
   )
 }
+
 export default CreateContent
-// ...existing code...
