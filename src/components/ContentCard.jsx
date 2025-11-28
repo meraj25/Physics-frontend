@@ -237,15 +237,7 @@ function ContentCards({ contents, error, isLoading }) {
                         </>
                       )}
                     </button>
-                    {assignment && (
-                      <button
-                        type="button"
-                        onClick={() => openUrl(assignment)}
-                        className="inline-flex items-center px-3 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700"
-                      >
-                        Assignment
-                      </button>
-                    )}
+                    
                   </>
                 )}
               </div>
