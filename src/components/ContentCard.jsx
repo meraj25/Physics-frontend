@@ -23,22 +23,28 @@ function ContentCards({ contents, error, isLoading }) {
   }
 
   const handlePayment = async (contentId, contentTopic, price) => {
-    if (!user) {
-      alert("Please sign in to purchase content")
+  if (!user) {
+    alert("Please sign in to purchase content")
+    return
+  }
+
+  setProcessingPayment((prev) => ({ ...prev, [contentId]: true }))
+
+  try {
+    const response = await initiatePayment(contentId).unwrap()
+    
+    // ADD THESE CONSOLE LOGS
+    console.log('🟢 Backend Response:', response)
+    console.log('Merchant ID:', response.merchantId)
+    console.log('Hash:', response.hash)
+    console.log('Order ID:', response.orderId)
+    console.log('Amount:', response.amount)
+
+    if (response.alreadyPurchased) {
+      alert("You have already purchased this content!")
+      setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
       return
     }
-
-    setProcessingPayment((prev) => ({ ...prev, [contentId]: true }))
-
-    try {
-      // Initiate payment on backend
-      const response = await initiatePayment(contentId).unwrap()
-
-      if (response.alreadyPurchased) {
-        alert("You have already purchased this content!")
-        setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
-        return
-      }
 
       // Get user info for PayHere
       const firstName = user.firstName || "User"
