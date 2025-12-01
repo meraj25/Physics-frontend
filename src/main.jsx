@@ -15,6 +15,9 @@ import SignUpPage from './pages/sign-up.page'
 import Dashboard from './pages/dashboard'
 import About from './pages/about.page'
 import ContactPage from './pages/contact'
+import PrivacyPolicy from './pages/privacy-policy.page'
+import RefundPolicy from './pages/return-policy.page'
+import TermsAndConditions from './pages/terms-and-conditions.page'
 import { store } from './lib/store'
 import { Provider } from 'react-redux'
 import HeaderLayout from './layouts/Header.layout'
@@ -42,7 +45,7 @@ createRoot(document.getElementById('root')).render(
              <Route path="/physics-2027" element={<Physics2027Page />} />
              <Route path="/physics-2028" element={<Physics2028Page />} />
              <Route path="/physics-study-pack" element={<PhysicsStudyPackPage />} />
-           </Route>
+             </Route>
             <Route path="/about" element={<About/>}/>
             <Route path="/contact" element={<ContactPage/>}/>
             
@@ -50,7 +53,11 @@ createRoot(document.getElementById('root')).render(
             <Route path="/sign-in" element={<SignInPage />} />
             <Route path="/sign-up" element={<SignUpPage />} />
         
-        </Route>
+           </Route>
+
+           <Route path="/privacy-policy" element={<PrivacyPolicy />}/>
+           <Route path="/refund-policy" element={<RefundPolicy />}/>
+           <Route path="/terms&conditions-policy" element={<TermsAndConditions />}/>
 
         
         <Route element={<ProtectedLayout/>}>
