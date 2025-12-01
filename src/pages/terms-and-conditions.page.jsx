@@ -1,126 +1,88 @@
-// File: TermsAndConditions.tsx or pages/terms.tsx
+// pages/terms.tsx or TermsAndConditions.tsx
 import React from 'react';
 
 const TermsAndConditions = () => {
- 
-
+  
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-700 px-8 py-12 text-white text-center">
-          <h1 className="text-4xl md:text-5xl font-bold">Terms & Conditions</h1>
-          <p className="mt-3 text-xl opacity-90">Sanjayasuriya</p>
-          <p className="mt-2 text-sm opacity-80">Last updated: December 1, 2025</p>
-        </div>
+    <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto bg-white border border-gray-200 shadow-lg rounded-lg p-8 md:p-12">
+        <header className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900">Terms & Conditions</h1>
+          <p className="text-sm text-gray-600 mt-3">Last Updated: December 1, 2025</p>
+          <p className="text-lg text-gray-700 mt-2">Sanjayasuriya – sanjayasuriya.online</p>
+        </header>
 
-        <div className="prose prose-lg max-w-none px-8 py-12 text-gray-800 leading-relaxed space-y-10">
-          <p className="text-center text-gray-600 italic">
-            By accessing <strong>sanjayasuriya.online</strong>, you agree to be bound by these Terms & Conditions.
-          </p>
-
-          {/* 1. Use of Our Service */}
+        <div className="prose max-w-none text-gray-800 text-lg leading-relaxed space-y-10">
           <section>
-            <h2 className="text-2xl font-bold text-indigo-700 mb-4">1. Use of Our Service</h2>
-            <p>Our platform provides:</p>
-            <ul className="list-disc list-inside mt-3 space-y-2 ml-4">
-              <li>Tuition class recordings (recorded sessions)</li>
-              <li>Educational content such as past papers, notes, model papers, and assignments</li>
-            </ul>
-            <p className="mt-4">
-              Users must create an account to purchase and unlock premium content. Free content may be available without login.
-            </p>
-          </section>
-
-          {/* 2. Digital Content Access */}
-          <section>
-            <h2 className="text-2xl font-bold text-indigo-700 mb-4">2. Digital Content Access</h2>
-            <p>Once a purchase is successfully completed:</p>
-            <ul className="list-disc list-inside mt-3 space-y-2 ml-4">
-              <li>Content becomes immediately available in your account</li>
-              <li>Access is granted <strong>only to the registered user</strong> who made the purchase</li>
-              <li>Sharing, distributing, re-uploading, or screen recording content is <strong>strictly prohibited</strong></li>
-            </ul>
-          </section>
-
-          {/* 3. Payment Terms */}
-          <section>
-            <h2 className="text-2xl font-bold text-indigo-700 mb-4">3. Payment Terms</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Acceptance of Terms</h2>
             <p>
-              All payments are securely processed through <strong>PayHere</strong> (Sri Lanka's trusted payment gateway).
-            </p>
-            <p className="mt-3 font-semibold text-red-600">
-              All payments are non-refundable, except in rare cases of technical errors (e.g., double charge or system failure), which will be reviewed case-by-case.
+              By accessing or using sanjayasuriya.online (the "Site"), you agree to be bound by these Terms & Conditions. If you do not agree, you must not use the Site or purchase any content.
             </p>
           </section>
 
-          {/* 4. User Responsibilities */}
           <section>
-            <h2 className="text-2xl font-bold text-indigo-700  mb-4">4. User Responsibilities</h2>
-            <p>You agree not to:</p>
-            <ul className="list-disc list-inside mt-3 space-y-2 ml-4">
-              <li>Share your login credentials with anyone</li>
-              <li>Resell, redistribute, or commercially exploit purchased content</li>
-              <li>Attempt to download, screen record, hack, extract, or copy video/content</li>
-              <li>Use automation tools or bots to access the platform</li>
-            </ul>
-          </section>
-
-          {/* 5. Intellectual Property */}
-          <section>
-            <h2 className="text-2xl font-bold text-indigo-700 mb-4">5. Intellectual Property</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">2. Nature of Service</h2>
             <p>
-              All videos, class recordings, notes, papers, and materials are the exclusive intellectual property of <strong>Sanjaya Suriya</strong>.
-            </p>
-            <p className="mt-3 font-medium text-red-700">
-              Unauthorized reproduction, distribution, or sharing may result in permanent account suspension and legal action.
+              The Site provides digital educational content including tuition class recordings, lesson videos, past papers, notes, and assignments. Access to premium content requires account registration and payment.
             </p>
           </section>
 
-          {/* 6. Account Suspension */}
           <section>
-            <h2 className="text-2xl font-bold text-indigo-700 mb-4">6. Account Suspension</h2>
-            <p>We reserve the right to suspend or terminate accounts without refund for:</p>
-            <ul className="list-disc list-inside mt-3 space-y-2 ml-4">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">3. User Account & Responsibilities</h2>
+            <p>You agree to:</p>
+            <ol className="list-decimal list-inside mt-4 space-y-3 ml-6">
+              <li>Provide accurate information during registration</li>
+              <li>Maintain confidentiality of your login credentials</li>
+              <li>Not share, resell, redistribute, or allow third-party access to purchased content</li>
+              <li>Not attempt to download, screen recording, hacking, or extraction of video/content</li>
+            </ol>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">4. Intellectual Property</h2>
+            <p>
+              All content on the Site, including videos, recordings, and materials, is the exclusive property of Sanjaya Suriya and protected by copyright law. Unauthorized reproduction, distribution, or commercial use is strictly prohibited and may result in legal action.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">5. Prohibited Activities</h2>
+            <p>Users shall not engage in:</p>
+            <ul className="list-disc list-inside mt-4 space-y-2 ml-6">
               <li>Content piracy or sharing</li>
+              <li>Account sharing or multiple simultaneous logins</li>
               <li>Fraudulent payment or chargeback attempts</li>
-              <li>Abusive behavior or misuse of the platform</li>
-              <li>Multiple logins from different locations/devices indicating sharing</li>
+              <li>Any form of automated access or data extraction</li>
             </ul>
           </section>
 
-         
-
-          {/* 7. Limitation of Liability */}
           <section>
-            <h2 className="text-2xl font-bold text-indigo-700 mb-4">7. Limitation of Liability</h2>
-            <p>We are not responsible for issues caused by:</p>
-            <ul className="list-disc list-inside mt-3 space-y-2 ml-4">
-              <li>Internet connectivity problems affecting video playback</li>
-              <li>Device or browser incompatibility</li>
-              <li>User errors (e.g., wrong purchase, forgotten password)</li>
-              <li>Third-party service outages (YouTube, Vimeo, PayHere, etc.)</li>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">6. Termination</h2>
+            <p>
+              Sanjayasuriya reserves the right to suspend or terminate any account without refund for violation of these Terms, at its sole discretion and without prior notice.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">7. Limitation of Liability</h2>
+            <p>
+              Sanjaya Suriya shall not be liable for any indirect, incidental, or consequential damages arising from use of the Site, including issues related to internet connectivity, device compatibility, or third-party service outages.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">8. Contact Information</h2>
+            <p>For any queries regarding these Terms:</p>
+            <ul className="list-none mt-4 space-y-3 text-lg">
+              <li><strong>Email:</strong> <a href="mailto:support@sanjayasuriya.online" className="text-blue-700 hover:underline">support@sanjayasuriya.online</a></li>
+              <li><strong>WhatsApp:</strong> <a href="https://wa.me/94771234567" className="text-blue-700 hover:underline">+94 712435817</a></li>
             </ul>
           </section>
-
-          {/* 8. Contact */}
-          <section className="bg-indigo-50 rounded-xl p-8 text-center border border-indigo-200">
-            <h2 className="text-2xl font-bold text-indigo-800 mb-4">Contact Us</h2>
-            <p className="text-lg">
-              For support, inquiries, or refund requests:
-            </p>
-            <div className="mt-6 space-y-3 text-lg font-medium">
-              <p>Email: <a href="mailto:support@sanjayasuriya.online" className="text-indigo-600 hover:underline">support@sanjayasuriya.online</a></p>
-              <p>WhatsApp: <a href="https://wa.me/94771234567" className="text-green-600 hover:underline">+94 77 123 4567</a> (Support only)</p>
-              <p>Website: <a href="https://sanjayasuriya.online" className="text-indigo-600 hover:underline">sanjayasuriya.online</a></p>
-            </div>
-          </section>
         </div>
 
-        {/* Footer */}
-        <div className="bg-gray-900 text-gray-400 text-center py-6 text-sm">
-          © 2025 Sanjayasuriya. All Rights Reserved. | Made with passion for education
-        </div>
+        <footer className="text-center text-gray-600 mt-16 pt-8 border-t">
+          <p>© 2025 Sanjayasuriya. All rights reserved.</p>
+        </footer>
       </div>
     </div>
   );

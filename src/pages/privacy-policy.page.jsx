@@ -1,118 +1,122 @@
-
+// PrivacyPolicy.tsx or pages/privacy-policy.tsx
+import React from 'react';
 
 const PrivacyPolicy = () => {
-  
+
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+    <div className="min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto bg-white border border-gray-200 shadow-lg rounded-lg p-8">
         {/* Header */}
-        <div className="bg-gradient-to-r from-green-600 to-teal-600 px-8 py-12 text-white text-center">
-          <h1 className="text-4xl md:text-5xl font-bold">Privacy Policy</h1>
-          <p className="mt-3 text-xl opacity-90">Sanjayasuriya</p>
-          <p className="mt-2 text-sm opacity-80">Last updated: December 1, 2025</p>
-        </div>
+        <header className="text-center mb-10">
+          <h1 className="text-4xl font-bold text-gray-900">Privacy Policy</h1>
+          <p className="text-sm text-gray-600 mt-2">
+            Last Updated: December 1, 2025
+          </p>
+          <p className="text-lg text-gray-700 mt-4">
+            Sanjayasuriya (sanjayasuriya.online)
+          </p>
+        </header>
 
-        <div className="prose prose-lg max-w-none px-8 py-12 text-gray-800 space-y-12">
-          <section className="text-center">
-            <p className="text-lg leading-relaxed">
-              This Privacy Policy explains how <strong>Sanjaya Suriya (sanjayasuriya.online)</strong> collects, uses, and protects your personal information when you access our tuition class recordings, lesson videos, educational materials, and online services.
+        <div className="prose max-w-none text-gray-800 leading-relaxed">
+          <p className="text-lg mb-8">
+            This Privacy Policy governs the manner in which Sanjayasuriya (sanjayasuriya.online) collects, uses, discloses, and protects personal information provided by users of the Site, especially when conducting business transactions or accessing tuition recordings, educational materials, and online services.
+          </p>
+
+          <section className="mb-10">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Information We Collect</h2>
+            <p>
+              Sanjaya Suriya may collect the following types of personal and usage information:
+            </p>
+            <ol className="list-decimal list-inside mt-4 space-y-2">
+              <li>Full name, email address, and phone number.</li>
+              <li>Billing information, securely processed via PayHere.</li>
+              <li>Account login credentials, stored in encrypted form.</li>
+              <li>Usage data, including pages viewed, classes accessed, time spent, and device information.</li>
+            </ol>
+          </section>
+
+          <section className="mb-10">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">2. How We Use Your Information</h2>
+            <p>
+              Sanjaya Suriya uses the collected information for the following purposes:
+            </p>
+            <ol className="list-decimal list-inside mt-4 space-y-2">
+              <li>To provide and manage access to purchased educational content.</li>
+              <li>To enhance platform performance and user learning experience.</li>
+              <li>To process secure payments and issue transaction receipts.</li>
+              <li>To send service-related notifications (e.g., new content updates, password resets).</li>
+              <li>To detect and prevent fraud, piracy, and unauthorized account access.</li>
+            </ol>
+          </section>
+
+          <section className="mb-10">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">3. Payments</h2>
+            <p>
+              All payment transactions are processed securely through PayHere, a licensed payment gateway in Sri Lanka. Sanjaya Suriya does not store or retain credit or debit card details on its servers.
             </p>
           </section>
 
-          {/* Information We Collect */}
-          <section className="bg-gray-50 rounded-xl p-8 border">
-            <h2 className="text-2xl font-bold text-gray-900 mb-5">Information We Collect</h2>
-            <p>We may collect the following personal and usage information:</p>
-            <ul className="mt-4 space-y-3 text-lg list-disc list-inside marker:text-green-600">
-              <li>Full name, email address, and phone number</li>
-              <li>Billing information (securely processed via PayHere)</li>
-              <li>Account login credentials (encrypted)</li>
-              <li>Usage data: pages viewed, classes accessed, time spent, device info</li>
-            </ul>
-          </section>
-
-          {/* How We Use Your Information */}
-          <section className="bg-blue-50 rounded-xl p-8 border border-blue-200">
-            <h2 className="text-2xl font-bold text-blue-900 mb-5">How We Use Your Information</h2>
-            <p>We use your data only to:</p>
-            <ul className="mt-4 space-y-3 text-lg list-disc list-inside marker:text-blue-600">
-              <li>Provide and manage access to your purchased content</li>
-              <li>Improve platform performance and your learning experience</li>
-              <li>Process secure payments and issue receipts</li>
-              <li>Send important service updates (e.g., new classes, password reset)</li>
-              <li>Detect and prevent fraud, piracy, and unauthorized account access</li>
-            </ul>
-          </section>
-
-          {/* Payments */}
-          <section className="bg-green-50 rounded-xl p-8 border border-green-200">
-            <h2 className="text-2xl font-bold text-green-900 mb-5">Secure Payments</h2>
-            <p className="text-lg">
-              All payments are processed through <strong>PayHere</strong> — Sri Lanka’s trusted and licensed payment gateway.
-            </p>
-            <p className="mt-4 text-lg font-semibold text-green-800">
-              We do <span className="underline">NOT</span> store your credit/debit card details on our servers.
+          <section className="mb-10">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">4. Data Protection & Security</h2>
+            <p>
+              Sanjaya Suriya implements reasonable technical and organizational measures, including encryption, secure server hosting, and access controls, to protect personal data against unauthorized access, loss, or misuse.
             </p>
           </section>
 
-          {/* Data Protection */}
-          <section className="bg-purple-50 rounded-xl p-8 border border-purple-200">
-            <h2 className="text-2xl font-bold text-purple-900 mb-5">Data Protection & Security</h2>
-            <p className="text-lg">
-              We implement industry-standard technical and organizational measures (encryption, secure servers, access controls) to protect your personal data from unauthorized access, loss, or misuse.
+          <section className="mb-10">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">5. Third-Party Services</h2>
+            <p>
+              Sanjaya Suriya may engage third-party services, including:
+            </p>
+            <ol className="list-decimal list-inside mt-4 space-y-2">
+              <li>PayHere for payment processing.</li>
+              <li>Google Analytics or similar tools for anonymous usage statistics.</li>
+              <li>Secure cloud hosting providers for content delivery.</li>
+            </ol>
+            <p className="mt-4">
+              All third parties are contractually obligated to adhere to strict privacy and security standards.
             </p>
           </section>
 
-          {/* Third-Party Services */}
-          <section className="bg-amber-50 rounded-xl p-8 border border-amber-300">
-            <h2 className="text-2xl font-bold text-amber-900 mb-5">Third-Party Services</h2>
-            <p>We only share data with trusted partners such as:</p>
-            <ul className="mt-4 space-y-2 text-lg list-disc list-inside marker:text-amber-700">
-              <li>PayHere (payment processing)</li>
-              <li>Google Analytics or similar tools (anonymous usage statistics only)</li>
-              <li>Secure cloud hosting providers</li>
-            </ul>
-            <p className="mt-4">All third parties are bound by strict privacy and security obligations.</p>
-          </section>
-
-          {/* Your Rights */}
-          <section className="bg-indigo-50 rounded-xl p-8 border border-indigo-300">
-            <h2 className="text-2xl font-bold text-indigo-900 mb-5">Your Rights</h2>
-            <p>You may contact us to:</p>
-            <ul className="mt-4 space-y-3 text-lg list-disc list-inside marker:text-indigo-600">
-              <li>Access the personal data we hold about you</li>
-              <li>Request correction of inaccurate information</li>
-              <li>Request deletion of your account and data (subject to legal requirements)</li>
-            </ul>
-          </section>
-
-          {/* Contact */}
-          <section className="bg-gradient-to-r from-teal-600 to-cyan-600 rounded-xl p-10 text-white text-center">
-            <h2 className="text-3xl font-bold mb-6">Contact Us</h2>
-            <p className="text-xl mb-6">
-              Have questions about your privacy or this policy?
+          <section className="mb-10">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">6. Your Rights</h2>
+            <p>
+              Users may exercise the following rights by contacting Sanjaya Suriya:
             </p>
-            <div className="space-y-4 text-xl font-medium">
-              <p>
-                Email:{' '}
-                <a href="mailto:support@sanjayasuriya.online" className="underline hover:text-cyan-200">
+            <ol className="list-decimal list-inside mt-4 space-y-2">
+              <li>Request access to personal data held by us.</li>
+              <li>Request correction of inaccurate or incomplete information.</li>
+              <li>Request deletion of account and data, subject to legal obligations.</li>
+            </ol>
+          </section>
+
+          <section className="mb-10">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">7. Contact Us</h2>
+            <p>
+              For any questions, concerns, or requests regarding this Privacy Policy or your personal data, please contact us at:
+            </p>
+            <ul className="list-none mt-4 space-y-2">
+              <li>
+                <strong>Email:</strong>{' '}
+                <a href="mailto:support@sanjayasuriya.online" className="text-blue-600 hover:underline">
                   support@sanjayasuriya.online
                 </a>
-              </p>
-              <p>
-                WhatsApp:{' '}
-                <a href="https://wa.me/94771234567" className="underline hover:text-cyan-200">
+              </li>
+              <li>
+                <strong>WhatsApp:</strong>{' '}
+                <a href="https://wa.me/94712453817" className="text-blue-600 hover:underline">
                   +94 77 123 4567
                 </a>
-              </p>
-            </div>
+              </li>
+            </ul>
           </section>
         </div>
 
-        <div className="bg-gray-900 text-gray-400 text-center py-6 text-sm">
-          © 2025 Sanjayasuriya • sanjayasuriya.online • Your Privacy Matters
-        </div>
+        <footer className="text-center text-gray-600 mt-10 border-t pt-6">
+          <p>© {currentYear} Sanjayasuriya. All rights reserved.</p>
+          <p className="mt-2">sanjayasuriya.online</p>
+        </footer>
       </div>
     </div>
   );
