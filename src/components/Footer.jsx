@@ -1,6 +1,7 @@
 
 import React, { useEffect } from 'react';
 import { BookOpen, Mail, Phone, MapPin } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 function useFadeIn() {
   useEffect(() => {
@@ -66,7 +67,27 @@ function Footer() {
 
           {/* Copyright */}
           <p className="text-xs text-blue-400 pt-4 border-t border-blue-800">
-            ©2025 Physics by Sanjaya. සියලුම හිමිකම් ඇවිරිණි.
+              <Link
+              to="/privacy-policy"
+              className="flex items-center font-bold text-xl md:text-2xl transition-transform hover:scale-105"
+              onClick={() => setIsOpen(false)}
+            >
+              Privacy Policy
+            </Link>
+                  <Link
+              to="/refund-policy"
+              className="flex items-center font-bold text-xl md:text-2xl transition-transform hover:scale-105"
+              onClick={() => setIsOpen(false)}
+            >
+              Refund Policy
+            </Link>
+                  <Link
+              to="/terms-and-conditions-policy"
+              className="flex items-center font-bold text-xl md:text-2xl transition-transform hover:scale-105"
+              onClick={() => setIsOpen(false)}
+            >
+              Terms and conditions
+            </Link>
           </p>
         </div>
       </div>
