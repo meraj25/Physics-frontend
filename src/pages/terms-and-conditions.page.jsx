@@ -41,7 +41,7 @@ const TermsAndConditions = () => {
           <section>
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">4. Intellectual Property</h2>
             <p>
-              All content on the Site, including videos, recordings, and materials, is the exclusive property of Sanjaya Suriya and protected by copyright law. Unauthorized reproduction, distribution, or commercial use is strictly prohibited and may result in legal action.
+              All content on the Site, including videos, recordings, and materials, is the exclusive property of Sanjayasuriya and protected by copyright law. Unauthorized reproduction, distribution, or commercial use is strictly prohibited and may result in legal action.
             </p>
           </section>
 
@@ -66,7 +66,7 @@ const TermsAndConditions = () => {
           <section>
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">7. Limitation of Liability</h2>
             <p>
-              Sanjaya Suriya shall not be liable for any indirect, incidental, or consequential damages arising from use of the Site, including issues related to internet connectivity, device compatibility, or third-party service outages.
+              Sanjayasuriya shall not be liable for any indirect, incidental, or consequential damages arising from use of the Site, including issues related to internet connectivity, device compatibility, or third-party service outages.
             </p>
           </section>
 
@@ -75,7 +75,7 @@ const TermsAndConditions = () => {
             <p>For any queries regarding these Terms:</p>
             <ul className="list-none mt-4 space-y-3 text-lg">
               <li><strong>Email:</strong> <a href="mailto:support@sanjayasuriya.online" className="text-blue-700 hover:underline">support@sanjayasuriya.online</a></li>
-              <li><strong>WhatsApp:</strong> <a href="https://wa.me/94771234567" className="text-blue-700 hover:underline">+94 712435817</a></li>
+              <li><strong>WhatsApp:</strong> <a href="https://wa.me/94712453817" className="text-blue-700 hover:underline">+94 712435817</a></li>
             </ul>
           </section>
         </div>

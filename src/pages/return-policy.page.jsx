@@ -53,7 +53,7 @@ const RefundPolicy = () => {
             <p>Contact us immediately at:</p>
             <ul className="list-none mt-4 space-y-3 text-lg">
               <li><strong>Email:</strong> <a href="mailto:support@sanjayasuriya.online" className="text-blue-700 hover:underline">support@sanjayasuriya.online</a></li>
-              <li><strong>WhatsApp:</strong> <a href="https://wa.me/94712453817" className="text-blue-700 hover:underline">+94 77 123 4567</a></li>
+              <li><strong>WhatsApp:</strong> <a href="https://wa.me/94712453817" className="text-blue-700 hover:underline">+94 712453817</a></li>
             </ul>
             <p className="mt-4">Include your PayHere transaction ID and screenshots.</p>
           </section>
@@ -61,7 +61,7 @@ const RefundPolicy = () => {
           <section>
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">5. Final Decision</h2>
             <p>
-              Sanjaya Suriya reserves the sole right to approve or deny any refund request after review. Approved refunds will be processed within 7–14 business days.
+              Sanjayasuriya reserves the sole right to approve or deny any refund request after review. Approved refunds will be processed within 7–14 business days.
             </p>
           </section>
         </div>

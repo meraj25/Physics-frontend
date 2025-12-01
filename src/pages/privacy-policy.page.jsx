@@ -26,7 +26,7 @@ const PrivacyPolicy = () => {
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Information We Collect</h2>
             <p>
-              Sanjaya Suriya may collect the following types of personal and usage information:
+              Sanjayasuriya may collect the following types of personal and usage information:
             </p>
             <ol className="list-decimal list-inside mt-4 space-y-2">
               <li>Full name, email address, and phone number.</li>
@@ -39,7 +39,7 @@ const PrivacyPolicy = () => {
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">2. How We Use Your Information</h2>
             <p>
-              Sanjaya Suriya uses the collected information for the following purposes:
+              Sanjayasuriya uses the collected information for the following purposes:
             </p>
             <ol className="list-decimal list-inside mt-4 space-y-2">
               <li>To provide and manage access to purchased educational content.</li>
@@ -53,21 +53,21 @@ const PrivacyPolicy = () => {
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">3. Payments</h2>
             <p>
-              All payment transactions are processed securely through PayHere, a licensed payment gateway in Sri Lanka. Sanjaya Suriya does not store or retain credit or debit card details on its servers.
+              All payment transactions are processed securely through PayHere, a licensed payment gateway in Sri Lanka. Sanjayasuriya does not store or retain credit or debit card details on its servers.
             </p>
           </section>
 
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">4. Data Protection & Security</h2>
             <p>
-              Sanjaya Suriya implements reasonable technical and organizational measures, including encryption, secure server hosting, and access controls, to protect personal data against unauthorized access, loss, or misuse.
+              Sanjayasuriya implements reasonable technical and organizational measures, including encryption, secure server hosting, and access controls, to protect personal data against unauthorized access, loss, or misuse.
             </p>
           </section>
 
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">5. Third-Party Services</h2>
             <p>
-              Sanjaya Suriya may engage third-party services, including:
+              Sanjayasuriya may engage third-party services, including:
             </p>
             <ol className="list-decimal list-inside mt-4 space-y-2">
               <li>PayHere for payment processing.</li>
@@ -82,7 +82,7 @@ const PrivacyPolicy = () => {
           <section className="mb-10">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">6. Your Rights</h2>
             <p>
-              Users may exercise the following rights by contacting Sanjaya Suriya:
+              Users may exercise the following rights by contacting Sanjayasuriya:
             </p>
             <ol className="list-decimal list-inside mt-4 space-y-2">
               <li>Request access to personal data held by us.</li>
@@ -106,7 +106,7 @@ const PrivacyPolicy = () => {
               <li>
                 <strong>WhatsApp:</strong>{' '}
                 <a href="https://wa.me/94712453817" className="text-blue-600 hover:underline">
-                  +94 77 123 4567
+                  +94 712453817
                 </a>
               </li>
             </ul>
