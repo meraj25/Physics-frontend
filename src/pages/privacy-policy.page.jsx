@@ -114,7 +114,7 @@ const PrivacyPolicy = () => {
         </div>
 
         <footer className="text-center text-gray-600 mt-10 border-t pt-6">
-          <p>© {currentYear} Sanjayasuriya. All rights reserved.</p>
+          <p>© 2025 Sanjayasuriya. All rights reserved.</p>
           <p className="mt-2">sanjayasuriya.online</p>
         </footer>
       </div>
