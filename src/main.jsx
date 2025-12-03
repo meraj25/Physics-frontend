@@ -7,8 +7,14 @@ import AdvancedLevelPage from './pages/advanced-level.page'
 import Physics2026Page from './pages/Physics-2026.page'
 import Physics2027Page from './pages/Physics-2027.page'
 import Physics2028Page from './pages/Physics-2028.page'
+
 import PhysicsStudyPackPage from './pages/physics-study-pack.page'
 import StudyPackContentPage from './pages/studypack-content.page'
+import MathsPage from './pages/maths.page'
+import AppliedContentPage from './pages/applied-content.page'
+import PureContentPage from './pages/pure-content.page'
+import PreEngPage from './pages/Pre-Engineering.page'
+import PreEngContentPage from './pages/pre-eng-content.page'
 import { ClerkProvider } from '@clerk/clerk-react'
 import SignInPage from './pages/sign-in.page'
 import SignUpPage from './pages/sign-up.page'
@@ -44,7 +50,9 @@ createRoot(document.getElementById('root')).render(
              <Route path="/physics-2026" element={<Physics2026Page />} />
              <Route path="/physics-2027" element={<Physics2027Page />} />
              <Route path="/physics-2028" element={<Physics2028Page />} />
+             <Route path="/mathematics" element={<MathsPage />} />
              <Route path="/physics-study-pack" element={<PhysicsStudyPackPage />} />
+             <Route path="/pre-engineering" element={<PreEngPage />} />
              </Route>
             <Route path="/about" element={<About/>}/>
             <Route path="/contact" element={<ContactPage/>}/>
@@ -64,6 +72,18 @@ createRoot(document.getElementById('root')).render(
          <Route element={<HeaderLayout />}>
             <Route path="/studypack">
                <Route path=":subheading" element={<StudyPackContentPage />} />
+            </Route>
+
+            <Route path="/mathematics/applied">
+               <Route path=":subheading" element={<AppliedContentPage />} />
+            </Route>
+
+            <Route path="/mathematics/pure">
+               <Route path=":subheading" element={<PureContentPage />} />
+            </Route>
+
+             <Route path="/pre-engineering">
+               <Route path=":subheading" element={<PreEngContentPage />} />
             </Route>
          </Route>
         </Route>

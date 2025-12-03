@@ -89,6 +89,16 @@ export const Api = createApi({
    getAllHeadings: build.query({
       query: () => `/headings`,
     }),
+    
+    getAllMathsHeadings: build.query({
+      query: () => `/maths_headings`,
+    }),
+    
+    getAllPreEngHeadings: build.query({
+      query: () => `/pre_eng_headings`,
+    })
+
+
 
 
   }),

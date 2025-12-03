@@ -53,7 +53,7 @@ useEffect(() => {
               />
               <SimpleCards
                 topic="Combined Mathematics"
-                path={`combined-mathematics-${selectedYear}`}
+                path={`mathematics`}
                 image="al.jpg"
               />
             </div>
