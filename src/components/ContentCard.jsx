@@ -110,12 +110,18 @@ function ContentCards({ contents, error, isLoading }) {
         const description = c.description ?? ""
         const link = c.link ?? ""
         const assignment = c.assignment ?? ""
+        const contentType = c.contentType ?? "theory"
         const paymentstatus = (c.paymentstatus ?? "Free").toLowerCase()
         const price = c.price ?? 1000
         const isFree = paymentstatus === "free"
         const isPaid = paymentstatus === "paid"
         const isPurchased = c.isPurchased || false
         const isProcessing = processingPayment[id] || false
+
+         const getAssignmentButtonLabel = () => {
+          if (contentType === "papers") return "Papers"
+          return "Assignment"
+        }
 
         return (
           <article
@@ -192,7 +198,7 @@ function ContentCards({ contents, error, isLoading }) {
                         onClick={() => openUrl(assignment)}
                         className="inline-flex items-center px-3 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700"
                       >
-                        Assignment
+                        {getAssignmentButtonLabel()}
                       </button>
                     )}
                   </>
@@ -216,12 +222,11 @@ function ContentCards({ contents, error, isLoading }) {
                         onClick={() => openUrl(assignment)}
                         className="inline-flex items-center px-3 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700"
                       >
-                        Assignment
+                        {getAssignmentButtonLabel()}
                       </button>
                     )}
                   </>
                 )}
-
                 {/* Paid content - not purchased */}
                 {isPaid && !isPurchased && (
                   <>

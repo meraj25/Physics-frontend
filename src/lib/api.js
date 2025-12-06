@@ -96,7 +96,76 @@ export const Api = createApi({
     
     getAllPreEngHeadings: build.query({
       query: () => `/pre_eng_headings`,
-    })
+    }),
+
+    getAllMathsContent: build.query({
+      query: () => `/mathscontents`,
+    }),
+     createMathsContent: build.mutation({
+      query: (content) => ({
+        url: "/mathscontents",
+        method: "POST",
+        body: content,
+      }),
+    }),
+        deleteMathsContent: build.mutation({
+     query: (id) => ({
+       url: `/mathscontents/${id}`,
+        method: "DELETE",
+      }),
+    }),
+
+    getAllPEContent: build.query({
+      query: () => `/pecontents`,
+    }),
+     createPEContent: build.mutation({
+      query: (content) => ({
+        url: "/pecontents",
+        method: "POST",
+        body: content,
+      }),
+    }),
+        deletePEContent: build.mutation({
+     query: (id) => ({
+       url: `/pecontents/${id}`,
+        method: "DELETE",
+      }),
+    }),
+
+    
+   getAllPapers: build.query({
+      query: () => `/papers`,
+    }),
+     createPapers: build.mutation({
+      query: (content) => ({
+        url: "/papers",
+        method: "POST",
+        body: content,
+      }),
+    }),
+        deletePapers: build.mutation({
+     query: (id) => ({
+       url: `/papers/${id}`,
+        method: "DELETE",
+      }),
+    }),
+
+     getAllMcontent: build.query({
+      query: () => `/mcontents`,
+    }),
+     createMcontent: build.mutation({
+      query: (content) => ({
+        url: "/mcontents",
+        method: "POST",
+        body: content,
+      }),
+    }),
+        deleteMcontent: build.mutation({
+     query: (id) => ({
+       url: `/mcontents/${id}`,
+        method: "DELETE",
+      }),
+    }),
 
 
 
@@ -108,13 +177,28 @@ export const Api = createApi({
 // auto-generated based on the defined endpoints
 export const { useGetAllContentQuery, 
   useCreateContentMutation,
-   useGetAllCategoriesQuery,
-    useGetAllYearsQuery,
-    useGetAllStudyPacksQuery,
-    useCreateStudyPackMutation,
-    useGetAllHeadingsQuery,
-    useDeleteContentMutation,
+  useGetAllCategoriesQuery,
+  useGetAllYearsQuery,
+  useGetAllStudyPacksQuery,
+  useCreateStudyPackMutation,
+  useGetAllHeadingsQuery,
+  useDeleteContentMutation,
   useDeleteStudyPackMutation,
-useInitiatePaymentMutation,
+  useInitiatePaymentMutation,
   useCheckPurchaseStatusQuery,
-  useGetUserPurchasesQuery, } = Api
+  useGetUserPurchasesQuery,
+  useCreateMathsContentMutation,
+  useGetAllMathsContentQuery,
+  useDeleteMathsContentMutation,
+  useGetAllPEContentQuery,
+  useCreatePEContentMutation,
+  useDeletePEContentMutation,
+  useGetAllPapersQuery,
+  useCreatePapersMutation,
+  useDeletePapersMutation,
+  useGetAllMathsHeadingsQuery,
+  useGetAllPreEngHeadingsQuery,
+  useGetAllMcontentQuery,
+  useCreateMcontentMutation,
+  useDeleteMcontentMutation,
+  } = Api

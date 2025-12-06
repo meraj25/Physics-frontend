@@ -6,7 +6,7 @@ import { useGetAllCategoriesQuery } from "@/lib/api";
 import { useGetAllYearsQuery } from "@/lib/api";
 import { useUser } from "@clerk/clerk-react";
 
-function Physics2028Page() {
+function Maths2026Page() {
   const { user, isLoaded } = useUser();
 
   const [selectedOption, setSelectedOption] = useState('Theory');
@@ -20,14 +20,13 @@ function Physics2028Page() {
   console.log("years:", years); 
 
   const filteredCategory = categories?.find((cat) => cat.name === selectedOption);
-  const filteredYear = years?.find((yr) => yr.name === '2028');
+  const filteredYear = years?.find((yr) => yr.name === '2026');
   const filteredContents = contents?.filter((content) =>
     filteredCategory && filteredYear
       ? content.categoryId === filteredCategory._id &&
         content.yearId === filteredYear._id
       : false
   );
-
   const contentTypeMap = {
     'Theory': 'theory',
     'Revision': 'revision',
@@ -40,6 +39,7 @@ function Physics2028Page() {
   })) || [];
 
   console.log("Filtered Contents:", contentsWithType);
+
 
 
   const isAdmin = user?.publicMetadata?.role === "admin";
@@ -80,7 +80,7 @@ function Physics2028Page() {
         <div className="max-w-6xl mx-auto">
           <section className="mb-16">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">2028 Mathematics</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">2026 Physics</h2>
               <br/>
               <div className="flex justify-center gap-4 flex-wrap">
                 {options.map((option) => (
@@ -104,7 +104,7 @@ function Physics2028Page() {
             {isLoaded && isAdmin && (
               <div className="flex justify-center">
                 <CreateMcontent
-                  yearName={"2028"}
+                  yearName={"2026"}
                   categoryName={selectedOption}
                 />
               </div>
@@ -119,4 +119,4 @@ function Physics2028Page() {
     </div>
   );
 }
-export default Physics2028Page; 
+export default Maths2026Page;

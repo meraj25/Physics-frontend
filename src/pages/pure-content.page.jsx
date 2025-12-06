@@ -1,4 +1,75 @@
+import React, { useEffect, useState } from "react"
+import { useParams } from "react-router"
+import { useGetAllMathsHeadingsQuery } from "@/lib/api"
+import CreateMathsContent from "@/components/CreateMathsContent"
+import MathsCard from "@/components/Mathscard"
+import { useGetAllMathsContentQuery } from "@/lib/api"
+import { useUser } from "@clerk/clerk-react"
+import Footer from "@/components/Footer"
+
+
+
 function PureContentPage() {
-    return <ContentPage subject="mathematics" type="pure" />;
+   const { subheading } = useParams() // this will receive the slug from the URL: /studypack/:subheading
+  const { data: headings, isLoading, error } = useGetAllMathsHeadingsQuery()
+  const { data: studyPacks } = useGetAllMathsContentQuery()
+  const [selectedHeading, setSelectedHeading] = useState(null)
+
+  const { user, isLoaded } = useUser();
+  const isAdmin = user?.publicMetadata?.role === "admin";
+  useEffect(() => {
+    if (!headings || !subheading) return
+
+    const slug = String(subheading).toLowerCase()
+
+    const found = headings.find((h) => {
+      const name = String(h.name ?? "")
+      const maybeSlug = String(h.slug ?? name).toLowerCase()
+      // match explicit slug, normalized name, or exact name
+      const normalizedName = name.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "")
+      return maybeSlug === slug || normalizedName === slug || name.toLowerCase() === slug
+    })
+
+    if (found) setSelectedHeading(found)
+  }, [headings, subheading])
+
+  if (isLoading) return <div className="p-6">Loading heading...</div>
+  if (error) return <div className="p-6 text-red-600">Failed to load headings</div>
+  if (!selectedHeading) return <div className="p-6">Heading not found</div>
+ 
+  const filteredContents = studyPacks?.filter((sp) =>
+    sp.heading === (selectedHeading._id ?? selectedHeading.id)
+  )
+  // pass resolved id and name into CreateSP (heading input will be read-only inside CreateSP)
+  return (
+    <div className="min-h-screen flex flex-col bg-white">
+      
+      <main className="flex-grow container mx-auto px-4 py-0">
+        <div className="max-w-6xl mx-auto">
+        <section className="mb-16">
+          <div className="text-center mb-12">
+         <h2 className="text-2xl font-semibold mb-10">{selectedHeading.main} — {selectedHeading.name}</h2>
+      
+
+          {isLoaded && isAdmin && (
+                    <div className="flex justify-center">
+                      <CreateMathsContent
+                       heading={selectedHeading}
+                       />
+                    </div>
+                  )}
+
+
+      <div className="mb-8">
+       <MathsCard contents={filteredContents} error={error} isLoading={isLoading} />
+       </div>
+
+       </div>
+      </section>
+      </div>
+      </main>
+      <Footer/>
+    </div>
+  )
 }
 export default PureContentPage;

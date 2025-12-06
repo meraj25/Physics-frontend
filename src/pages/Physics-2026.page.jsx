@@ -6,7 +6,7 @@ import { useGetAllCategoriesQuery } from "@/lib/api";
 import { useGetAllYearsQuery } from "@/lib/api";
 import { useUser } from "@clerk/clerk-react";
 
-function AdvancedLevelPage() {
+function Physics2026Page() {
   const { user, isLoaded } = useUser();
 
   const [selectedOption, setSelectedOption] = useState('Theory');
@@ -27,8 +27,20 @@ function AdvancedLevelPage() {
         content.yearId === filteredYear._id
       : false
   );
+  const contentTypeMap = {
+    'Theory': 'theory',
+    'Revision': 'revision',
+    'Papers': 'papers'
+  };
 
-  console.log("Filtered Contents:", filteredContents);
+  const contentsWithType = filteredContents?.map((content) => ({
+    ...content,
+    contentType: contentTypeMap[selectedOption]
+  })) || [];
+
+  console.log("Filtered Contents:", contentsWithType);
+
+
 
   const isAdmin = user?.publicMetadata?.role === "admin";
 
@@ -68,7 +80,7 @@ function AdvancedLevelPage() {
         <div className="max-w-6xl mx-auto">
           <section className="mb-16">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">2026 Physics</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">2026 Mathematics</h2>
               <br/>
               <div className="flex justify-center gap-4 flex-wrap">
                 {options.map((option) => (
@@ -99,7 +111,7 @@ function AdvancedLevelPage() {
             )}
 
             <div className="mb-8">
-              <ContentCards contents={filteredContents} error={error} isLoading={isLoading} />
+              <ContentCards contents={contentsWithType} error={error} isLoading={isLoading} />
             </div>
           </section>
         </div>
@@ -107,4 +119,4 @@ function AdvancedLevelPage() {
     </div>
   );
 }
-export default AdvancedLevelPage;
+export default Physics2026Page;
