@@ -12,6 +12,7 @@ function Navigation() {
   const menuItems = [
     { path: '/', label: 'Home' },
     { path: '/physics-study-pack', label: 'Physics Study Pack' },
+    { path: '/math-study-pack', label: 'Maths Study Pack' },
     { path: '/contact', label: 'Contact' },
     { path: '/about', label: 'About' },
   ];

@@ -290,4 +290,4 @@ export function CreateMcontent({
   )
 }
 
-export default CreateContent
+export default CreateMcontent;

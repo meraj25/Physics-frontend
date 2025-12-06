@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CreateContent } from "@/components/CreateContent";
+import { CreateMcontent } from "@/components/CreateMcontent";
 import ContentCards from "@/components/ContentCard";
 import { useGetAllContentQuery } from "@/lib/api";
 import { useGetAllCategoriesQuery } from "@/lib/api";
@@ -79,7 +79,7 @@ function Maths2027Page() {
         <div className="max-w-6xl mx-auto">
           <section className="mb-16">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">2027 Physics</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">2027 Mathematics</h2>
               <br/>
               <div className="flex justify-center gap-4 flex-wrap">
                 {options.map((option) => (
@@ -102,7 +102,7 @@ function Maths2027Page() {
             {/* ✅ Show CreateContent only for admins */}
             {isLoaded && isAdmin && (
               <div className="flex justify-center">
-                <CreateContent
+                <CreateMcontent
                   yearName={"2027"}
                   categoryName={selectedOption}
                 />

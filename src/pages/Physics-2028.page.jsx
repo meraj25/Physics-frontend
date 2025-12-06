@@ -80,7 +80,7 @@ function Physics2028Page() {
         <div className="max-w-6xl mx-auto">
           <section className="mb-16">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">2028 Mathematics</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">2028 Physics</h2>
               <br/>
               <div className="flex justify-center gap-4 flex-wrap">
                 {options.map((option) => (
