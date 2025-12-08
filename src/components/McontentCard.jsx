@@ -322,13 +322,15 @@ function McontentCards({ contents, error, isLoading }) {
                 )}
 
                 {/* View Results button for all users */}
-                <button
-                  type="button"
-                  onClick={() => handleViewResult(id)}
-                  className="inline-flex items-center px-3 py-2 bg-emerald-600 text-white text-sm rounded hover:bg-emerald-700"
-                >
-                  View Results
-                </button>
+                {(isFree || (isPaid && unlocked)) && (
+                  <button
+                    type="button"
+                    onClick={() => handleViewResult(id)}
+                    className="inline-flex items-center px-3 py-2 bg-emerald-600 text-white text-sm rounded hover:bg-emerald-700"
+                  >
+                    View Results
+                  </button>
+                )}
 
                 {/* Add Results (admin only) */}
                 {isAdmin && (
