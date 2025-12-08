@@ -1,20 +1,18 @@
-// ...existing code...
 import React, { useState } from "react"
-import { useDeleteContentMutation, useInitiatePaymentMutation, useGetResultsQuery, useAddResultMutation } from "@/lib/api"
+import { useDeleteMcontentMutation, useInitiatePaymentMutation, useGetMathsResultsQuery, useAddMathsResultMutation } from "@/lib/api"
 import { useUser } from "@clerk/clerk-react"
 import { Trash2, Lock, CheckCircle } from "lucide-react"
 import { initiatePayHerePayment } from "@/utils/payhere"
-// ...existing code...
 
-function ContentCards({ contents, error, isLoading }) {
+function McontentCards({ contents, error, isLoading }) {
   const [removedMap, setRemovedMap] = useState({})
   const [processingPayment, setProcessingPayment] = useState({})
   const [showAddResultMap, setShowAddResultMap] = useState({})
   const [addResultForm, setAddResultForm] = useState({})
-  const [deleteContent, { isLoading: deleting }] = useDeleteContentMutation()
+  const [deleteContent, { isLoading: deleting }] = useDeleteMcontentMutation()
   const [initiatePayment] = useInitiatePaymentMutation()
-  const [addResult, { isLoading: addingResult }] = useAddResultMutation()
-  const { data: results = [] } = useGetResultsQuery()
+  const [addResult, { isLoading: addingResult }] = useAddMathsResultMutation()
+  const { data: results = [] } = useGetMathsResultsQuery()
   const { user, isLoaded } = useUser()
   const isAdmin = isLoaded && user?.publicMetadata?.role === "admin"
 
@@ -221,7 +219,11 @@ function ContentCards({ contents, error, isLoading }) {
                 </div>
               )}
 
-              <img src={`/assets/images/cc.jpg`} alt={topic} className="h-full w-full object-cover" />
+              <img
+                src={`/assets/images/cc.jpg`}
+                alt={topic}
+                className="h-full w-full object-cover"
+              />
             </div>
 
             <div className="p-4">
@@ -229,26 +231,42 @@ function ContentCards({ contents, error, isLoading }) {
                 <h4 className="text-lg font-semibold text-gray-900">{topic}</h4>
                 <span
                   className={`text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap ${
-                    isFree ? "bg-green-100 text-green-800" : isPurchased ? "bg-blue-100 text-blue-800" : "bg-yellow-100 text-yellow-800"
+                    isFree
+                      ? "bg-green-100 text-green-800"
+                      : isPurchased
+                      ? "bg-blue-100 text-blue-800"
+                      : "bg-yellow-100 text-yellow-800"
                   }`}
                 >
                   {isFree ? "Free" : isPurchased ? "Owned" : `LKR ${price}`}
                 </span>
               </div>
 
-              {description && <p className="mt-2 text-sm text-gray-600 line-clamp-3">{description}</p>}
+              {description && (
+                <p className="mt-2 text-sm text-gray-600 line-clamp-3">
+                  {description}
+                </p>
+              )}
 
               <div className="mt-4 flex flex-wrap gap-2">
                 {/* Free content - show all buttons */}
                 {isFree && (
                   <>
                     {link && (
-                      <button type="button" onClick={() => openUrl(link)} className="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
+                      <button
+                        type="button"
+                        onClick={() => openUrl(link)}
+                        className="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                      >
                         View Content
                       </button>
                     )}
                     {assignment && (
-                      <button type="button" onClick={() => openUrl(assignment)} className="inline-flex items-center px-3 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700">
+                      <button
+                        type="button"
+                        onClick={() => openUrl(assignment)}
+                        className="inline-flex items-center px-3 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700"
+                      >
                         {getAssignmentButtonLabel()}
                       </button>
                     )}
@@ -259,17 +277,26 @@ function ContentCards({ contents, error, isLoading }) {
                 {isPaid && isPurchased && (
                   <>
                     {link && (
-                      <button type="button" onClick={() => openUrl(link)} className="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
+                      <button
+                        type="button"
+                        onClick={() => openUrl(link)}
+                        className="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                      >
                         View Content
                       </button>
                     )}
                     {assignment && (
-                      <button type="button" onClick={() => openUrl(assignment)} className="inline-flex items-center px-3 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700">
+                      <button
+                        type="button"
+                        onClick={() => openUrl(assignment)}
+                        className="inline-flex items-center px-3 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700"
+                      >
                         {getAssignmentButtonLabel()}
                       </button>
                     )}
                   </>
                 )}
+
                 {/* Paid content - not purchased */}
                 {isPaid && !isPurchased && (
                   <>
@@ -294,7 +321,7 @@ function ContentCards({ contents, error, isLoading }) {
                   </>
                 )}
 
-                {/* New: View Results button for all users */}
+                {/* View Results button for all users */}
                 <button
                   type="button"
                   onClick={() => handleViewResult(id)}
@@ -303,7 +330,7 @@ function ContentCards({ contents, error, isLoading }) {
                   View Results
                 </button>
 
-                {/* New: Add Results (admin only) */}
+                {/* Add Results (admin only) */}
                 {isAdmin && (
                   <div className="relative">
                     <button
@@ -371,5 +398,4 @@ function ContentCards({ contents, error, isLoading }) {
   )
 }
 
-export default ContentCards
-// ...existing code...
+export default McontentCards

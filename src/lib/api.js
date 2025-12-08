@@ -167,6 +167,67 @@ export const Api = createApi({
       }),
     }),
 
+  GetResults: build.query({
+      query: () => `/results`,
+    }),
+     AddResult: build.mutation({
+      query: (content) => ({
+        url: "/results",
+        method: "POST",
+        body: content,
+      }),
+    }),
+  
+
+
+  GetSPResults: build.query({
+      query: () => `/spresults`,
+    }),
+     AddSPResult: build.mutation({
+      query: (content) => ({
+        url: "/spresults",
+        method: "POST",
+        body: content,
+      }),
+    }),
+
+    
+  GetMathsResults: build.query({
+      query: () => `/mathsresults`,
+    }),
+     AddMathsResult: build.mutation({
+      query: (content) => ({
+        url: "/mathsresults",
+        method: "POST",
+        body: content,
+      }),
+    }),
+
+  GetMSPResults: build.query({
+      query: () => `/mspresults`,
+    }),
+     AddMSPResult: build.mutation({
+      query: (content) => ({
+        url: "/mspresults",
+        method: "POST",
+        body: content,
+      }),
+    }),
+
+  GetPEResults: build.query({
+      query: () => `/peresults`,
+    }),
+     AddPEResult: build.mutation({
+      query: (content) => ({
+        url: "/peresults",
+        method: "POST",
+        body: content,
+      }),
+    }),
+
+
+
+
 
 
 
@@ -201,4 +262,13 @@ export const { useGetAllContentQuery,
   useGetAllMcontentQuery,
   useCreateMcontentMutation,
   useDeleteMcontentMutation,
-  } = Api
+  useGetResultsQuery,
+  useGetSPResultsQuery,
+  useGetMathsResultsQuery,
+  useGetMSPResultsQuery,
+  useGetPEResultsQuery,
+  useAddResultMutation,
+  useAddMathsResultMutation,
+  useAddSPResultMutation,
+  useAddMSPResultMutation,
+  useAddPEResultMutation,} = Api

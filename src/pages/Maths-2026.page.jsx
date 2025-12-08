@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { CreateMcontent } from "@/components/CreateMcontent";
-import ContentCards from "@/components/ContentCard";
+import McontentCards from "@/components/McontentCard";
 import { useGetAllMcontentQuery } from "@/lib/api";
 import { useGetAllCategoriesQuery } from "@/lib/api";
 import { useGetAllYearsQuery } from "@/lib/api";
@@ -111,7 +111,7 @@ function Maths2026Page() {
             )}
 
             <div className="mb-8">
-              <ContentCards contents={contentsWithType} error={error} isLoading={isLoading} />
+              <McontentCards contents={contentsWithType} error={error} isLoading={isLoading} />
             </div>
           </section>
         </div>

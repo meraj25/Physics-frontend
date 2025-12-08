@@ -1,13 +1,17 @@
 import React, { useState } from "react"
-import { useGetAllMathsHeadingsQuery, useDeleteMathsContentMutation } from "@/lib/api"
+import { useGetAllMathsHeadingsQuery, useDeleteMathsContentMutation, useGetMathsResultsQuery, useAddMathsResultMutation } from "@/lib/api"
 import { Unlock, Trash2 } from "lucide-react"
 import { useUser } from "@clerk/clerk-react"
 
 export default function MathsCard({ contents, error, isLoading }) {
-  const [unlockedMap, setUnlockedMap] = useState({}) // { [id]: true }
-  const [removedMap, setRemovedMap] = useState({}) // { [id]: true } to hide deleted items locally
+  const [unlockedMap, setUnlockedMap] = useState({})
+  const [removedMap, setRemovedMap] = useState({})
+  const [showAddResultMap, setShowAddResultMap] = useState({})
+  const [addResultForm, setAddResultForm] = useState({})
   const { data: headings } = useGetAllMathsHeadingsQuery()
+  const { data: results = [] } = useGetMathsResultsQuery()
   const [deleteMathsContent, { isLoading: deleting }] = useDeleteMathsContentMutation()
+  const [addResult, { isLoading: addingResult }] = useAddMathsResultMutation()
   const { user, isLoaded } = useUser()
   const isAdmin = isLoaded && user?.publicMetadata?.role === "admin"
 
@@ -21,6 +25,13 @@ export default function MathsCard({ contents, error, isLoading }) {
     window.open(url, "_blank", "noopener,noreferrer")
   }
 
+  const currentUsername =
+    user?.username ||
+    user?.primaryEmailAddress?.emailAddress ||
+    user?.emailAddresses?.[0]?.emailAddress ||
+    `${user?.firstName ?? ""}${user?.lastName ?? ""}`.trim() ||
+    "unknown"
+
   const handlePay = (id) => {
     if (confirm("Pay to unlock Maths content?")) {
       setUnlockedMap((m) => ({ ...m, [id]: true }))
@@ -32,10 +43,66 @@ export default function MathsCard({ contents, error, isLoading }) {
     try {
       await deleteMathsContent(id).unwrap()
       console.log("Deleted:", id)
-      setRemovedMap((m) => ({ ...m, [id]: true })) // hide locally
+      setRemovedMap((m) => ({ ...m, [id]: true }))
     } catch (err) {
       console.error("Delete failed", err)
       alert("Failed to delete maths content.")
+    }
+  }
+
+  const handleViewResult = (contentId) => {
+    if (!isLoaded || !user) {
+      alert("Please sign in to view results.")
+      return
+    }
+
+    const match = results.find(
+      (r) => String(r.contentId) === String(contentId) && String(r.username) === String(currentUsername)
+    )
+
+    if (match && match.url) {
+      openUrl(match.url)
+    } else {
+      alert("No result found for this maths content and your username.")
+    }
+  }
+
+  const toggleAddResult = (contentId) => {
+    setShowAddResultMap((m) => ({ ...m, [contentId]: !m[contentId] }))
+    setAddResultForm((f) => ({
+      ...f,
+      [contentId]: {
+        contentId,
+        username: currentUsername,
+        url: "",
+      },
+    }))
+  }
+
+  const handleAddResultChange = (contentId, field, value) => {
+    setAddResultForm((f) => ({
+      ...f,
+      [contentId]: {
+        ...(f[contentId] || {}),
+        [field]: value,
+      },
+    }))
+  }
+
+  const submitAddResult = async (contentId) => {
+    const form = addResultForm[contentId] || {}
+    if (!form.contentId || !form.username || !form.url) {
+      alert("Please fill contentId, username and URL.")
+      return
+    }
+
+    try {
+      await addResult({ contentId: form.contentId, username: form.username, url: form.url }).unwrap()
+      alert("Result added.")
+      setShowAddResultMap((m) => ({ ...m, [contentId]: false }))
+    } catch (err) {
+      console.error("Add result failed", err)
+      alert("Failed to add result.")
     }
   }
 
@@ -64,6 +131,8 @@ export default function MathsCard({ contents, error, isLoading }) {
         const isFree = paymentstatus === "free"
         const isPaid = paymentstatus === "paid"
         const unlocked = !!unlockedMap[id]
+        const showAddForm = showAddResultMap[id] || false
+        const formValues = addResultForm[id] || { contentId: id, username: currentUsername, url: "" }
 
         return (
           <article
@@ -76,8 +145,8 @@ export default function MathsCard({ contents, error, isLoading }) {
                 <button
                   onClick={() => handleDelete(id)}
                   disabled={deleting}
-                  aria-label="Delete study pack"
-                  title="Delete study pack"
+                  aria-label="Delete maths content"
+                  title="Delete maths content"
                   className="absolute top-2 right-2 z-20 inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/90 hover:bg-red-50 border border-red-200 text-red-600 shadow-sm"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -161,6 +230,75 @@ export default function MathsCard({ contents, error, isLoading }) {
                   >
                     View Content
                   </button>
+                )}
+
+                {/* View Results button for all users */}
+                <button
+                  type="button"
+                  onClick={() => handleViewResult(id)}
+                  className="inline-flex items-center px-3 py-2 bg-emerald-600 text-white text-sm rounded hover:bg-emerald-700"
+                >
+                  View Results
+                </button>
+
+                {/* Add Results (admin only) */}
+                {isAdmin && (
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => toggleAddResult(id)}
+                      className="inline-flex items-center px-3 py-2 bg-sky-600 text-white text-sm rounded hover:bg-sky-700"
+                    >
+                      {showAddForm ? "Close Add Result" : "Add Results"}
+                    </button>
+
+                    {showAddForm && (
+                      <div className="mt-2 p-3 bg-gray-50 border rounded w-80 shadow-sm">
+                        <label className="block text-xs text-gray-600">Content ID</label>
+                        <input
+                          type="text"
+                          value={formValues.contentId}
+                          readOnly
+                          className="mt-1 w-full px-2 py-1 border rounded bg-white text-sm"
+                        />
+
+                        <label className="block text-xs text-gray-600 mt-2">Username</label>
+                        <input
+                          type="text"
+                          value={formValues.username}
+                          onChange={(e) => handleAddResultChange(id, "username", e.target.value)}
+                          className="mt-1 w-full px-2 py-1 border rounded text-sm"
+                        />
+
+                        <label className="block text-xs text-gray-600 mt-2">Result URL</label>
+                        <input
+                          type="text"
+                          value={formValues.url}
+                          onChange={(e) => handleAddResultChange(id, "url", e.target.value)}
+                          placeholder="https://..."
+                          className="mt-1 w-full px-2 py-1 border rounded text-sm"
+                        />
+
+                        <div className="mt-3 flex justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setShowAddResultMap((m) => ({ ...m, [id]: false }))}
+                            className="px-3 py-1 text-sm rounded bg-white border"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => submitAddResult(id)}
+                            disabled={addingResult}
+                            className="px-3 py-1 text-sm rounded bg-sky-600 text-white hover:bg-sky-700 disabled:opacity-50"
+                          >
+                            {addingResult ? "Adding..." : "Add"}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
