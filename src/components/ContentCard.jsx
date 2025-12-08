@@ -6,7 +6,7 @@ import { Trash2, Lock, CheckCircle } from "lucide-react"
 import { initiatePayHerePayment } from "@/utils/payhere"
 // ...existing code...
 
-function ContentCards({ contents, error, isLoading }) {
+function ContentCards({ contents, error, isLoading, refetch }) {  // Add refetch prop
   const [removedMap, setRemovedMap] = useState({})
   const [processingPayment, setProcessingPayment] = useState({})
   const [showAddResultMap, setShowAddResultMap] = useState({})
@@ -46,7 +46,6 @@ function ContentCards({ contents, error, isLoading }) {
     try {
       const response = await initiatePayment(contentId).unwrap()
 
-      // ADD THESE CONSOLE LOGS
       console.log("🟢 Backend Response:", response)
       console.log("Merchant ID:", response.merchantId)
       console.log("Hash:", response.hash)
@@ -79,11 +78,28 @@ function ContentCards({ contents, error, isLoading }) {
           email,
           phone,
         },
-        onCompleted: (orderId) => {
+        onCompleted: async (orderId) => {
           console.log("Payment completed:", orderId)
-          alert("Payment successful! You can now access the content.")
-          // Reload to fetch updated purchase status
-          window.location.reload()
+          
+          // Wait for webhook to process (adjust timing as needed)
+          alert("Payment successful! Refreshing your content...")
+          await new Promise(resolve => setTimeout(resolve, 2000))
+          
+          // Refetch content data
+          if (refetch) {
+            try {
+              await refetch()
+              setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
+              alert("Content unlocked! You can now view it.")
+            } catch (err) {
+              console.error("Failed to refetch:", err)
+              // Fallback to reload if refetch fails
+              window.location.reload(true)
+            }
+          } else {
+            // Fallback if refetch prop not passed
+            window.location.reload(true)
+          }
         },
         onDismissed: () => {
           console.log("Payment dismissed")

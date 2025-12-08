@@ -12,7 +12,8 @@ function Physics2026Page() {
   const [selectedOption, setSelectedOption] = useState('Theory');
   const options = ['Theory', 'Revision', 'Papers'];
 
-  const { data : contents, error, isLoading } = useGetAllContentQuery();
+  // ✅ ADD refetch here
+  const { data: contents, error, isLoading, refetch } = useGetAllContentQuery();
   const { data: categories } = useGetAllCategoriesQuery();
   const { data: years } = useGetAllYearsQuery();
 
@@ -39,8 +40,6 @@ function Physics2026Page() {
   })) || [];
 
   console.log("Filtered Contents:", contentsWithType);
-
-
 
   const isAdmin = user?.publicMetadata?.role === "admin";
 
@@ -111,7 +110,13 @@ function Physics2026Page() {
             )}
 
             <div className="mb-8">
-              <ContentCards contents={contentsWithType} error={error} isLoading={isLoading} />
+              {/* ✅ PASS refetch to ContentCards */}
+              <ContentCards 
+                contents={contentsWithType} 
+                error={error} 
+                isLoading={isLoading}
+                refetch={refetch}
+              />
             </div>
           </section>
         </div>
