@@ -1,12 +1,18 @@
 // ...existing code...
 import React, { useState } from "react"
-import { useDeleteContentMutation, useInitiatePaymentMutation, useGetResultsQuery, useAddResultMutation } from "@/lib/api"
+import { 
+  useDeleteContentMutation, 
+  useInitiatePaymentMutation, 
+  useGetResultsQuery, 
+  useAddResultMutation,
+  useCheckPurchaseStatusQuery  // Add this import
+} from "@/lib/api"
 import { useUser } from "@clerk/clerk-react"
 import { Trash2, Lock, CheckCircle } from "lucide-react"
 import { initiatePayHerePayment } from "@/utils/payhere"
 // ...existing code...
 
-function ContentCards({ contents, error, isLoading, refetch }) {  // Add refetch prop
+function ContentCards({ contents, error, isLoading, refetch }) {
   const [removedMap, setRemovedMap] = useState({})
   const [processingPayment, setProcessingPayment] = useState({})
   const [showAddResultMap, setShowAddResultMap] = useState({})
@@ -200,7 +206,13 @@ function ContentCards({ contents, error, isLoading, refetch }) {  // Add refetch
         const price = c.price ?? 1000
         const isFree = paymentstatus === "free"
         const isPaid = paymentstatus === "paid"
-        const isPurchased = c.isPurchased || false
+        
+        // Use the hook to check purchase status for paid content
+        const { data: purchaseData, isLoading: checkingPurchase } = useCheckPurchaseStatusQuery(id, {
+          skip: !isPaid || !user, // Only check if content is paid and user is logged in
+        })
+        
+        const isPurchased = isPaid ? (purchaseData?.purchased || false) : false
         const isProcessing = processingPayment[id] || false
         const showAddForm = showAddResultMap[id] || false
         const formValues = addResultForm[id] || { contentId: id, username: currentUsername, url: "" }
@@ -248,7 +260,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {  // Add refetch
                     isFree ? "bg-green-100 text-green-800" : isPurchased ? "bg-blue-100 text-blue-800" : "bg-yellow-100 text-yellow-800"
                   }`}
                 >
-                  {isFree ? "Free" : isPurchased ? "Owned" : `LKR ${price}`}
+                  {checkingPurchase ? "..." : isFree ? "Free" : isPurchased ? "Owned" : `LKR ${price}`}
                 </span>
               </div>
 
@@ -272,7 +284,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {  // Add refetch
                 )}
 
                 {/* Paid content - purchased */}
-                {isPaid && isPurchased && (
+                {isPaid && isPurchased && !checkingPurchase && (
                   <>
                     {link && (
                       <button type="button" onClick={() => openUrl(link)} className="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
@@ -287,7 +299,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {  // Add refetch
                   </>
                 )}
                 {/* Paid content - not purchased */}
-                {isPaid && !isPurchased && (
+                {isPaid && !isPurchased && !checkingPurchase && (
                   <>
                     <button
                       type="button"
