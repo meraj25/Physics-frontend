@@ -214,7 +214,7 @@ export const Api = createApi({
       }),
     }),
 
-  GetPEResults: build.query({
+    GetPEResults: build.query({
       query: () => `/peresults`,
     }),
      AddPEResult: build.mutation({
@@ -226,7 +226,17 @@ export const Api = createApi({
     }),
 
 
+     getAllPurchases: build.query({
+      query: () => `/purchases`,
+    }),
 
+     createPurchase: build.mutation({
+      query: (content) => ({
+        url: "/purchases",
+        method: "POST",
+        body: content,
+      }),
+    }),
 
 
 
@@ -271,4 +281,6 @@ export const { useGetAllContentQuery,
   useAddMathsResultMutation,
   useAddSPResultMutation,
   useAddMSPResultMutation,
-  useAddPEResultMutation,} = Api
+  useAddPEResultMutation,
+useGetAllPurchasesQuery,
+useCreatePurchaseMutation,} = Api
