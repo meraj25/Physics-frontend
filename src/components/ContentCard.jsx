@@ -5,7 +5,7 @@ import {
   useInitiatePaymentMutation, 
   useGetResultsQuery, 
   useAddResultMutation,
-  useGetUserPurchasesQuery  // Changed from useCheckPurchaseStatusQuery
+  useGetUserPurchasesQuery
 } from "@/lib/api"
 import { useUser } from "@clerk/clerk-react"
 import { Trash2, Lock, CheckCircle } from "lucide-react"
@@ -25,15 +25,18 @@ function ContentCards({ contents, error, isLoading, refetch }) {
   const isAdmin = isLoaded && user?.publicMetadata?.role === "admin"
 
   // Fetch all user purchases once (at the top level, not in loop)
-  const { data: userPurchases = [], isLoading: loadingPurchases } = useGetUserPurchasesQuery(undefined, {
+  const { data: userPurchases = [], isLoading: loadingPurchases, refetch: refetchPurchases } = useGetUserPurchasesQuery(undefined, {
     skip: !user, // Only fetch if user is logged in
   })
 
   // Create a Set of purchased content IDs for O(1) lookup
   const purchasedContentIds = useMemo(() => {
-    return new Set(userPurchases.map(purchase => 
-      String(purchase.contentId?._id || purchase.contentId)
-    ))
+    console.log("🔍 User purchases:", userPurchases)
+    return new Set(userPurchases.map(purchase => {
+      const contentId = String(purchase.contentId?._id || purchase.contentId)
+      console.log("✅ Purchased content ID:", contentId)
+      return contentId
+    }))
   }, [userPurchases])
 
   if (isLoading) return <div className="p-4">Loading...</div>
@@ -97,40 +100,50 @@ function ContentCards({ contents, error, isLoading, refetch }) {
           phone,
         },
         onCompleted: async (orderId) => {
-          console.log("Payment completed:", orderId)
+          console.log("✅ Payment completed:", orderId)
+          setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
           
-          // Wait for webhook to process (adjust timing as needed)
-          alert("Payment successful! Refreshing your content...")
-          await new Promise(resolve => setTimeout(resolve, 2000))
+          // Show success message
+          alert("Payment successful! Updating your content access...")
           
-          // Refetch content data
-          if (refetch) {
-            try {
+          // Wait for webhook to process (5 seconds should be enough)
+          await new Promise(resolve => setTimeout(resolve, 5000))
+          
+          console.log("🔄 Refetching purchases...")
+          
+          try {
+            // Refetch purchases to get the latest data
+            await refetchPurchases()
+            
+            console.log("✅ Purchases refetched successfully")
+            
+            // Also refetch content if function is available
+            if (refetch) {
               await refetch()
-              setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
-              alert("Content unlocked! You can now view it.")
-            } catch (err) {
-              console.error("Failed to refetch:", err)
-              // Fallback to reload if refetch fails
-              window.location.reload(true)
             }
-          } else {
-            // Fallback if refetch prop not passed
-            window.location.reload(true)
+            
+            alert("Content unlocked! You can now view it.")
+          } catch (err) {
+            console.error("❌ Failed to refetch:", err)
+            alert("Payment successful! Please refresh the page to see your content.")
+            // Give user option to reload
+            if (confirm("Would you like to reload the page now?")) {
+              window.location.reload()
+            }
           }
         },
         onDismissed: () => {
-          console.log("Payment dismissed")
+          console.log("⚠️ Payment dismissed")
           setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
         },
         onError: (error) => {
-          console.error("Payment error:", error)
+          console.error("❌ Payment error:", error)
           alert("Payment failed. Please try again.")
           setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
         },
       })
     } catch (err) {
-      console.error("Payment initiation failed:", err)
+      console.error("❌ Payment initiation failed:", err)
       alert("Failed to initiate payment. Please try again.")
       setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
     }
@@ -219,8 +232,19 @@ function ContentCards({ contents, error, isLoading, refetch }) {
         const isFree = paymentstatus === "free"
         const isPaid = paymentstatus === "paid"
         
-        // Check if this content ID is in the purchased set (no hook call in loop!)
+        // Check if this content ID is in the purchased set
         const isPurchased = isPaid ? purchasedContentIds.has(String(id)) : false
+        
+        // Debug log for each content item
+        if (isPaid) {
+          console.log(`📦 Content ${id}:`, {
+            topic,
+            isPaid,
+            isPurchased,
+            contentId: String(id),
+            hasPurchases: purchasedContentIds.size > 0
+          })
+        }
         
         const isProcessing = processingPayment[id] || false
         const showAddForm = showAddResultMap[id] || false
@@ -230,7 +254,9 @@ function ContentCards({ contents, error, isLoading, refetch }) {
           if (contentType === "papers") return "Papers"
           return "Assignment"
         }
-
+// Add this debug code temporarily
+   console.log("Content ID from card:", String(id))
+   console.log("Purchase contentId:", String(purchase.contentId?._id || purchase.contentId))
         return (
           <article
             key={id}
