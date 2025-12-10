@@ -1,11 +1,11 @@
 // ...existing code...
-import React, { useState } from "react"
+import React, { useState, useMemo } from "react"
 import { 
   useDeleteContentMutation, 
   useInitiatePaymentMutation, 
   useGetResultsQuery, 
   useAddResultMutation,
-  useCheckPurchaseStatusQuery  // Add this import
+  useGetUserPurchasesQuery  // Changed from useCheckPurchaseStatusQuery
 } from "@/lib/api"
 import { useUser } from "@clerk/clerk-react"
 import { Trash2, Lock, CheckCircle } from "lucide-react"
@@ -23,6 +23,18 @@ function ContentCards({ contents, error, isLoading, refetch }) {
   const { data: results = [] } = useGetResultsQuery()
   const { user, isLoaded } = useUser()
   const isAdmin = isLoaded && user?.publicMetadata?.role === "admin"
+
+  // Fetch all user purchases once (at the top level, not in loop)
+  const { data: userPurchases = [], isLoading: loadingPurchases } = useGetUserPurchasesQuery(undefined, {
+    skip: !user, // Only fetch if user is logged in
+  })
+
+  // Create a Set of purchased content IDs for O(1) lookup
+  const purchasedContentIds = useMemo(() => {
+    return new Set(userPurchases.map(purchase => 
+      String(purchase.contentId?._id || purchase.contentId)
+    ))
+  }, [userPurchases])
 
   if (isLoading) return <div className="p-4">Loading...</div>
   if (error) return <div className="p-4 text-red-600">Error loading content.</div>
@@ -207,12 +219,9 @@ function ContentCards({ contents, error, isLoading, refetch }) {
         const isFree = paymentstatus === "free"
         const isPaid = paymentstatus === "paid"
         
-        // Use the hook to check purchase status for paid content
-        const { data: purchaseData, isLoading: checkingPurchase } = useCheckPurchaseStatusQuery(id, {
-          skip: !isPaid || !user, // Only check if content is paid and user is logged in
-        })
+        // Check if this content ID is in the purchased set (no hook call in loop!)
+        const isPurchased = isPaid ? purchasedContentIds.has(String(id)) : false
         
-        const isPurchased = isPaid ? (purchaseData?.purchased || false) : false
         const isProcessing = processingPayment[id] || false
         const showAddForm = showAddResultMap[id] || false
         const formValues = addResultForm[id] || { contentId: id, username: currentUsername, url: "" }
@@ -260,7 +269,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                     isFree ? "bg-green-100 text-green-800" : isPurchased ? "bg-blue-100 text-blue-800" : "bg-yellow-100 text-yellow-800"
                   }`}
                 >
-                  {checkingPurchase ? "..." : isFree ? "Free" : isPurchased ? "Owned" : `LKR ${price}`}
+                  {loadingPurchases ? "..." : isFree ? "Free" : isPurchased ? "Owned" : `LKR ${price}`}
                 </span>
               </div>
 
@@ -284,7 +293,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                 )}
 
                 {/* Paid content - purchased */}
-                {isPaid && isPurchased && !checkingPurchase && (
+                {isPaid && isPurchased && !loadingPurchases && (
                   <>
                     {link && (
                       <button type="button" onClick={() => openUrl(link)} className="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
@@ -299,7 +308,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                   </>
                 )}
                 {/* Paid content - not purchased */}
-                {isPaid && !isPurchased && !checkingPurchase && (
+                {isPaid && !isPurchased && !loadingPurchases && (
                   <>
                     <button
                       type="button"
