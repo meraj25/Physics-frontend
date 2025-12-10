@@ -70,19 +70,19 @@ export const Api = createApi({
     
     initiatePayment: build.mutation({
       query: (contentId) => ({
-        url: '/payments/initiate',
+        url: '/payment/initiate',
         method: 'POST',
         body: { contentId },
       }),
     }),
 
     checkPurchaseStatus: build.query({
-      query: (contentId) => `/payments/check/${contentId}`,
+      query: (contentId) => `/payment/check/${contentId}`,
       providesTags: ['Purchase'],
     }),
 
     getUserPurchases: build.query({
-      query: () => '/payments/user-purchases',
+      query: () => '/payment/user-purchases',
       providesTags: ['Purchase'],
     }),
 
