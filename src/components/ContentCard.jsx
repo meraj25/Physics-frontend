@@ -31,10 +31,17 @@ function ContentCards({ contents, error, isLoading, refetch }) {
 
   // Create a Set of purchased content IDs for O(1) lookup
   const purchasedContentIds = useMemo(() => {
-    console.log("🔍 User purchases:", userPurchases)
+    console.log("🔍 User purchases (full data):", userPurchases)
+    
+    if (userPurchases.length === 0) {
+      console.log("⚠️ No purchases found")
+      return new Set()
+    }
+    
     return new Set(userPurchases.map(purchase => {
+      // Handle both populated and non-populated contentId
       const contentId = String(purchase.contentId?._id || purchase.contentId)
-      console.log("✅ Purchased content ID:", contentId)
+      console.log("✅ Mapped purchase - Raw:", purchase.contentId, "→ Processed:", contentId)
       return contentId
     }))
   }, [userPurchases])
@@ -235,14 +242,15 @@ function ContentCards({ contents, error, isLoading, refetch }) {
         // Check if this content ID is in the purchased set
         const isPurchased = isPaid ? purchasedContentIds.has(String(id)) : false
         
-        // Debug log for each content item
+        // Debug log for each paid content item
         if (isPaid) {
-          console.log(`📦 Content ${id}:`, {
-            topic,
+          console.log(`📦 Content ${id} (${topic}):`, {
             isPaid,
             isPurchased,
-            contentId: String(id),
-            hasPurchases: purchasedContentIds.size > 0
+            contentIdAsString: String(id),
+            hasPurchases: purchasedContentIds.size > 0,
+            allPurchasedIds: Array.from(purchasedContentIds),
+            matches: purchasedContentIds.has(String(id)) ? "✅ MATCH" : "❌ NO MATCH"
           })
         }
         
@@ -254,9 +262,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
           if (contentType === "papers") return "Papers"
           return "Assignment"
         }
-// Add this debug code temporarily
-   console.log("Content ID from card:", String(id))
-   console.log("Purchase contentId:", String(purchase.contentId?._id || purchase.contentId))
+
         return (
           <article
             key={id}
