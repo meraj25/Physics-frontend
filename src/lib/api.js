@@ -76,11 +76,14 @@ export const Api = createApi({
       }),
     }),
 
-    checkPurchaseStatus: build.query({
+    checkPurchaseStatus: builder.query({
       query: (contentId) => `/payments/check/${contentId}`,
-      providesTags: ['Purchase'],
+      providesTags: (result, error, contentId) => [
+        { type: 'Purchase', id: contentId },
+        'Purchase'
+      ],
     }),
-
+    
     getUserPurchases: build.query({
       query: () => '/payments/user-purchases',
       providesTags: ['Purchase'],
