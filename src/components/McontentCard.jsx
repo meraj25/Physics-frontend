@@ -49,6 +49,12 @@ function McontentCards({ contents, error, isLoading }) {
       return
     }
 
+     console.log("🔵 Attempting payment for Math Content")
+  console.log("Content ID:", contentId)
+  console.log("Content ID type:", typeof contentId)
+  console.log("User ID:", user?.id)
+  console.log("Content Topic:", contentTopic)
+
     setProcessingPayment((prev) => ({ ...prev, [contentId]: true }))
 
     try {
