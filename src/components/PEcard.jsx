@@ -1,17 +1,30 @@
 import React, { useState } from "react"
-import { useGetAllPreEngHeadingsQuery, useDeletePEContentMutation, useGetPEResultsQuery, useAddPEResultMutation } from "@/lib/api"
-import { Unlock, Trash2 } from "lucide-react"
+import {
+  useGetAllPreEngHeadingsQuery,
+  useDeletePEContentMutation,
+  useGetPEResultsQuery,
+  useAddPEResultMutation,
+  useInitiatePaymentMutation,
+  useCreatePurchaseMutation,
+  useGetAllPurchasesQuery,
+} from "@/lib/api"
+import { Unlock, Trash2, Lock, CheckCircle } from "lucide-react"
 import { useUser } from "@clerk/clerk-react"
+import { initiatePayHerePayment } from "@/utils/payhere"
 
 export default function PEContentCard({ contents, error, isLoading }) {
   const [unlockedMap, setUnlockedMap] = useState({})
   const [removedMap, setRemovedMap] = useState({})
+  const [processingPayment, setProcessingPayment] = useState({})
   const [showAddResultMap, setShowAddResultMap] = useState({})
   const [addResultForm, setAddResultForm] = useState({})
   const { data: headings } = useGetAllPreEngHeadingsQuery()
   const { data: results = [] } = useGetPEResultsQuery()
   const [deletePEContent, { isLoading: deleting }] = useDeletePEContentMutation()
   const [addResult, { isLoading: addingResult }] = useAddPEResultMutation()
+  const [initiatePayment] = useInitiatePaymentMutation()
+  const [createPurchase] = useCreatePurchaseMutation()
+  const { data: purchases = [] } = useGetAllPurchasesQuery()
   const { user, isLoaded } = useUser()
   const isAdmin = isLoaded && user?.publicMetadata?.role === "admin"
 
@@ -32,9 +45,71 @@ export default function PEContentCard({ contents, error, isLoading }) {
     `${user?.firstName ?? ""}${user?.lastName ?? ""}`.trim() ||
     "unknown"
 
-  const handlePay = (id) => {
-    if (confirm("Pay to unlock this study pack?")) {
-      setUnlockedMap((m) => ({ ...m, [id]: true }))
+  const handlePayment = async (contentId, contentTopic, price) => {
+    if (!user) {
+      alert("Please sign in to purchase content")
+      return
+    }
+
+    setProcessingPayment((prev) => ({ ...prev, [contentId]: true }))
+
+    try {
+      const response = await initiatePayment(contentId).unwrap()
+
+      if (response.alreadyPurchased) {
+        alert("You have already purchased this content!")
+        setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
+        return
+      }
+
+      const firstName = user.firstName || "User"
+      const lastName = user.lastName || "Name"
+      const email = user.primaryEmailAddress?.emailAddress || "user@example.com"
+      const phone = user.primaryPhoneNumber?.phoneNumber || ""
+
+      await initiatePayHerePayment({
+        orderId: response.orderId,
+        amount: response.amount,
+        currency: response.currency,
+        hash: response.hash,
+        merchantId: response.merchantId,
+        contentTopic,
+        userInfo: { firstName, lastName, email, phone },
+        onCompleted: async (orderId) => {
+          try {
+            await createPurchase({ userId: user.id, contentId, amount: response.amount }).unwrap()
+            await new Promise((r) => setTimeout(r, 1200))
+
+            const purchaseExists = purchases.some(
+              (p) => String(p.userId) === String(user.id) && String(p.contentId) === String(contentId)
+            )
+
+            if (purchaseExists) {
+              setUnlockedMap((m) => ({ ...m, [contentId]: true }))
+              alert("Payment successful! Content unlocked.")
+            } else {
+              setUnlockedMap((m) => ({ ...m, [contentId]: true }))
+              alert("Payment successful — content unlocked (local)")
+            }
+          } catch (err) {
+            console.error("Failed to create purchase record:", err)
+            alert("Payment processed but saving purchase failed. Reloading...")
+            window.location.reload()
+          } finally {
+            setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
+          }
+        },
+        onDismissed: () => setProcessingPayment((prev) => ({ ...prev, [contentId]: false })),
+        onError: (err) => {
+          console.error("Payment error:", err)
+          alert("Payment failed. Please try again.")
+          setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
+        },
+      })
+    } catch (err) {
+      console.error("Payment initiation failed:", err)
+      alert("Failed to initiate payment. Please try again.")
+      setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
     }
   }
 
@@ -131,6 +206,7 @@ export default function PEContentCard({ contents, error, isLoading }) {
         const isFree = paymentstatus === "free"
         const isPaid = paymentstatus === "paid"
         const unlocked = !!unlockedMap[id]
+        const isPurchased = unlocked || purchases.some((p) => String(p.userId) === String(user?.id) && String(p.contentId) === String(id)) || false
         const showAddForm = showAddResultMap[id] || false
         const formValues = addResultForm[id] || { contentId: id, username: currentUsername, url: "" }
 
@@ -212,17 +288,18 @@ export default function PEContentCard({ contents, error, isLoading }) {
                   </button>
                 ) : null}
 
-                {isPaid && !unlocked && (
+                {isPaid && !isPurchased && (
                   <button
                     type="button"
-                    onClick={() => handlePay(id)}
-                    className="inline-flex items-center px-3 py-2 text-white text-sm rounded bg-red-600 hover:bg-red-700"
+                    onClick={() => handlePayment(id, topic, sp?.price ?? 0)}
+                    disabled={processingPayment[id]}
+                    className="inline-flex items-center px-3 py-2 text-white text-sm rounded bg-red-600 hover:bg-red-700 disabled:opacity-50"
                   >
-                    Pay to unlock
+                    {processingPayment[id] ? "Processing..." : "Pay to unlock"}
                   </button>
                 )}
 
-                {isPaid && unlocked && link && (
+                {isPaid && isPurchased && link && (
                   <button
                     type="button"
                     onClick={() => openUrl(link)}
@@ -233,7 +310,7 @@ export default function PEContentCard({ contents, error, isLoading }) {
                 )}
 
                 {/* View Results button for all users */}
-                {(isFree || (isPaid && unlocked)) && (
+                {(isFree || (isPaid && isPurchased)) && (
                   <button
                     type="button"
                     onClick={() => handleViewResult(id)}

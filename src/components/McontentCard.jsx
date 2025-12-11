@@ -1,5 +1,12 @@
 import React, { useState } from "react"
-import { useDeleteMcontentMutation, useInitiatePaymentMutation, useGetMathsResultsQuery, useAddMathsResultMutation } from "@/lib/api"
+import {
+  useDeleteMcontentMutation,
+  useInitiatePaymentMutation,
+  useGetMathsResultsQuery,
+  useAddMathsResultMutation,
+  useCreatePurchaseMutation,
+  useGetAllPurchasesQuery,
+} from "@/lib/api"
 import { useUser } from "@clerk/clerk-react"
 import { Trash2, Lock, CheckCircle } from "lucide-react"
 import { initiatePayHerePayment } from "@/utils/payhere"
@@ -12,7 +19,9 @@ function McontentCards({ contents, error, isLoading }) {
   const [deleteContent, { isLoading: deleting }] = useDeleteMcontentMutation()
   const [initiatePayment] = useInitiatePaymentMutation()
   const [addResult, { isLoading: addingResult }] = useAddMathsResultMutation()
+  const [createPurchase] = useCreatePurchaseMutation()
   const { data: results = [] } = useGetMathsResultsQuery()
+  const { data: purchases = [] } = useGetAllPurchasesQuery()
   const { user, isLoaded } = useUser()
   const isAdmin = isLoaded && user?.publicMetadata?.role === "admin"
 
@@ -77,11 +86,34 @@ function McontentCards({ contents, error, isLoading }) {
           email,
           phone,
         },
-        onCompleted: (orderId) => {
+        onCompleted: async (orderId) => {
           console.log("Payment completed:", orderId)
-          alert("Payment successful! You can now access the content.")
-          // Reload to fetch updated purchase status
-          window.location.reload()
+          try {
+            // create purchase record in backend
+            await createPurchase({ userId: user.id, contentId, amount: response.amount }).unwrap()
+            // allow backend to settle
+            await new Promise((r) => setTimeout(r, 1200))
+
+            const purchaseExists = purchases.some(
+              (p) => String(p.userId) === String(user.id) && String(p.contentId) === String(contentId)
+            )
+
+            if (purchaseExists) {
+              setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
+              // mark unlocked locally
+              setUnlockedMap((m) => ({ ...m, [contentId]: true }))
+              alert("Payment successful! Content unlocked.")
+            } else {
+              // fallback: still mark unlocked locally
+              setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
+              setUnlockedMap((m) => ({ ...m, [contentId]: true }))
+              alert("Payment successful — content unlocked (local). Refresh if needed.")
+            }
+          } catch (purchaseErr) {
+            console.error("Failed to create purchase record:", purchaseErr)
+            alert("Payment processed but failed to save purchase. Reloading...")
+            window.location.reload()
+          }
         },
         onDismissed: () => {
           console.log("Payment dismissed")
@@ -182,7 +214,9 @@ function McontentCards({ contents, error, isLoading }) {
         const price = c.price ?? 1000
         const isFree = paymentstatus === "free"
         const isPaid = paymentstatus === "paid"
-        const isPurchased = c.isPurchased || false
+        const isPurchased = !!unlockedMap[id] || purchases.some(
+          (p) => String(p.userId) === String(user?.id) && String(p.contentId) === String(id)
+        ) || false
         const isProcessing = processingPayment[id] || false
         const showAddForm = showAddResultMap[id] || false
         const formValues = addResultForm[id] || { contentId: id, username: currentUsername, url: "" }
@@ -321,8 +355,8 @@ function McontentCards({ contents, error, isLoading }) {
                   </>
                 )}
 
-                {/* View Results button for all users */}
-                {(isFree || (isPaid && unlocked)) && (
+                {/* View Results button - show only for free or purchased */}
+                {(isFree || (isPaid && isPurchased)) && (
                   <button
                     type="button"
                     onClick={() => handleViewResult(id)}
