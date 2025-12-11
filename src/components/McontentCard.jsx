@@ -13,6 +13,7 @@ import { initiatePayHerePayment } from "@/utils/payhere"
 
 function McontentCards({ contents, error, isLoading }) {
   const [removedMap, setRemovedMap] = useState({})
+  const [unlockedMap, setUnlockedMap] = useState({})
   const [processingPayment, setProcessingPayment] = useState({})
   const [showAddResultMap, setShowAddResultMap] = useState({})
   const [addResultForm, setAddResultForm] = useState({})
