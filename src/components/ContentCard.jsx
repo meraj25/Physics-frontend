@@ -1,12 +1,6 @@
 // ...existing code...
-import React, { useState, useMemo } from "react"
-import { 
-  useDeleteContentMutation, 
-  useInitiatePaymentMutation, 
-  useGetResultsQuery, 
-  useAddResultMutation,
-  useGetUserPurchasesQuery
-} from "@/lib/api"
+import React, { useState } from "react"
+import { useDeleteContentMutation, useInitiatePaymentMutation, useGetResultsQuery, useAddResultMutation, useCreatePurchaseMutation, useGetAllPurchasesQuery } from "@/lib/api"
 import { useUser } from "@clerk/clerk-react"
 import { Trash2, Lock, CheckCircle } from "lucide-react"
 import { initiatePayHerePayment } from "@/utils/payhere"
@@ -20,31 +14,11 @@ function ContentCards({ contents, error, isLoading, refetch }) {
   const [deleteContent, { isLoading: deleting }] = useDeleteContentMutation()
   const [initiatePayment] = useInitiatePaymentMutation()
   const [addResult, { isLoading: addingResult }] = useAddResultMutation()
+  const [createPurchase] = useCreatePurchaseMutation()
   const { data: results = [] } = useGetResultsQuery()
+  const { data: purchases = [] } = useGetAllPurchasesQuery()
   const { user, isLoaded } = useUser()
   const isAdmin = isLoaded && user?.publicMetadata?.role === "admin"
-
-  // Fetch all user purchases once (at the top level, not in loop)
-  const { data: userPurchases = [], isLoading: loadingPurchases, refetch: refetchPurchases } = useGetUserPurchasesQuery(undefined, {
-    skip: !user, // Only fetch if user is logged in
-  })
-
-  // Create a Set of purchased content IDs for O(1) lookup
-  const purchasedContentIds = useMemo(() => {
-    console.log("🔍 User purchases (full data):", userPurchases)
-    
-    if (userPurchases.length === 0) {
-      console.log("⚠️ No purchases found")
-      return new Set()
-    }
-    
-    return new Set(userPurchases.map(purchase => {
-      // Handle both populated and non-populated contentId
-      const contentId = String(purchase.contentId?._id || purchase.contentId)
-      console.log("✅ Mapped purchase - Raw:", purchase.contentId, "→ Processed:", contentId)
-      return contentId
-    }))
-  }, [userPurchases])
 
   if (isLoading) return <div className="p-4">Loading...</div>
   if (error) return <div className="p-4 text-red-600">Error loading content.</div>
@@ -107,50 +81,59 @@ function ContentCards({ contents, error, isLoading, refetch }) {
           phone,
         },
         onCompleted: async (orderId) => {
-          console.log("✅ Payment completed:", orderId)
-          setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
-          
-          // Show success message
-          alert("Payment successful! Updating your content access...")
-          
-          // Wait for webhook to process (5 seconds should be enough)
-          await new Promise(resolve => setTimeout(resolve, 5000))
-          
-          console.log("🔄 Refetching purchases...")
+          console.log("Payment completed:", orderId)
           
           try {
-            // Refetch purchases to get the latest data
-            await refetchPurchases()
+            // Create purchase record
+            await createPurchase({
+              userId: user.id,
+              contentId: contentId,
+              orderId: orderId,
+              amount: response.amount,
+              currency: response.currency,
+            }).unwrap()
             
-            console.log("✅ Purchases refetched successfully")
+            console.log("Purchase record created")
             
-            // Also refetch content if function is available
-            if (refetch) {
-              await refetch()
+            // Wait for webhook and database to process
+            alert("Payment successful! Refreshing your content...")
+            await new Promise(resolve => setTimeout(resolve, 2000))
+            
+            // Check if purchase record exists
+            const purchaseExists = purchases.some(
+              (p) => String(p.userId) === String(user.id) && String(p.contentId) === String(contentId)
+            )
+            
+            if (purchaseExists || refetch) {
+              try {
+                await refetch()
+                setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
+                alert("Content unlocked! You can now view it.")
+              } catch (err) {
+                console.error("Failed to refetch:", err)
+                window.location.reload(true)
+              }
+            } else {
+              window.location.reload(true)
             }
-            
-            alert("Content unlocked! You can now view it.")
-          } catch (err) {
-            console.error("❌ Failed to refetch:", err)
-            alert("Payment successful! Please refresh the page to see your content.")
-            // Give user option to reload
-            if (confirm("Would you like to reload the page now?")) {
-              window.location.reload()
-            }
+          } catch (purchaseErr) {
+            console.error("Failed to create purchase record:", purchaseErr)
+            alert("Payment processed but failed to save purchase. Refreshing...")
+            window.location.reload(true)
           }
         },
         onDismissed: () => {
-          console.log("⚠️ Payment dismissed")
+          console.log("Payment dismissed")
           setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
         },
         onError: (error) => {
-          console.error("❌ Payment error:", error)
+          console.error("Payment error:", error)
           alert("Payment failed. Please try again.")
           setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
         },
       })
     } catch (err) {
-      console.error("❌ Payment initiation failed:", err)
+      console.error("Payment initiation failed:", err)
       alert("Failed to initiate payment. Please try again.")
       setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
     }
@@ -238,22 +221,9 @@ function ContentCards({ contents, error, isLoading, refetch }) {
         const price = c.price ?? 1000
         const isFree = paymentstatus === "free"
         const isPaid = paymentstatus === "paid"
-        
-        // Check if this content ID is in the purchased set
-        const isPurchased = isPaid ? purchasedContentIds.has(String(id)) : false
-        
-        // Debug log for each paid content item
-        if (isPaid) {
-          console.log(`📦 Content ${id} (${topic}):`, {
-            isPaid,
-            isPurchased,
-            contentIdAsString: String(id),
-            hasPurchases: purchasedContentIds.size > 0,
-            allPurchasedIds: Array.from(purchasedContentIds),
-            matches: purchasedContentIds.has(String(id)) ? "✅ MATCH" : "❌ NO MATCH"
-          })
-        }
-        
+         const isPurchased = purchases.some(
+          (p) => String(p.userId) === String(user?.id) && String(p.contentId) === String(id)
+        ) || false
         const isProcessing = processingPayment[id] || false
         const showAddForm = showAddResultMap[id] || false
         const formValues = addResultForm[id] || { contentId: id, username: currentUsername, url: "" }
@@ -301,7 +271,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                     isFree ? "bg-green-100 text-green-800" : isPurchased ? "bg-blue-100 text-blue-800" : "bg-yellow-100 text-yellow-800"
                   }`}
                 >
-                  {loadingPurchases ? "..." : isFree ? "Free" : isPurchased ? "Owned" : `LKR ${price}`}
+                  {isFree ? "Free" : isPurchased ? "Owned" : `LKR ${price}`}
                 </span>
               </div>
 
@@ -325,7 +295,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                 )}
 
                 {/* Paid content - purchased */}
-                {isPaid && isPurchased && !loadingPurchases && (
+                {isPaid && isPurchased && (
                   <>
                     {link && (
                       <button type="button" onClick={() => openUrl(link)} className="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
@@ -340,7 +310,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                   </>
                 )}
                 {/* Paid content - not purchased */}
-                {isPaid && !isPurchased && !loadingPurchases && (
+                {isPaid && !isPurchased && (
                   <>
                     <button
                       type="button"
@@ -363,7 +333,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                   </>
                 )}
 
-                {/* New: View Results button for all users */}
+                {/* View Results button - show only for free or purchased */}
                 {(isFree || (isPaid && isPurchased)) && (
                   <button
                     type="button"
@@ -373,7 +343,8 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                     View Results
                   </button>
                 )}
-                {/* New: Add Results (admin only) */}
+
+                {/* Add Results (admin only) */}
                 {isAdmin && (
                   <div className="relative">
                     <button
