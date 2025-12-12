@@ -49,9 +49,9 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-white">
      
-      <section className="bg-gradient-to-br from-white to-blue-50 py-20 fade-in-on-scroll ">
+      <section className="bg-gradient-to-br from-white to-blue-50 py-8 md:py-12 fade-in-on-scroll ">
         <div className="container mx-auto px-6 ">
-    <div className="grid md:grid-cols-2 gap-16 items-center min-h-[480px]">
+    <div className="grid md:grid-cols-2 gap-16 items-center min-h-[400px]">
       <div className="pl-4 md:pl-12 mb-20">
         <h1 className="text-5xl md:text-7xl font-bold text-blue-900 mb-6 leading-tight">
           Master New Skills, Achieve Your Goals
@@ -72,8 +72,6 @@ function Dashboard() {
         </SignedOut>
         </div>
       </div>
-
-          
             <div className="relative flex justify-end">
               <img
                 src="/assets/images/s.png"
