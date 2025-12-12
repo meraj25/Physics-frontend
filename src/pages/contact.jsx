@@ -73,19 +73,19 @@ export default function TeacherContactPage() {
                   {
                     icon: Phone,
                     label: 'Phone',
-                    value: '+94 77 123 4567',
-                    href: 'tel:+94771234567',
+                    value: '+94 71 361 0592',
+                    href: 'tel:+94713610592',
                   },
                   {
                     icon: MapPin,
                     label: 'Location',
-                    value: 'No. 45, School Lane, Colombo 07',
+                    value: 'Kandy,Sri Lanka',
                   },
                   {
                     icon: Mail,
                     label: 'Mail',
-                    value: 'teacher@school.lk',
-                    href: 'mailto:teacher@school.lk',
+                    value: 'sanjayasuriya@gmail.com',
+                    href: 'mailto:sanjayasuriya@gmail.com',
                   },
                 ].map((item, i) => (
                   <div
@@ -137,14 +137,12 @@ export default function TeacherContactPage() {
               {
                 icon: Phone,
                 title: 'CALL US',
-                line1: '+94 77 123 4567',
-                line2: '+94 11 987 6543',
+                line1: '+94 71 361 0592',
               },
               {
                 icon: MapPin,
                 title: 'LOCATION',
-                line1: 'No. 45, School Lane,',
-                line2: 'Colombo 07, Sri Lanka',
+                line1: 'Kandy, Sri Lanka',
               },
               {
                 icon: Clock,

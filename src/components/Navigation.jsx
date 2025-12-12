@@ -35,7 +35,7 @@ function Navigation() {
               className="flex items-center font-bold text-xl md:text-2xl transition-transform hover:scale-105"
               onClick={() => setIsOpen(false)}
             >
-              Physics by <span className="text-cyan-300 ml-1">Sanjaya</span>
+              Sanjaya<span className="text-cyan-300">suriya</span>
             </Link>
 
             {/* Desktop Nav - Center */}

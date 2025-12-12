@@ -37,9 +37,8 @@ function Footer() {
           {/* Logo & Title */}
           <div className="flex items-center justify-center gap-2 mb-3">
             
-            <h3 className="text-xl font-bold">Physics by 
-              <span className="text-cyan-300"> Sanajaya</span>
-              </h3>
+            <h3 className="text-xl font-bold">Sanajaya<span className="text-cyan-300">suriya</span>
+            </h3>
           </div>
 
           {/* Tagline */}
@@ -49,19 +48,19 @@ function Footer() {
 
           {/* Contact */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-blue-300">
-            <a href="mailto:physics@studypack.lk" className="flex items-center gap-2 hover:text-white transition">
+            <a href="mailto:sanjayasuriya@gmail.com" className="flex items-center gap-2 hover:text-white transition">
               <Mail className="w-4 h-4" />
-              physics@studypack.lk
+              sanjayasuriya@gmail.com
             </a>
             <span className="hidden sm:inline">•</span>
-            <a href="tel:+94771234567" className="flex items-center gap-2 hover:text-white transition">
+            <a href="tel:+94713610592" className="flex items-center gap-2 hover:text-white transition">
               <Phone className="w-4 h-4" />
-              +94 77 123 4567
+              +94 71 361 0592
             </a>
             <span className="hidden sm:inline">•</span>
             <span className="flex items-center gap-2">
               <MapPin className="w-4 h-4" />
-              කොළඹ, ශ්‍රී ලංකා
+              නුවර, ශ්‍රී ලංකා
             </span>
           </div>
 
