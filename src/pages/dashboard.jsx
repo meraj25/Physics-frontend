@@ -49,7 +49,7 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-white">
      
-      <section className="bg-gradient-to-br from-white to-blue-50 py-8 md:py-12 fade-in-on-scroll ">
+      <section className="bg-white py-8 md:py-12 fade-in-on-scroll ">
         <div className="container mx-auto px-6 ">
     <div className="grid md:grid-cols-2 gap-16 items-center min-h-[400px]">
       <div className="pl-4 md:pl-12 mb-20">
