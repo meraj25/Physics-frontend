@@ -65,30 +65,32 @@ function Footer() {
             </span>
           </div>
 
-          {/* Copyright */}
-          <p className="text-xs text-blue-400 pt-4 border-t border-blue-800">
+          {/* Policies */}
+          <div className="pt-6 border-t border-blue-800">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
               <Link
-              to="/privacy-policy"
-              className="flex items-center font-bold text-xl md:text-2xl transition-transform hover:scale-105"
-              onClick={() => setIsOpen(false)}
-            >
-              Privacy Policy
-            </Link>
-                  <Link
-              to="/refund-policy"
-              className="flex items-center font-bold text-xl md:text-2xl transition-transform hover:scale-105"
-              onClick={() => setIsOpen(false)}
-            >
-              Refund Policy
-            </Link>
-                  <Link
-              to="/terms-and-conditions-policy"
-              className="flex items-center font-bold text-xl md:text-2xl transition-transform hover:scale-105"
-              onClick={() => setIsOpen(false)}
-            >
-              Terms and conditions
-            </Link>
-          </p>
+                to="/privacy-policy"
+                className="text-xs text-blue-300 hover:text-white transition-colors duration-200"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                to="/return-policy"
+                className="text-xs text-blue-300 hover:text-white transition-colors duration-200"
+              >
+                Refund Policy
+              </Link>
+              <Link
+                to="/terms-and-conditions"
+                className="text-xs text-blue-300 hover:text-white transition-colors duration-200"
+              >
+                Terms & Conditions
+              </Link>
+            </div>
+          </div>
+
+          {/* Copyright */}
+          
         </div>
       </div>
             
