@@ -36,6 +36,7 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
   const [assignment, setAssignment] = useState("Assignment")
   const [topic, setTopic] = useState("Topic")
   const [paymentstatus, setPaymentstatus] = useState("Free")
+  const [price, setPrice] = useState(0)
 
   // UI state
   const [showSuccess, setShowSuccess] = useState(false)
@@ -50,6 +51,7 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
     assignment: z.string().min(1, "Assignment is required"),
     topic: z.string().min(1, "Topic is required"),
     paymentstatus: z.string().min(1, "Payment status is required"),
+    price: z.number().min(0, "Price must be 0 or greater"),
   })
 
   useEffect(() => {
@@ -99,6 +101,7 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
       topic: String(topic ?? "").trim(),
       assignment: String(assignment ?? "").trim(),
       paymentstatus: String(paymentstatus ?? "").trim(),
+      price: Number(price),
     }
 
     const result = schema.safeParse(toValidate)
@@ -120,6 +123,7 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
         assignment: toValidate.assignment,
         topic: toValidate.topic,
         paymentstatus: toValidate.paymentstatus,
+        price: toValidate.price,
       }
 
       console.log("create payload:", pecontent)
@@ -130,6 +134,7 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
       setAssignment("Assignment")
       setTopic("Topic")
       setPaymentstatus("Free")
+      setPrice(0)
 
       setShowSuccess(true)
       setTimeout(() => setShowSuccess(false), 3500)
@@ -205,6 +210,23 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
               </select>
               {errors.paymentstatus && <p className="text-sm text-red-600">{errors.paymentstatus}</p>}
             </div>
+
+            {paymentstatus === "Paid" && (
+              <div className="grid gap-3">
+                <Label htmlFor="price">Price (LKR)</Label>
+                <Input
+                  id="price"
+                  name="price"
+                  type="number"
+                  min="0"
+                  step="100"
+                  value={price}
+                  onChange={(e) => setPrice(Number(e.target.value))}
+                  placeholder="Enter price in LKR"
+                />
+                {errors.price && <p className="text-sm text-red-600">{errors.price}</p>}
+              </div>
+            )}
           </div>
 
 

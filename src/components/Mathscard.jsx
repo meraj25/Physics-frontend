@@ -207,9 +207,14 @@ export default function MathsCard({ contents, error, isLoading }) {
         const link = sp.link ?? ""
         const assignment = sp.assignment ?? ""
         const paymentstatus = (sp.paymentstatus ?? "Free").toLowerCase()
+        const price = sp.price ?? 1000
         const isFree = paymentstatus === "free"
         const isPaid = paymentstatus === "paid"
+        const isPurchased = purchases.some(
+          (p) => String(p.userId) === String(user?.id) && String(p.contentId) === String(id)
+        ) || false
         const unlocked = !!unlockedMap[id]
+        const isProcessing = processingPayment[id] || false
         const showAddForm = showAddResultMap[id] || false
         const formValues = addResultForm[id] || { contentId: id, username: currentUsername, url: "" }
 
@@ -231,6 +236,15 @@ export default function MathsCard({ contents, error, isLoading }) {
                   <Trash2 className="w-4 h-4" />
                 </button>
               )}
+
+              {/* Purchased badge */}
+              {isPaid && isPurchased && (
+                <div className="absolute top-2 left-2 z-20 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-green-500 text-white text-xs font-medium shadow-sm">
+                  <CheckCircle className="w-3 h-3" />
+                  Purchased
+                </div>
+              )}
+
               <img
                 src={`/assets/images/sp.jpg`}
                 alt={headingName}
@@ -241,79 +255,94 @@ export default function MathsCard({ contents, error, isLoading }) {
             {/* Card content */}
             <div className="p-4">
               <div className="flex items-start justify-between gap-3">
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900">
-                    {topic}
-                  </h4>
-                </div>
-
-                {/* Status badge */}
-                {isFree ? (
-                  <span className="text-xs font-medium px-2 py-1 rounded-full bg-green-100 text-green-800">
-                    Free
-                  </span>
-                ) : isPaid && unlocked ? (
-                  <div
-                    title="Unlocked"
-                    className="flex items-center gap-1 text-green-700"
-                  >
-                    <Unlock className="w-5 h-5" />
-                    <span className="text-xs font-medium">Unlocked</span>
-                  </div>
-                ) : (
-                  <span className="text-xs font-medium px-2 py-1 rounded-full bg-yellow-100 text-yellow-800">
-                    Paid
-                  </span>
-                )}
+                <h4 className="text-lg font-semibold text-gray-900">
+                  {topic}
+                </h4>
+                <span
+                  className={`text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap ${
+                    isFree ? "bg-green-100 text-green-800" : isPurchased ? "bg-blue-100 text-blue-800" : "bg-yellow-100 text-yellow-800"
+                  }`}
+                >
+                  {isFree ? "Free" : isPurchased ? "Owned" : `LKR ${price}`}
+                </span>
               </div>
 
               {/* Buttons section */}
               <div className="mt-4 flex flex-wrap gap-2">
-                {/* Free: show view + assignment */}
-                {isFree && link && (
-                  <button
-                    type="button"
-                    onClick={() => openUrl(link)}
-                    className="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-                  >
-                    View Content
-                  </button>
+                {/* Free content - show all buttons */}
+                {isFree && (
+                  <>
+                    {link && (
+                      <button
+                        type="button"
+                        onClick={() => openUrl(link)}
+                        className="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                      >
+                        View Content
+                      </button>
+                    )}
+                    {assignment && (
+                      <button
+                        type="button"
+                        onClick={() => openUrl(assignment)}
+                        className="inline-flex items-center px-3 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700"
+                      >
+                        Assignment
+                      </button>
+                    )}
+                  </>
                 )}
 
-                {(isFree && assignment) ||
-                (isPaid && unlocked && assignment) ? (
-                  <button
-                    type="button"
-                    onClick={() => openUrl(assignment)}
-                    className="inline-flex items-center px-3 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700"
-                  >
-                    Assignment
-                  </button>
-                ) : null}
-
-                {isPaid && !unlocked && (
-                  <button
-                    type="button"
-                    onClick={() => handlePayment(id, topic, sp.price ?? 0)}
-                    disabled={processingPayment[id]}
-                    className="inline-flex items-center px-3 py-2 text-white text-sm rounded bg-red-600 hover:bg-red-700 disabled:opacity-50"
-                  >
-                    {processingPayment[id] ? "Processing..." : "Pay to unlock"}
-                  </button>
+                {/* Paid content - purchased */}
+                {isPaid && isPurchased && (
+                  <>
+                    {link && (
+                      <button
+                        type="button"
+                        onClick={() => openUrl(link)}
+                        className="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
+                      >
+                        View Content
+                      </button>
+                    )}
+                    {assignment && (
+                      <button
+                        type="button"
+                        onClick={() => openUrl(assignment)}
+                        className="inline-flex items-center px-3 py-2 bg-indigo-600 text-white text-sm rounded hover:bg-indigo-700"
+                      >
+                        Assignment
+                      </button>
+                    )}
+                  </>
                 )}
 
-                {isPaid && (unlockedMap[id] || purchases.some((p) => String(p.userId) === String(user?.id) && String(p.contentId) === String(id))) && link && (
-                  <button
-                    type="button"
-                    onClick={() => openUrl(link)}
-                    className="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700"
-                  >
-                    View Content
-                  </button>
+                {/* Paid content - not purchased */}
+                {isPaid && !isPurchased && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => handlePayment(id, topic, price)}
+                      disabled={isProcessing}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm rounded font-medium hover:from-orange-600 hover:to-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isProcessing ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <Lock className="w-4 h-4" />
+                          Unlock for LKR {price}
+                        </>
+                      )}
+                    </button>
+                  </>
                 )}
 
-                {/* View Results button for all users */}
-                {(isFree || (isPaid && unlocked)) && (
+                {/* View Results button - show only for free or purchased */}
+                {(isFree || (isPaid && isPurchased)) && (
                   <button
                     type="button"
                     onClick={() => handleViewResult(id)}

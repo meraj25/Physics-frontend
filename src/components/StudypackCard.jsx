@@ -203,6 +203,7 @@ export default function StudyPackCards({ contents, error, isLoading }) {
         const link = sp.link ?? ""
         const assignment = sp.assignment ?? ""
         const paymentstatus = (sp.paymentstatus ?? "Free").toLowerCase()
+        const price = sp.price ?? 1000
         const isFree = paymentstatus === "free"
         const isPaid = paymentstatus === "paid"
         const unlocked = !!unlockedMap[id]
@@ -228,6 +229,15 @@ export default function StudyPackCards({ contents, error, isLoading }) {
                   <Trash2 className="w-4 h-4" />
                 </button>
               )}
+
+              {/* Purchased badge */}
+              {isPaid && isPurchased && (
+                <div className="absolute top-2 left-2 z-20 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-green-500 text-white text-xs font-medium shadow-sm">
+                  <CheckCircle className="w-3 h-3" />
+                  Purchased
+                </div>
+              )}
+
               <img
                 src={`/assets/images/sp.jpg`}
                 alt={headingName}
@@ -238,35 +248,16 @@ export default function StudyPackCards({ contents, error, isLoading }) {
             {/* Card content */}
             <div className="p-4">
               <div className="flex items-start justify-between gap-3">
-                <div>
-                  <h4 className="text-lg font-semibold text-gray-900">
-                    {topic}
-                  </h4>
-                </div>
-
-                {/* Status badge */}
-                {isFree ? (
-                    <span className="text-xs font-medium px-2 py-1 rounded-full bg-green-100 text-green-800">
-                      Free
-                    </span>
-                  ) : isPaid && isPurchased ? (
-                    <div className="absolute top-2 left-2 z-20 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-green-500 text-white text-xs font-medium shadow-sm">
-                      <CheckCircle className="w-3 h-3" />
-                      Purchased
-                    </div>
-                  ) : isPaid && unlocked ? (
-                    <div
-                      title="Unlocked"
-                      className="flex items-center gap-1 text-green-700"
-                    >
-                      <Unlock className="w-5 h-5" />
-                      <span className="text-xs font-medium">Unlocked</span>
-                    </div>
-                  ) : (
-                    <span className="text-xs font-medium px-2 py-1 rounded-full bg-yellow-100 text-yellow-800">
-                      Paid
-                    </span>
-                  )}
+                <h4 className="text-lg font-semibold text-gray-900">
+                  {topic}
+                </h4>
+                <span
+                  className={`text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap ${
+                    isFree ? "bg-green-100 text-green-800" : isPurchased ? "bg-blue-100 text-blue-800" : "bg-yellow-100 text-yellow-800"
+                  }`}
+                >
+                  {isFree ? "Free" : isPurchased ? "Owned" : `LKR ${price}`}
+                </span>
               </div>
 
               {/* Buttons section */}
@@ -296,11 +287,21 @@ export default function StudyPackCards({ contents, error, isLoading }) {
                 {isPaid && !isPurchased && (
                   <button
                     type="button"
-                    onClick={() => handlePayment(id, topic, sp?.price ?? 0)}
+                    onClick={() => handlePayment(id, topic, price)}
                     disabled={processingPayment[id]}
-                    className="inline-flex items-center px-3 py-2 text-white text-sm rounded bg-red-600 hover:bg-red-700 disabled:opacity-50"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm rounded font-medium hover:from-orange-600 hover:to-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {processingPayment[id] ? "Processing..." : "Pay to unlock"}
+                    {processingPayment[id] ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <Lock className="w-4 h-4" />
+                        Unlock for LKR {price}
+                      </>
+                    )}
                   </button>
                 )}
 
