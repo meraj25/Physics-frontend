@@ -274,7 +274,7 @@ export default function StudyPackCards({ contents, error, isLoading }) {
                 )}
 
                 {(isFree && assignment) ||
-                (isPaid && unlocked && assignment) ? (
+                (isPaid && isPurchased && assignment) ? (
                   <button
                     type="button"
                     onClick={() => openUrl(assignment)}
@@ -313,6 +313,8 @@ export default function StudyPackCards({ contents, error, isLoading }) {
                   >
                     View Content
                   </button>
+                   
+                  
                 )}
 
                 {/* View Results button for all users */}

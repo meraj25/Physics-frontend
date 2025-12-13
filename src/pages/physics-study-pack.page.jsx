@@ -195,7 +195,7 @@ function App() {
                   {topic.links && topic.links.length > 0 && (
                     <div className="space-y-2">
                       <h4 className="text-sm font-semibold text-gray-700 mb-3">Related Topics:</h4>
-                      <div className="grid gap-2">
+                      <div className="grid md:grid-cols-3 gap-2">
                         {topic.links.map((link, index) => (
                           <a
                             key={index}

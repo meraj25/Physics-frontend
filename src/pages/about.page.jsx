@@ -78,7 +78,7 @@ export default function About() {
                 </div>
 
                 <h1 className="text-5xl md:text-6xl font-bold mb-4">
-                  Mr. Sanjaya <span className="text-cyan-300">Jayasooriya</span>
+                  Mr. Sanjaya <span className="text-cyan-300">Jayasuriya</span>
                 </h1>
 
                 <p className="text-xl text-blue-100 mb-6">

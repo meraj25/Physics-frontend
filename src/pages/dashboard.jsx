@@ -99,9 +99,7 @@ function Dashboard() {
         <CardDescription>Explore the Adavance Level package.</CardDescription>
       </CardHeader>
       <CardContent>
-        <Link to="/advanced-level">
-        <Button className="w-full bg-blue-600 hover:bg-blue-700 transition-colors duration-300">Explore</Button>
-      </Link>
+        <Link to="/advanced-level"></Link>
       </CardContent>
       </Card>
         </div>
@@ -115,9 +113,8 @@ function Dashboard() {
       </CardHeader>
       <CardContent>
         
-       <Link to="/pre-engineering">
-        <Button className="w-full  bg-blue-600  hover:bg-blue-700 transition-colors duration-300">Explore</Button>
-      </Link>
+       <Link to="/pre-engineering"></Link>
+       
 
       </CardContent>
     </Card>
@@ -131,9 +128,7 @@ function Dashboard() {
         <CardDescription>Explore the Other packages.</CardDescription>
       </CardHeader>
       <CardContent>
-        <Link to="/other-courses ">
-        <Button className="w-full  bg-blue-600  hover:bg-blue-700 transition-colors duration-300">Explore</Button>
-      </Link>
+        <Link to="/other-courses "></Link>
       </CardContent>
     </Card>
         </div>
