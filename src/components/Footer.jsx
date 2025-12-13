@@ -74,13 +74,13 @@ function Footer() {
                 Privacy Policy
               </Link>
               <Link
-                to="/return-policy"
+                to="/refund-policy"
                 className="text-xs text-blue-300 hover:text-white transition-colors duration-200"
               >
                 Refund Policy
               </Link>
               <Link
-                to="/terms-and-conditions"
+                to="/terms-and-conditions-policy"
                 className="text-xs text-blue-300 hover:text-white transition-colors duration-200"
               >
                 Terms & Conditions
