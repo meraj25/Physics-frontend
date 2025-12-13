@@ -90,22 +90,27 @@ function Dashboard() {
           <p className="text-xl text-slate-600 text-center mb-16 max-w-2xl mx-auto">Experience personalized education with direct access to your teacher</p>
 
           <main className="content-center grid grid-cols-1 md:grid-cols-3 gap-4 mt-20">
+       
         <div>
-
-       <Card className="w-full max-w-md ml-15 fade-in-on-scroll hover:scale-105 hover:shadow-2xl">
+  <Link to="/advanced-level" className="block">
+    <Card className="w-full max-w-md ml-15 fade-in-on-scroll hover:scale-105 hover:shadow-2xl cursor-pointer transition-transform">
       <CardHeader>
         <CardTitle className="text-center mb-5">Advance Level</CardTitle>
         <img src="/assets/images/al.jpg" alt="Advance Level" />
-        <CardDescription>Explore the Adavance Level package.</CardDescription>
+        <CardDescription>Explore the Advance Level package.</CardDescription>
       </CardHeader>
       <CardContent>
-        <Link to="/advanced-level"></Link>
+     
       </CardContent>
-      </Card>
-        </div>
+    </Card>
+  </Link>
+</div>
 
         <div>
-    <Card className="w-full max-w-md ml-7 fade-in-on-scroll hover:scale-105 hover:shadow-2xl">
+          <Link to="/pre-engineering" className="block">
+    <Card className="w-full max-w-md ml-7 fade-in-on-scroll hover:scale-105 hover:shadow-2xl"
+    
+    >
       <CardHeader>
         <CardTitle className="text-center mb-5">Pre Engineering</CardTitle>
         <img src="/assets/images/pe.jpg" alt="Pre Engineering" />
@@ -113,14 +118,14 @@ function Dashboard() {
       </CardHeader>
       <CardContent>
         
-       <Link to="/pre-engineering"></Link>
-       
-
+      
       </CardContent>
     </Card>
+    </Link>
         </div>
 
         <div>
+          <Link to="/other-courses" className="block">
     <Card className="w-full max-w-md fade-in-on-scroll hover:scale-105 hover:shadow-2xl">
       <CardHeader>
         <CardTitle className="text-center mb-3">Other Courses</CardTitle>
@@ -128,9 +133,10 @@ function Dashboard() {
         <CardDescription>Explore the Other packages.</CardDescription>
       </CardHeader>
       <CardContent>
-        <Link to="/other-courses "></Link>
+        
       </CardContent>
     </Card>
+    </Link>
         </div>
 
       </main>
