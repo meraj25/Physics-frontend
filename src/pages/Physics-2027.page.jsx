@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { CreateMcontent } from "@/components/CreateMcontent";
 import ContentCards from "@/components/ContentCard";
-import { useGetAllMcontentQuery } from "@/lib/api";
+import { useGetAllContentQuery } from "@/lib/api";
 import { useGetAllCategoriesQuery } from "@/lib/api";
 import { useGetAllYearsQuery } from "@/lib/api";
 import { useUser } from "@clerk/clerk-react";
@@ -12,7 +12,7 @@ function Physics2027Page() {
   const [selectedOption, setSelectedOption] = useState('Theory');
   const options = ['Theory', 'Revision', 'Papers'];
 
-  const { data : contents, error, isLoading } = useGetAllMcontentQuery();
+  const { data : contents, error, isLoading } = useGetAllContentQuery();
   const { data: categories } = useGetAllCategoriesQuery();
   const { data: years } = useGetAllYearsQuery();
 
