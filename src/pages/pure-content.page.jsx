@@ -48,7 +48,7 @@ function PureContentPage() {
         <div className="max-w-6xl mx-auto">
         <section className="mb-16">
           <div className="text-center mb-12">
-         <h2 className="text-2xl font-semibold mb-10">{selectedHeading.main} — {selectedHeading.name}</h2>
+         <h2 className="text-2xl font-semibold mb-10">{selectedHeading.name}</h2>
       
 
           {isLoaded && isAdmin && (

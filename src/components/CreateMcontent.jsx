@@ -25,6 +25,7 @@ import {
 import { useCreateMcontentMutation, useGetAllCategoriesQuery, useGetAllYearsQuery } from "../lib/api"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { CheckCircle2Icon } from "lucide-react"
+import { Textarea } from "./ui/textarea"
 
 export function CreateMcontent({
   yearId: propYearId,
@@ -226,7 +227,7 @@ export function CreateMcontent({
 
             <div className="grid gap-3">
               <Label htmlFor="description">Description</Label>
-              <Input id="description" name="description" value={description} onChange={(e) => setDescription(e.target.value)} />
+              <Textarea id="description" name="description" value={description} onChange={(e) => setDescription(e.target.value)} />
               {errors.description && <p className="text-sm text-red-600">{errors.description}</p>}
             </div>
 

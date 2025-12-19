@@ -169,7 +169,7 @@ function App() {
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-center mb-8 text-gray-900">Explore the exclusive Physics Study Pack</h1>
 
-        <div className="space-y-4 grid md:grid-cols-3 gap-2">
+        <div className="space-y-4 grid md:grid-cols-2 gap-3">
           {topics.map((topic) => (
             <div
               key={topic.id}
@@ -195,7 +195,7 @@ function App() {
                   {topic.links && topic.links.length > 0 && (
                     <div className="space-y-2">
                       <h4 className="text-sm font-semibold text-gray-700 mb-3">Related Topics:</h4>
-                      <div className="grid md:grid-cols-3 gap-2">
+                      <div className="grid md:grid-cols-1 gap-2">
                         {topic.links.map((link, index) => (
                           <a
                             key={index}

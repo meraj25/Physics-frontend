@@ -284,7 +284,7 @@ function McontentCards({ contents, error, isLoading }) {
               </div>
 
               {description && (
-                <p className="mt-2 text-sm text-gray-600 line-clamp-3">
+                <p className="mt-2 text-sm text-gray-600 ">
                   {description}
                 </p>
               )}

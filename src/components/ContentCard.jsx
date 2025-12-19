@@ -270,7 +270,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                 </span>
               </div>
 
-              {description && <p className="mt-2 text-sm text-gray-600 line-clamp-3">{description}</p>}
+              {description && <p className="mt-2 text-sm text-gray-600 ">{description}</p>}
 
               <div className="mt-4 flex flex-wrap gap-2">
                 {/* Free content - show all buttons */}

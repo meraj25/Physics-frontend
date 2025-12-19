@@ -13,6 +13,7 @@ import {
 } from "./ui/dialog"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
+import { Textarea } from "./ui/textarea"
 import {
   Select as UiSelect,
   SelectContent,
@@ -226,7 +227,7 @@ export function CreateContent({
 
             <div className="grid gap-3">
               <Label htmlFor="description">Description</Label>
-              <Input id="description" name="description" value={description} onChange={(e) => setDescription(e.target.value)} />
+              <Textarea id="description" name="description" value={description} onChange={(e) => setDescription(e.target.value)} />
               {errors.description && <p className="text-sm text-red-600">{errors.description}</p>}
             </div>
 
