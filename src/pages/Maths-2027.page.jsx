@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { CreateMcontent } from "@/components/CreateMcontent";
 import McontentCards from "@/components/McontentCard";
-import { useGetAllContentQuery } from "@/lib/api";
+import { useGetAllMcontentQuery } from "@/lib/api";
 import { useGetAllCategoriesQuery } from "@/lib/api";
 import { useGetAllYearsQuery } from "@/lib/api";
 import { useUser } from "@clerk/clerk-react";
@@ -12,7 +12,7 @@ function Maths2027Page() {
   const [selectedOption, setSelectedOption] = useState('Theory');
   const options = ['Theory', 'Revision', 'Papers'];
 
-  const { data : contents, error, isLoading } = useGetAllContentQuery();
+  const { data : contents, error, isLoading } = useGetAllMcontentQuery();
   const { data: categories } = useGetAllCategoriesQuery();
   const { data: years } = useGetAllYearsQuery();
 
