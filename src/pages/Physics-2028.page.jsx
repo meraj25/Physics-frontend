@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CreateMcontent } from "@/components/CreateMcontent";
+import CreateContent from "@/components/CreateContent";
 import ContentCards from "@/components/ContentCard";
 import { useGetAllContentQuery } from "@/lib/api";
 import { useGetAllCategoriesQuery } from "@/lib/api";
@@ -103,7 +103,7 @@ function Physics2028Page() {
             {/* ✅ Show CreateContent only for admins */}
             {isLoaded && isAdmin && (
               <div className="flex justify-center">
-                <CreateMcontent
+                <CreateContent
                   yearName={"2028"}
                   categoryName={selectedOption}
                 />
