@@ -11,6 +11,8 @@ function ContentCards({ contents, error, isLoading, refetch }) {
   const [processingPayment, setProcessingPayment] = useState({})
   const [showAddResultMap, setShowAddResultMap] = useState({})
   const [addResultForm, setAddResultForm] = useState({})
+  const [adminUnlockInputs, setAdminUnlockInputs] = useState({})
+  const [adminUnlockLoading, setAdminUnlockLoading] = useState({})
   const [deleteContent, { isLoading: deleting }] = useDeleteContentMutation()
   const [initiatePayment] = useInitiatePaymentMutation()
   const [addResult, { isLoading: addingResult }] = useAddResultMutation()
@@ -177,6 +179,33 @@ function ContentCards({ contents, error, isLoading, refetch }) {
         url: "",
       },
     }))
+  }
+
+  const handleAdminUnlockChange = (contentId, value) => {
+    setAdminUnlockInputs((s) => ({ ...s, [contentId]: value }))
+  }
+
+  const handleAdminUnlock = async (contentId, price) => {
+    const username = (adminUnlockInputs[contentId] || "").trim()
+    if (!username) {
+      alert("Please enter a username to unlock for.")
+      return
+    }
+
+    setAdminUnlockLoading((s) => ({ ...s, [contentId]: true }))
+
+    try {
+      // Attempt to create a purchase record for the provided username.
+      // Backend should accept `username` or resolve it server-side.
+      await createPurchase({ username, contentId, amount: price, currency: "LKR" }).unwrap()
+      alert(`Content unlocked for ${username}`)
+      // Reload to refresh purchases and UI state
+      window.location.reload()
+    } catch (err) {
+      console.error("Admin unlock failed", err)
+      alert("Failed to unlock content for the user. See console.")
+      setAdminUnlockLoading((s) => ({ ...s, [contentId]: false }))
+    }
   }
 
   const handleAddResultChange = (contentId, field, value) => {
@@ -396,6 +425,28 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                         </div>
                       </div>
                     )}
+                    {/* Admin unlock user UI */}
+                    <div className="mt-2 p-3 bg-gray-50 border rounded w-80 shadow-sm">
+                      <label className="block text-xs text-gray-600">Unlock for Username</label>
+                      <input
+                        type="text"
+                        value={adminUnlockInputs[id] || ""}
+                        onChange={(e) => handleAdminUnlockChange(id, e.target.value)}
+                        placeholder="username or email"
+                        className="mt-1 w-full px-2 py-1 border rounded text-sm"
+                      />
+
+                      <div className="mt-3 flex justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleAdminUnlock(id, price)}
+                          disabled={adminUnlockLoading[id]}
+                          className="px-3 py-1 text-sm rounded bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50"
+                        >
+                          {adminUnlockLoading[id] ? "Unlocking..." : "Unlock"}
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>

@@ -18,6 +18,8 @@ export default function PEContentCard({ contents, error, isLoading }) {
   const [processingPayment, setProcessingPayment] = useState({})
   const [showAddResultMap, setShowAddResultMap] = useState({})
   const [addResultForm, setAddResultForm] = useState({})
+  const [adminUnlockInputs, setAdminUnlockInputs] = useState({})
+  const [adminUnlockLoading, setAdminUnlockLoading] = useState({})
   const { data: headings } = useGetAllPreEngHeadingsQuery()
   const { data: results = [] } = useGetPEResultsQuery()
   const [deletePEContent, { isLoading: deleting }] = useDeletePEContentMutation()
@@ -178,6 +180,30 @@ export default function PEContentCard({ contents, error, isLoading }) {
     } catch (err) {
       console.error("Add result failed", err)
       alert("Failed to add result.")
+    }
+  }
+
+  const handleAdminUnlockChange = (contentId, value) => {
+    setAdminUnlockInputs((s) => ({ ...s, [contentId]: value }))
+  }
+
+  const handleAdminUnlock = async (contentId, price) => {
+    const username = (adminUnlockInputs[contentId] || "").trim()
+    if (!username) {
+      alert("Please enter a username to unlock for.")
+      return
+    }
+
+    setAdminUnlockLoading((s) => ({ ...s, [contentId]: true }))
+
+    try {
+      await createPurchase({ username, contentId, amount: price, currency: "LKR" }).unwrap()
+      alert(`Content unlocked for ${username}`)
+      window.location.reload()
+    } catch (err) {
+      console.error("Admin unlock failed", err)
+      alert("Failed to unlock content for the user. See console.")
+      setAdminUnlockLoading((s) => ({ ...s, [contentId]: false }))
     }
   }
 
@@ -403,6 +429,28 @@ export default function PEContentCard({ contents, error, isLoading }) {
                         </div>
                       </div>
                     )}
+                    {/* Admin unlock user UI */}
+                    <div className="mt-2 p-3 bg-gray-50 border rounded w-80 shadow-sm">
+                      <label className="block text-xs text-gray-600">Unlock for Username</label>
+                      <input
+                        type="text"
+                        value={adminUnlockInputs[id] || ""}
+                        onChange={(e) => handleAdminUnlockChange(id, e.target.value)}
+                        placeholder="username or email"
+                        className="mt-1 w-full px-2 py-1 border rounded text-sm"
+                      />
+
+                      <div className="mt-3 flex justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleAdminUnlock(id, price)}
+                          disabled={adminUnlockLoading[id]}
+                          className="px-3 py-1 text-sm rounded bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50"
+                        >
+                          {adminUnlockLoading[id] ? "Unlocking..." : "Unlock"}
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>
