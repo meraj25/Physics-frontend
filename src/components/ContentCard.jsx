@@ -197,8 +197,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
     try {
       // Attempt to create a purchase record for the provided username.
       // Backend should accept `username` or resolve it server-side.
-      // We send the entered value as `userId` (backend stores purchases by userId).
-      await createPurchase({ userId: username, contentId, amount: price, currency: "LKR" }).unwrap()
+      await createPurchase({ username, contentId, amount: price, currency: "LKR" }).unwrap()
       alert(`Content unlocked for ${username}`)
       // Reload to refresh purchases and UI state
       window.location.reload()
@@ -251,14 +250,9 @@ function ContentCards({ contents, error, isLoading, refetch }) {
         const price = c.price ?? 1000
         const isFree = paymentstatus === "free"
         const isPaid = paymentstatus === "paid"
-        const isPurchased = purchases.some((p) => {
-          const contentMatch = String(p.contentId) === String(id)
-          const userIdMatch = user?.id && String(p.userId) === String(user.id)
-          const usernameMatch =
-            String(p.userId) === String(currentUsername) ||
-            (p.username != null && String(p.username) === String(currentUsername))
-          return contentMatch && (userIdMatch || usernameMatch)
-        })
+        const isPurchased = purchases.some(
+        (p) =>(String(p.userId) === String(user?.id) || String(p.username) === String(currentUsername)) &&
+        String(p.contentId) === String(id)) || false
         const isProcessing = processingPayment[id] || false
         const showAddForm = showAddResultMap[id] || false
         const formValues = addResultForm[id] || { contentId: id, username: currentUsername, url: "" }
