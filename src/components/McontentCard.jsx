@@ -213,24 +213,24 @@ function McontentCards({ contents, error, isLoading }) {
   }
 
   const handleAdminUnlock = async (contentId, price) => {
-    const username = (adminUnlockInputs[contentId] || "").trim()
-    if (!username) {
-      alert("Please enter a username to unlock for.")
-      return
-    }
-
-    setAdminUnlockLoading((s) => ({ ...s, [contentId]: true }))
-
-    try {
-      await createPurchase({ userId: username, contentId, amount: price, currency: "LKR" }).unwrap()
-      alert(`Content unlocked for ${username}`)
-      window.location.reload()
-    } catch (err) {
-      console.error("Admin unlock failed", err)
-      alert("Failed to unlock content for the user. See console.")
-      setAdminUnlockLoading((s) => ({ ...s, [contentId]: false }))
-    }
+  const username = (adminUnlockInputs[contentId] || "").trim()
+  if (!username) {
+    alert("Please enter a username to unlock for.")
+    return
   }
+
+  setAdminUnlockLoading((s) => ({ ...s, [contentId]: true }))
+
+  try {
+    await createPurchase({ username, contentId, amount: price, currency: "LKR" }).unwrap()
+    alert(`Content unlocked for ${username}`)
+    window.location.reload()
+  } catch (err) {
+    console.error("Admin unlock failed", err)
+    alert("Failed to unlock content for the user. See console.")
+    setAdminUnlockLoading((s) => ({ ...s, [contentId]: false }))
+  }
+}
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
@@ -247,17 +247,9 @@ function McontentCards({ contents, error, isLoading }) {
         const price = c.price ?? 1000
         const isFree = paymentstatus === "free"
         const isPaid = paymentstatus === "paid"
-        const isPurchased =
-          !!unlockedMap[id] ||
-          purchases.some((p) => {
-            const contentMatch = String(p.contentId) === String(id)
-            const userIdMatch = user?.id && String(p.userId) === String(user.id)
-            const usernameMatch =
-              String(p.userId) === String(currentUsername) ||
-              (p.username != null && String(p.username) === String(currentUsername))
-            return contentMatch && (userIdMatch || usernameMatch)
-          }) ||
-          false
+        const isPurchased =!!unlockedMap[id] ||purchases.some(
+        (p) =>(String(p.userId) === String(user?.id) || String(p.username) === String(currentUsername)) &&
+        String(p.contentId) === String(id)) || false
         const isProcessing = processingPayment[id] || false
         const showAddForm = showAddResultMap[id] || false
         const formValues = addResultForm[id] || { contentId: id, username: currentUsername, url: "" }
