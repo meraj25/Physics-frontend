@@ -236,9 +236,14 @@ export default function MathsCard({ contents, error, isLoading }) {
         const price = sp.price ?? 1000
         const isFree = paymentstatus === "free"
         const isPaid = paymentstatus === "paid"
-        const isPurchased = purchases.some(
-          (p) => String(p.userId) === String(user?.id) && String(p.contentId) === String(id)
-        ) || false
+        const isPurchased = purchases.some((p) => {
+          const contentMatch = String(p.contentId) === String(id)
+          const userIdMatch = user?.id && String(p.userId) === String(user.id)
+          const usernameMatch =
+            String(p.userId) === String(currentUsername) ||
+            (p.username != null && String(p.username) === String(currentUsername))
+          return contentMatch && (userIdMatch || usernameMatch)
+        })
         const unlocked = !!unlockedMap[id]
         const isProcessing = processingPayment[id] || false
         const showAddForm = showAddResultMap[id] || false
