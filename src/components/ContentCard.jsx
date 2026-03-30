@@ -197,7 +197,8 @@ function ContentCards({ contents, error, isLoading, refetch }) {
     try {
       // Attempt to create a purchase record for the provided username.
       // Backend should accept `username` or resolve it server-side.
-      await createPurchase({ username, contentId, amount: price, currency: "LKR" }).unwrap()
+      // We send the entered value as `userId` (backend stores purchases by userId).
+      await createPurchase({ userId: username, contentId, amount: price, currency: "LKR" }).unwrap()
       alert(`Content unlocked for ${username}`)
       // Reload to refresh purchases and UI state
       window.location.reload()

@@ -222,7 +222,7 @@ function McontentCards({ contents, error, isLoading }) {
     setAdminUnlockLoading((s) => ({ ...s, [contentId]: true }))
 
     try {
-      await createPurchase({ username, contentId, amount: price, currency: "LKR" }).unwrap()
+      await createPurchase({ userId: username, contentId, amount: price, currency: "LKR" }).unwrap()
       alert(`Content unlocked for ${username}`)
       window.location.reload()
     } catch (err) {
