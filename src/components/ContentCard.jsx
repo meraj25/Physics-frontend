@@ -1,6 +1,6 @@
 // ...existing code...
 import React, { useState } from "react"
-import { useDeleteContentMutation, useInitiatePaymentMutation, useGetResultsQuery, useAddResultMutation, useGetAllPurchasesQuery } from "@/lib/api"
+import { useDeleteContentMutation, useInitiatePaymentMutation, useGetResultsQuery, useAddResultMutation, useGetAllPurchasesQuery,useCreatePurchaseMutation, } from "@/lib/api"
 import { useUser } from "@clerk/clerk-react"
 import { Trash2, Lock, CheckCircle } from "lucide-react"
 import { initiatePayHerePayment } from "@/utils/payhere"
@@ -18,6 +18,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
   const [addResult, { isLoading: addingResult }] = useAddResultMutation()
   const { data: results = [] } = useGetResultsQuery()
   const { data: purchases = [], refetch: refetchPurchases } = useGetAllPurchasesQuery()
+  const [createPurchase] = useCreatePurchaseMutation()
   const { user, isLoaded } = useUser()
   const isAdmin = isLoaded && user?.publicMetadata?.role === "admin"
 

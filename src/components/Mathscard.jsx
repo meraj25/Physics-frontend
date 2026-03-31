@@ -6,6 +6,7 @@ import {
   useAddMathsResultMutation,
   useInitiatePaymentMutation,
   useGetAllPurchasesQuery,
+  useCreatePurchaseMutation,
 } from "@/lib/api"
 import { Unlock, Trash2, Lock, CheckCircle } from "lucide-react"
 import { useUser } from "@clerk/clerk-react"
@@ -25,6 +26,7 @@ export default function MathsCard({ contents, error, isLoading }) {
   const [addResult, { isLoading: addingResult }] = useAddMathsResultMutation()
   const [initiatePayment] = useInitiatePaymentMutation()
    const { data: purchases = [], refetch: refetchPurchases } = useGetAllPurchasesQuery()
+   const [createPurchase] = useCreatePurchaseMutation()
   const { user, isLoaded } = useUser()
   const isAdmin = isLoaded && user?.publicMetadata?.role === "admin"
 
