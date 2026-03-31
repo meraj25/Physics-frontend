@@ -1,6 +1,6 @@
 // ...existing code...
 import React, { useState } from "react"
-import { useDeleteContentMutation, useInitiatePaymentMutation, useGetResultsQuery, useAddResultMutation, useCreatePurchaseMutation, useGetAllPurchasesQuery } from "@/lib/api"
+import { useDeleteContentMutation, useInitiatePaymentMutation, useGetResultsQuery, useAddResultMutation, useGetAllPurchasesQuery } from "@/lib/api"
 import { useUser } from "@clerk/clerk-react"
 import { Trash2, Lock, CheckCircle } from "lucide-react"
 import { initiatePayHerePayment } from "@/utils/payhere"
@@ -16,9 +16,8 @@ function ContentCards({ contents, error, isLoading, refetch }) {
   const [deleteContent, { isLoading: deleting }] = useDeleteContentMutation()
   const [initiatePayment] = useInitiatePaymentMutation()
   const [addResult, { isLoading: addingResult }] = useAddResultMutation()
-  const [createPurchase] = useCreatePurchaseMutation()
   const { data: results = [] } = useGetResultsQuery()
-  const { data: purchases = [] } = useGetAllPurchasesQuery()
+  const { data: purchases = [], refetch } = useGetAllPurchasesQuery()
   const { user, isLoaded } = useUser()
   const isAdmin = isLoaded && user?.publicMetadata?.role === "admin"
 
@@ -83,47 +82,41 @@ function ContentCards({ contents, error, isLoading, refetch }) {
           phone,
         },
         onCompleted: async (orderId) => {
-          console.log("Payment completed:", orderId)
-          
-          try {
-            // Create purchase record
-            await createPurchase({
-              userId: user.id,
-              contentId: contentId,
-              orderId: orderId,
-              amount: response.amount,
-              currency: response.currency,
-            }).unwrap()
-            
-            console.log("Purchase record created")
-            
-            // Wait for webhook and database to process
-            alert("Payment successful! Refreshing your content...")
-            await new Promise(resolve => setTimeout(resolve, 2000))
-            
-            // Check if purchase record exists
-            const purchaseExists = purchases.some(
-              (p) => String(p.userId) === String(user.id) && String(p.contentId) === String(contentId)
-            )
-            
-            if (purchaseExists || refetch) {
-              try {
+                   console.log("Payment completed:", orderId)
+                   alert("Payment successful! Unlocking your content...")
+
+             // Poll every 2 seconds, up to 10 attempts (20 seconds total)
+            let attempts = 0
+            const maxAttempts = 10
+
+            const poll = async () => {
+             attempts++
+            try {
                 await refetch()
-                setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
-                alert("Content unlocked! You can now view it.")
-              } catch (err) {
-                console.error("Failed to refetch:", err)
-                window.location.reload(true)
-              }
-            } else {
-              window.location.reload(true)
-            }
-          } catch (purchaseErr) {
-            console.error("Failed to create purchase record:", purchaseErr)
-            alert("Payment processed but failed to save purchase. Refreshing...")
-            window.location.reload(true)
-          }
-        },
+      
+                       // Check if purchase now exists
+                       const purchased = purchases.some(
+                      (p) => String(p.contentId) === String(contentId)
+                       )
+      
+                      if (purchased || attempts >= maxAttempts) {
+                      setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
+                       if (!purchased) alert("Payment recorded. Please refresh if content is still locked.")
+                      } else {
+                      setTimeout(poll, 2000) // try again in 2 seconds
+                      }
+                      } catch {
+                          if (attempts >= maxAttempts) {
+                                window.location.reload(true)
+                          } else {
+                            setTimeout(poll, 2000)
+                      }
+                  }
+                   }
+
+  await new Promise(resolve => setTimeout(resolve, 2000)) // initial 2s wait
+  poll()
+},
         onDismissed: () => {
           console.log("Payment dismissed")
           setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
