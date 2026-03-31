@@ -17,7 +17,6 @@ function ContentCards({ contents, error, isLoading, refetch }) {
   const [initiatePayment] = useInitiatePaymentMutation()
   const [addResult, { isLoading: addingResult }] = useAddResultMutation()
   const { data: results = [] } = useGetResultsQuery()
-  // ✅ Get refetch from the purchases query so we can re-request fresh data
   const { data: purchases = [], refetch: refetchPurchases } = useGetAllPurchasesQuery()
   const { user, isLoaded } = useUser()
   const isAdmin = isLoaded && user?.publicMetadata?.role === "admin"
@@ -50,17 +49,25 @@ function ContentCards({ contents, error, isLoading, refetch }) {
     try {
       const response = await initiatePayment(contentId).unwrap()
 
+      console.log("🟢 Backend Response:", response)
+      console.log("Merchant ID:", response.merchantId)
+      console.log("Hash:", response.hash)
+      console.log("Order ID:", response.orderId)
+      console.log("Amount:", response.amount)
+
       if (response.alreadyPurchased) {
         alert("You have already purchased this content!")
         setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
         return
       }
 
+      // Get user info for PayHere
       const firstName = user.firstName || "User"
       const lastName = user.lastName || "Name"
       const email = user.primaryEmailAddress?.emailAddress || "user@example.com"
       const phone = user.primaryPhoneNumber?.phoneNumber || ""
 
+      // Start PayHere payment
       await initiatePayHerePayment({
         orderId: response.orderId,
         amount: response.amount,
@@ -68,62 +75,55 @@ function ContentCards({ contents, error, isLoading, refetch }) {
         hash: response.hash,
         merchantId: response.merchantId,
         contentTopic: contentTopic,
-        userInfo: { firstName, lastName, email, phone },
-        onCompleted: async (orderId) => {
-          console.log("PayHere popup closed after payment:", orderId)
-          // ✅ Don't alert "Payment successful" here — PayHere fires onCompleted
-          // when the popup closes, NOT when your notify endpoint confirms it.
-          // The notify URL is called server-to-server and may take several seconds.
-
-          let attempts = 0
-          const maxAttempts = 15 // 30 seconds total
-
-          const poll = async () => {
-            attempts++
-            try {
-              // ✅ Use refetchPurchases (not refetch which refreshes content list)
-              // and await the result to get fresh data — don't rely on the
-              // stale `purchases` variable captured in the closure.
-              const { data: freshPurchases = [] } = await refetchPurchases()
-
-              const purchased = freshPurchases.some(
-                (p) =>
-                  (String(p.userId) === String(user?.id) ||
-                    String(p.username) === String(currentUsername)) &&
-                  String(p.contentId) === String(contentId) &&
-                  p.status === "completed"
-              )
-
-              if (purchased) {
-                setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
-                alert("Payment confirmed! Content is now unlocked.")
-              } else if (attempts >= maxAttempts) {
-                setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
-                alert(
-                  "Payment was received but confirmation is taking longer than expected. " +
-                  "Please refresh the page in a moment."
-                )
-              } else {
-                // ✅ Exponential-ish backoff: start at 2s, grow slightly
-                const delay = Math.min(2000 + attempts * 500, 5000)
-                setTimeout(poll, delay)
-              }
-            } catch {
-              if (attempts >= maxAttempts) {
-                setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
-                window.location.reload(true)
-              } else {
-                setTimeout(poll, 3000)
-              }
-            }
-          }
-
-          // ✅ Give PayHere's server-to-server notify call a head start
-          // before the first poll — 3s is more reliable than 2s
-          setTimeout(poll, 3000)
+        userInfo: {
+          firstName,
+          lastName,
+          email,
+          phone,
         },
+        onCompleted: async (orderId) => {
+  console.log("Payment completed:", orderId)
+  alert("Payment successful! Unlocking your content...")
+
+  let attempts = 0
+  const maxAttempts = 10
+
+  const poll = async () => {
+    attempts++
+    try {
+      // refetchPurchases returns FRESH data directly
+      const { data: freshPurchases = [] } = await refetchPurchases()
+
+      const purchased = freshPurchases.some(
+        (p) =>
+          String(p.contentId) === String(contentId) &&
+          p.status === 'completed'
+      )
+
+      if (purchased) {
+        setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
+        // force re-render with fresh data
+        await refetch()
+      } else if (attempts >= maxAttempts) {
+        setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
+        alert("Payment recorded. Please refresh if content is still locked.")
+      } else {
+        setTimeout(poll, 2000)
+      }
+    } catch {
+      if (attempts >= maxAttempts) {
+        window.location.reload(true)
+      } else {
+        setTimeout(poll, 2000)
+      }
+    }
+  }
+
+  await new Promise(resolve => setTimeout(resolve, 2000))
+  poll()
+},
         onDismissed: () => {
-          console.log("Payment dismissed by user")
+          console.log("Payment dismissed")
           setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
         },
         onError: (error) => {
@@ -157,9 +157,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
     }
 
     const match = results.find(
-      (r) =>
-        String(r.contentId) === String(contentId) &&
-        String(r.username) === String(currentUsername)
+      (r) => String(r.contentId) === String(contentId) && String(r.username) === String(currentUsername)
     )
 
     if (match && match.url) {
@@ -173,7 +171,11 @@ function ContentCards({ contents, error, isLoading, refetch }) {
     setShowAddResultMap((m) => ({ ...m, [contentId]: !m[contentId] }))
     setAddResultForm((f) => ({
       ...f,
-      [contentId]: { contentId, username: currentUsername, url: "" },
+      [contentId]: {
+        contentId,
+        username: currentUsername,
+        url: "",
+      },
     }))
   }
 
@@ -181,21 +183,36 @@ function ContentCards({ contents, error, isLoading, refetch }) {
     setAdminUnlockInputs((s) => ({ ...s, [contentId]: value }))
   }
 
-  // ✅ Removed broken handleAdminUnlock that called undefined createPurchase.
-  // Wire this up to a real mutation when you add that API endpoint.
   const handleAdminUnlock = async (contentId, price) => {
     const username = (adminUnlockInputs[contentId] || "").trim()
     if (!username) {
       alert("Please enter a username to unlock for.")
       return
     }
-    alert("Admin unlock requires a backend endpoint — please implement createPurchase mutation.")
+
+    setAdminUnlockLoading((s) => ({ ...s, [contentId]: true }))
+
+    try {
+      // Attempt to create a purchase record for the provided username.
+      // Backend should accept `username` or resolve it server-side.
+      await createPurchase({ username, contentId, amount: price, currency: "LKR" }).unwrap()
+      alert(`Content unlocked for ${username}`)
+      // Reload to refresh purchases and UI state
+      window.location.reload()
+    } catch (err) {
+      console.error("Admin unlock failed", err)
+      alert("Failed to unlock content for the user. See console.")
+      setAdminUnlockLoading((s) => ({ ...s, [contentId]: false }))
+    }
   }
 
   const handleAddResultChange = (contentId, field, value) => {
     setAddResultForm((f) => ({
       ...f,
-      [contentId]: { ...(f[contentId] || {}), [field]: value },
+      [contentId]: {
+        ...(f[contentId] || {}),
+        [field]: value,
+      },
     }))
   }
 
@@ -226,18 +243,16 @@ function ContentCards({ contents, error, isLoading, refetch }) {
         const description = c.description ?? ""
         const link = c.link ?? ""
         const assignment = c.assignment ?? ""
+        const contentType = c.contentType ?? "theory"
         const paymentstatus = (c.paymentstatus ?? "Free").toLowerCase()
         const price = c.price ?? 1000
         const isFree = paymentstatus === "free"
         const isPaid = paymentstatus === "paid"
-        const isPurchased =
-          purchases.some(
-            (p) =>
-              (String(p.userId) === String(user?.id) ||
-                String(p.username) === String(currentUsername)) &&
-              String(p.contentId) === String(id) &&
-              p.status === "completed"
-          ) || false
+        const isPurchased = purchases.some(
+        (p) => (String(p.userId) === String(user?.id) || String(p.username) === String(currentUsername)) &&
+        String(p.contentId) === String(id) &&
+        p.status === 'completed'  // ← only completed payments
+        ) || false
         const isProcessing = processingPayment[id] || false
         const showAddForm = showAddResultMap[id] || false
         const formValues = addResultForm[id] || { contentId: id, username: currentUsername, url: "" }
@@ -248,6 +263,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
             className="rounded-lg overflow-hidden border shadow-sm bg-white hover:scale-105 hover:shadow-2xl transition-all duration-200"
           >
             <div className="h-44 bg-gray-100 relative flex items-center justify-center">
+              {/* Admin delete button overlay */}
               {isAdmin && (
                 <button
                   onClick={() => handleDelete(id)}
@@ -260,6 +276,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                 </button>
               )}
 
+              {/* Purchased badge */}
               {isPaid && isPurchased && (
                 <div className="absolute top-2 left-2 z-20 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-green-500 text-white text-xs font-medium shadow-sm">
                   <CheckCircle className="w-3 h-3" />
@@ -275,20 +292,17 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                 <h4 className="text-lg font-semibold text-gray-900">{topic}</h4>
                 <span
                   className={`text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap ${
-                    isFree
-                      ? "bg-green-100 text-green-800"
-                      : isPurchased
-                      ? "bg-blue-100 text-blue-800"
-                      : "bg-yellow-100 text-yellow-800"
+                    isFree ? "bg-green-100 text-green-800" : isPurchased ? "bg-blue-100 text-blue-800" : "bg-yellow-100 text-yellow-800"
                   }`}
                 >
                   {isFree ? "Free" : isPurchased ? "Owned" : `LKR ${price}`}
                 </span>
               </div>
 
-              {description && <p className="mt-2 text-sm text-gray-600">{description}</p>}
+              {description && <p className="mt-2 text-sm text-gray-600 ">{description}</p>}
 
               <div className="mt-4 flex flex-wrap gap-2">
+                {/* Free content - show all buttons */}
                 {isFree && (
                   <>
                     {link && (
@@ -304,6 +318,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                   </>
                 )}
 
+                {/* Paid content - purchased */}
                 {isPaid && isPurchased && (
                   <>
                     {link && (
@@ -318,28 +333,31 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                     )}
                   </>
                 )}
-
+                {/* Paid content - not purchased */}
                 {isPaid && !isPurchased && (
-                  <button
-                    type="button"
-                    onClick={() => handlePayment(id, topic, price)}
-                    disabled={isProcessing}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm rounded font-medium hover:from-orange-600 hover:to-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {isProcessing ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        Confirming payment...
-                      </>
-                    ) : (
-                      <>
-                        <Lock className="w-4 h-4" />
-                        Unlock for LKR {price}
-                      </>
-                    )}
-                  </button>
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => handlePayment(id, topic, price)}
+                      disabled={isProcessing}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm rounded font-medium hover:from-orange-600 hover:to-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isProcessing ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          Processing...
+                        </>
+                      ) : (
+                        <>
+                          <Lock className="w-4 h-4" />
+                          Unlock for LKR {price}
+                        </>
+                      )}
+                    </button>
+                  </>
                 )}
 
+                {/* View Results button - show only for free or purchased */}
                 {(isFree || (isPaid && isPurchased)) && (
                   <button
                     type="button"
@@ -350,6 +368,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                   </button>
                 )}
 
+                {/* Add Results (admin only) */}
                 {isAdmin && (
                   <div className="relative">
                     <button
@@ -363,28 +382,67 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                     {showAddForm && (
                       <div className="mt-2 p-3 bg-gray-50 border rounded w-80 shadow-sm">
                         <label className="block text-xs text-gray-600">Content ID</label>
-                        <input type="text" value={formValues.contentId} readOnly className="mt-1 w-full px-2 py-1 border rounded bg-white text-sm" />
+                        <input
+                          type="text"
+                          value={formValues.contentId}
+                          readOnly
+                          className="mt-1 w-full px-2 py-1 border rounded bg-white text-sm"
+                        />
 
                         <label className="block text-xs text-gray-600 mt-2">Username</label>
-                        <input type="text" value={formValues.username} onChange={(e) => handleAddResultChange(id, "username", e.target.value)} className="mt-1 w-full px-2 py-1 border rounded text-sm" />
+                        <input
+                          type="text"
+                          value={formValues.username}
+                          onChange={(e) => handleAddResultChange(id, "username", e.target.value)}
+                          className="mt-1 w-full px-2 py-1 border rounded text-sm"
+                        />
 
                         <label className="block text-xs text-gray-600 mt-2">Result URL</label>
-                        <input type="text" value={formValues.url} onChange={(e) => handleAddResultChange(id, "url", e.target.value)} placeholder="https://..." className="mt-1 w-full px-2 py-1 border rounded text-sm" />
+                        <input
+                          type="text"
+                          value={formValues.url}
+                          onChange={(e) => handleAddResultChange(id, "url", e.target.value)}
+                          placeholder="https://..."
+                          className="mt-1 w-full px-2 py-1 border rounded text-sm"
+                        />
 
                         <div className="mt-3 flex justify-end gap-2">
-                          <button type="button" onClick={() => setShowAddResultMap((m) => ({ ...m, [id]: false }))} className="px-3 py-1 text-sm rounded bg-white border">Cancel</button>
-                          <button type="button" onClick={() => submitAddResult(id)} disabled={addingResult} className="px-3 py-1 text-sm rounded bg-sky-600 text-white hover:bg-sky-700 disabled:opacity-50">
+                          <button
+                            type="button"
+                            onClick={() => setShowAddResultMap((m) => ({ ...m, [id]: false }))}
+                            className="px-3 py-1 text-sm rounded bg-white border"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => submitAddResult(id)}
+                            disabled={addingResult}
+                            className="px-3 py-1 text-sm rounded bg-sky-600 text-white hover:bg-sky-700 disabled:opacity-50"
+                          >
                             {addingResult ? "Adding..." : "Add"}
                           </button>
                         </div>
                       </div>
                     )}
-
+                    {/* Admin unlock user UI */}
                     <div className="mt-2 p-3 bg-gray-50 border rounded w-80 shadow-sm">
                       <label className="block text-xs text-gray-600">Unlock for Username</label>
-                      <input type="text" value={adminUnlockInputs[id] || ""} onChange={(e) => handleAdminUnlockChange(id, e.target.value)} placeholder="username or email" className="mt-1 w-full px-2 py-1 border rounded text-sm" />
+                      <input
+                        type="text"
+                        value={adminUnlockInputs[id] || ""}
+                        onChange={(e) => handleAdminUnlockChange(id, e.target.value)}
+                        placeholder="username or email"
+                        className="mt-1 w-full px-2 py-1 border rounded text-sm"
+                      />
+
                       <div className="mt-3 flex justify-end gap-2">
-                        <button type="button" onClick={() => handleAdminUnlock(id, price)} disabled={adminUnlockLoading[id]} className="px-3 py-1 text-sm rounded bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50">
+                        <button
+                          type="button"
+                          onClick={() => handleAdminUnlock(id, price)}
+                          disabled={adminUnlockLoading[id]}
+                          className="px-3 py-1 text-sm rounded bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50"
+                        >
                           {adminUnlockLoading[id] ? "Unlocking..." : "Unlock"}
                         </button>
                       </div>
