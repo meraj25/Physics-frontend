@@ -17,7 +17,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
   const [initiatePayment] = useInitiatePaymentMutation()
   const [addResult, { isLoading: addingResult }] = useAddResultMutation()
   const { data: results = [] } = useGetResultsQuery()
-  const { data: purchases = [] } = useGetAllPurchasesQuery()
+  const { data: purchases = [], refetch: refetchPurchases } = useGetAllPurchasesQuery()
   const { user, isLoaded } = useUser()
   const isAdmin = isLoaded && user?.publicMetadata?.role === "admin"
 
@@ -83,11 +83,11 @@ function ContentCards({ contents, error, isLoading, refetch }) {
         },
         onCompleted: async (orderId) => {
                    console.log("Payment completed:", orderId)
-                   alert("Payment successful! Unlocking your content...")
+                   
 
              // Poll every 2 seconds, up to 10 attempts (20 seconds total)
-            let attempts = 0
-            const maxAttempts = 10
+            let attempts = 10
+            const maxAttempts = 15
 
             const poll = async () => {
              attempts++
@@ -95,7 +95,8 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                 await refetch()
       
                        // Check if purchase now exists
-                       const purchased = purchases.some(
+                       const { data: freshPurchases = [] } = await refetchPurchases()  
+                       const purchased = freshPurchases.some(
                       (p) => String(p.contentId) === String(contentId)
                        )
       
@@ -109,7 +110,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                           if (attempts >= maxAttempts) {
                                 window.location.reload(true)
                           } else {
-                            setTimeout(poll, 2000)
+                            setTimeout(poll, 3000)
                       }
                   }
                    }
