@@ -4,7 +4,6 @@ import {
   useInitiatePaymentMutation,
   useGetMathsResultsQuery,
   useAddMathsResultMutation,
-  useCreatePurchaseMutation,
   useGetAllPurchasesQuery,
 } from "@/lib/api"
 import { useUser } from "@clerk/clerk-react"
@@ -22,9 +21,8 @@ function McontentCards({ contents, error, isLoading }) {
   const [deleteContent, { isLoading: deleting }] = useDeleteMcontentMutation()
   const [initiatePayment] = useInitiatePaymentMutation()
   const [addResult, { isLoading: addingResult }] = useAddMathsResultMutation()
-  const [createPurchase] = useCreatePurchaseMutation()
   const { data: results = [] } = useGetMathsResultsQuery()
-  const { data: purchases = [] } = useGetAllPurchasesQuery()
+  const { data: purchases = [], refetch: refetchPurchases } = useGetAllPurchasesQuery()
   const { user, isLoaded } = useUser()
   const isAdmin = isLoaded && user?.publicMetadata?.role === "admin"
 
@@ -97,32 +95,41 @@ function McontentCards({ contents, error, isLoading }) {
         },
         onCompleted: async (orderId) => {
           console.log("Payment completed:", orderId)
-          try {
-            // create purchase record in backend
-            await createPurchase({ userId: user.id, contentId, amount: response.amount }).unwrap()
-            // allow backend to settle
-            await new Promise((r) => setTimeout(r, 1200))
+          alert("Payment successful! Unlocking your content...")
 
-            const purchaseExists = purchases.some(
-              (p) => String(p.userId) === String(user.id) && String(p.contentId) === String(contentId)
-            )
+          let attempts = 0
+          const maxAttempts = 10
 
-            if (purchaseExists) {
-              setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
-              // mark unlocked locally
-              setUnlockedMap((m) => ({ ...m, [contentId]: true }))
-              alert("Payment successful! Content unlocked.")
-            } else {
-              // fallback: still mark unlocked locally
-              setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
-              setUnlockedMap((m) => ({ ...m, [contentId]: true }))
-              alert("Payment successful — content unlocked (local). Refresh if needed.")
+          const poll = async () => {
+            attempts++
+            try {
+              const { data: freshPurchases = [] } = await refetchPurchases()
+
+              const purchased = freshPurchases.some(
+                (p) =>
+                  String(p.contentId) === String(contentId) &&
+                  p.status === 'completed'
+              )
+
+              if (purchased) {
+                setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
+              } else if (attempts >= maxAttempts) {
+                setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
+                alert("Payment recorded. Please refresh if content is still locked.")
+              } else {
+                setTimeout(poll, 2000)
+              }
+            } catch {
+              if (attempts >= maxAttempts) {
+                window.location.reload(true)
+              } else {
+                setTimeout(poll, 2000)
+              }
             }
-          } catch (purchaseErr) {
-            console.error("Failed to create purchase record:", purchaseErr)
-            alert("Payment processed but failed to save purchase. Reloading...")
-            window.location.reload()
           }
+
+          await new Promise(resolve => setTimeout(resolve, 2000))
+          poll()
         },
         onDismissed: () => {
           console.log("Payment dismissed")
@@ -247,9 +254,12 @@ function McontentCards({ contents, error, isLoading }) {
         const price = c.price ?? 1000
         const isFree = paymentstatus === "free"
         const isPaid = paymentstatus === "paid"
-        const isPurchased =!!unlockedMap[id] ||purchases.some(
-        (p) =>(String(p.userId) === String(user?.id) || String(p.username) === String(currentUsername)) &&
-        String(p.contentId) === String(id)) || false
+        const isPurchased = purchases.some(
+  (p) =>
+    (String(p.userId) === String(user?.id) || String(p.username) === String(currentUsername)) &&
+    String(p.contentId) === String(id) &&
+    p.status === 'completed'
+) || false
         const isProcessing = processingPayment[id] || false
         const showAddForm = showAddResultMap[id] || false
         const formValues = addResultForm[id] || { contentId: id, username: currentUsername, url: "" }

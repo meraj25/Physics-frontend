@@ -5,7 +5,6 @@ import {
   useGetMathsResultsQuery,
   useAddMathsResultMutation,
   useInitiatePaymentMutation,
-  useCreatePurchaseMutation,
   useGetAllPurchasesQuery,
 } from "@/lib/api"
 import { Unlock, Trash2, Lock, CheckCircle } from "lucide-react"
@@ -25,8 +24,7 @@ export default function MathsCard({ contents, error, isLoading }) {
   const [deleteMathsContent, { isLoading: deleting }] = useDeleteMathsContentMutation()
   const [addResult, { isLoading: addingResult }] = useAddMathsResultMutation()
   const [initiatePayment] = useInitiatePaymentMutation()
-  const [createPurchase] = useCreatePurchaseMutation()
-  const { data: purchases = [] } = useGetAllPurchasesQuery()
+   const { data: purchases = [], refetch: refetchPurchases } = useGetAllPurchasesQuery()
   const { user, isLoaded } = useUser()
   const isAdmin = isLoaded && user?.publicMetadata?.role === "admin"
 
@@ -77,31 +75,43 @@ export default function MathsCard({ contents, error, isLoading }) {
         merchantId: response.merchantId,
         contentTopic,
         userInfo: { firstName, lastName, email, phone },
-        onCompleted: async (orderId) => {
-          try {
-            await createPurchase({ userId: user.id, contentId, amount: response.amount }).unwrap()
-            // give backend a moment to settle
-            await new Promise((r) => setTimeout(r, 1500))
+      onCompleted: async (orderId) => {
+          console.log("Payment completed:", orderId)
+          alert("Payment successful! Unlocking your content...")
 
-            const purchaseExists = purchases.some(
-              (p) => String(p.userId) === String(user.id) && String(p.contentId) === String(contentId)
-            )
+          let attempts = 0
+          const maxAttempts = 10
 
-            if (purchaseExists) {
-              setUnlockedMap((m) => ({ ...m, [contentId]: true }))
-              alert("Payment successful — content unlocked.")
-            } else {
-              // fallback: mark unlocked locally
-              setUnlockedMap((m) => ({ ...m, [contentId]: true }))
-              alert("Payment successful — content unlocked (local).")
+          const poll = async () => {
+            attempts++
+            try {
+              const { data: freshPurchases = [] } = await refetchPurchases()
+
+              const purchased = freshPurchases.some(
+                (p) =>
+                  String(p.contentId) === String(contentId) &&
+                  p.status === 'completed'
+              )
+
+              if (purchased) {
+                setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
+              } else if (attempts >= maxAttempts) {
+                setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
+                alert("Payment recorded. Please refresh if content is still locked.")
+              } else {
+                setTimeout(poll, 2000)
+              }
+            } catch {
+              if (attempts >= maxAttempts) {
+                window.location.reload(true)
+              } else {
+                setTimeout(poll, 2000)
+              }
             }
-          } catch (err) {
-            console.error("Failed to create purchase record:", err)
-            alert("Payment processed but saving purchase failed. Reloading...")
-            window.location.reload()
-          } finally {
-            setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
           }
+
+          await new Promise(resolve => setTimeout(resolve, 2000))
+          poll()
         },
         onDismissed: () => {
           setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
@@ -239,7 +249,8 @@ export default function MathsCard({ contents, error, isLoading }) {
         const isPurchased = purchases.some(
   (p) =>
     (String(p.userId) === String(user?.id) || String(p.username) === String(currentUsername)) &&
-    String(p.contentId) === String(id)
+    String(p.contentId) === String(id) &&
+    p.status === 'completed'
 ) || false
         const unlocked = !!unlockedMap[id]
         const isProcessing = processingPayment[id] || false

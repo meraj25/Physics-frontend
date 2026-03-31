@@ -5,7 +5,6 @@ import {
   useGetPEResultsQuery,
   useAddPEResultMutation,
   useInitiatePaymentMutation,
-  useCreatePurchaseMutation,
   useGetAllPurchasesQuery,
 } from "@/lib/api"
 import { Unlock, Trash2, Lock, CheckCircle } from "lucide-react"
@@ -25,8 +24,7 @@ export default function PEContentCard({ contents, error, isLoading }) {
   const [deletePEContent, { isLoading: deleting }] = useDeletePEContentMutation()
   const [addResult, { isLoading: addingResult }] = useAddPEResultMutation()
   const [initiatePayment] = useInitiatePaymentMutation()
-  const [createPurchase] = useCreatePurchaseMutation()
-  const { data: purchases = [] } = useGetAllPurchasesQuery()
+  const { data: purchases = [], refetch: refetchPurchases } = useGetAllPurchasesQuery()
   const { user, isLoaded } = useUser()
   const isAdmin = isLoaded && user?.publicMetadata?.role === "admin"
 
@@ -78,28 +76,42 @@ export default function PEContentCard({ contents, error, isLoading }) {
         contentTopic,
         userInfo: { firstName, lastName, email, phone },
         onCompleted: async (orderId) => {
-          try {
-            await createPurchase({ userId: user.id, contentId, amount: response.amount }).unwrap()
-            await new Promise((r) => setTimeout(r, 1200))
+          console.log("Payment completed:", orderId)
+          alert("Payment successful! Unlocking your content...")
 
-            const purchaseExists = purchases.some(
-              (p) => String(p.userId) === String(user.id) && String(p.contentId) === String(contentId)
-            )
+          let attempts = 0
+          const maxAttempts = 10
 
-            if (purchaseExists) {
-              setUnlockedMap((m) => ({ ...m, [contentId]: true }))
-              alert("Payment successful! Content unlocked.")
-            } else {
-              setUnlockedMap((m) => ({ ...m, [contentId]: true }))
-              alert("Payment successful — content unlocked (local)")
+          const poll = async () => {
+            attempts++
+            try {
+              const { data: freshPurchases = [] } = await refetchPurchases()
+
+              const purchased = freshPurchases.some(
+                (p) =>
+                  String(p.contentId) === String(contentId) &&
+                  p.status === 'completed'
+              )
+
+              if (purchased) {
+                setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
+              } else if (attempts >= maxAttempts) {
+                setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
+                alert("Payment recorded. Please refresh if content is still locked.")
+              } else {
+                setTimeout(poll, 2000)
+              }
+            } catch {
+              if (attempts >= maxAttempts) {
+                window.location.reload(true)
+              } else {
+                setTimeout(poll, 2000)
+              }
             }
-          } catch (err) {
-            console.error("Failed to create purchase record:", err)
-            alert("Payment processed but saving purchase failed. Reloading...")
-            window.location.reload()
-          } finally {
-            setProcessingPayment((prev) => ({ ...prev, [contentId]: false }))
           }
+
+          await new Promise(resolve => setTimeout(resolve, 2000))
+          poll()
         },
         onDismissed: () => setProcessingPayment((prev) => ({ ...prev, [contentId]: false })),
         onError: (err) => {
@@ -233,9 +245,12 @@ export default function PEContentCard({ contents, error, isLoading }) {
         const isFree = paymentstatus === "free"
         const isPaid = paymentstatus === "paid"
         const unlocked = !!unlockedMap[id]
-        const isPurchased =unlocked ||
-        purchases.some((p) =>(String(p.userId) === String(user?.id) || String(p.username) === String(currentUsername)) &&
-        String(p.contentId) === String(id)) || false
+        const isPurchased = purchases.some(
+  (p) =>
+    (String(p.userId) === String(user?.id) || String(p.username) === String(currentUsername)) &&
+    String(p.contentId) === String(id) &&
+    p.status === 'completed'
+) || false
         const isProcessing = processingPayment[id] || false
         const showAddForm = showAddResultMap[id] || false
         const formValues = addResultForm[id] || { contentId: id, username: currentUsername, url: "" }
