@@ -5,6 +5,7 @@ import {
   useGetMathsResultsQuery,
   useAddMathsResultMutation,
   useGetAllPurchasesQuery,
+  useCreatePurchaseMutation,
 } from "@/lib/api"
 import { useUser } from "@clerk/clerk-react"
 import { Trash2, Lock, CheckCircle } from "lucide-react"
@@ -23,6 +24,7 @@ function McontentCards({ contents, error, isLoading }) {
   const [addResult, { isLoading: addingResult }] = useAddMathsResultMutation()
   const { data: results = [] } = useGetMathsResultsQuery()
   const { data: purchases = [], refetch: refetchPurchases } = useGetAllPurchasesQuery()
+   const [createPurchase] = useCreatePurchaseMutation()
   const { user, isLoaded } = useUser()
   const isAdmin = isLoaded && user?.publicMetadata?.role === "admin"
 
