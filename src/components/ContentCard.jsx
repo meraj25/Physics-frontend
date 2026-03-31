@@ -244,8 +244,10 @@ function ContentCards({ contents, error, isLoading, refetch }) {
         const isFree = paymentstatus === "free"
         const isPaid = paymentstatus === "paid"
         const isPurchased = purchases.some(
-        (p) =>(String(p.userId) === String(user?.id) || String(p.username) === String(currentUsername)) &&
-        String(p.contentId) === String(id)) || false
+        (p) => (String(p.userId) === String(user?.id) || String(p.username) === String(currentUsername)) &&
+        String(p.contentId) === String(id) &&
+        p.status === 'completed'  // ← only completed payments
+        ) || false
         const isProcessing = processingPayment[id] || false
         const showAddForm = showAddResultMap[id] || false
         const formValues = addResultForm[id] || { contentId: id, username: currentUsername, url: "" }
