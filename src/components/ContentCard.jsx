@@ -17,7 +17,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
   const [initiatePayment] = useInitiatePaymentMutation()
   const [addResult, { isLoading: addingResult }] = useAddResultMutation()
   const { data: results = [] } = useGetResultsQuery()
-  const { data: purchases = [], refetch } = useGetAllPurchasesQuery()
+  const { data: purchases = [] } = useGetAllPurchasesQuery()
   const { user, isLoaded } = useUser()
   const isAdmin = isLoaded && user?.publicMetadata?.role === "admin"
 
