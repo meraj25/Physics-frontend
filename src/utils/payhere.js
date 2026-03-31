@@ -33,7 +33,7 @@ export const initiatePayHerePayment = async ({
     await loadPayHereScript();
 
     const payment = {
-      sandbox: true, // Set to false for production
+      sandbox: false, // Set to false for production
       merchant_id: merchantId,
       return_url: `${window.location.origin}/payment/success`,
       cancel_url: `${window.location.origin}/payment/cancel`,
