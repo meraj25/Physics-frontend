@@ -76,7 +76,7 @@ function Dashboard() {
               <img
                 src="/assets/images/s3.png"
                 alt="Hero"
-                className="w-full max-w-xs md:max-w-md lg:max-w-lg object-cover translate-x-6 md:translate-x-12 mr-25"
+                className="w-full max-w-2xl md:max-w-3xl lg:max-w-4xl object-cover"
               />
             </div>
 
