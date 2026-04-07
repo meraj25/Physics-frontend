@@ -74,7 +74,7 @@ function Dashboard() {
       </div>
             <div className="relative flex justify-end">
               <img
-                src="/assets/images/s.png"
+                src="/assets/images/s3.png"
                 alt="Hero"
                 className="w-full max-w-xs md:max-w-md lg:max-w-lg object-cover translate-x-6 md:translate-x-12 mr-25"
               />
