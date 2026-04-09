@@ -46,6 +46,7 @@ export function CreateMcontent({
   const [link, setLink] = useState("https://example.com")
   const [assignment, setAssignment] = useState("Assignment")
   const [description, setDescription] = useState("Description of the content")
+  const [pre_content, setPre_content] = useState("Pre-content")
   const [paymentstatus, setPaymentstatus] = useState("Free")
   const [price, setPrice] = useState(0) // ADD THIS - default price is 0
 
@@ -66,6 +67,7 @@ export function CreateMcontent({
     link: z.string().url("Link must be a valid URL").optional(),
     assignment: z.string().min(1, "Assignment is required"),
     description: z.string().min(1, "Description is required"),
+    pre_content: z.string().min(1, "Pre-content is required"),
     paymentstatus: z.string().min(1, "Payment status is required"),
     price: z.number().min(0, "Price must be 0 or greater"), // ADD THIS
   })
@@ -122,6 +124,7 @@ export function CreateMcontent({
       link: linkForValidation,
       assignment: String(assignment ?? "").trim(),
       description: String(description ?? "").trim(),
+      pre_content: String(pre_content ?? "").trim(),
       paymentstatus: String(paymentstatus ?? "").trim(),
       price: Number(price), // ADD THIS - convert to number
     }
@@ -145,6 +148,7 @@ export function CreateMcontent({
         link: toValidate.link,
         assignment: toValidate.assignment,
         description: toValidate.description,
+        pre_content: toValidate.pre_content,
         paymentstatus: toValidate.paymentstatus,
         price: toValidate.price, // ADD THIS
       }
@@ -229,6 +233,20 @@ export function CreateMcontent({
               <Label htmlFor="description">Description</Label>
               <Textarea id="description" name="description" value={description} onChange={(e) => setDescription(e.target.value)} />
               {errors.description && <p className="text-sm text-red-600">{errors.description}</p>}
+            </div>
+
+            <div className="grid gap-3">
+              <Label htmlFor="pre_content">Pre-content</Label>
+               <Textarea
+                  id="pre_content"
+                  name="pre_content"
+                  value={pre_content}
+                  onChange={(e) => setPre_content(e.target.value)}
+                  rows={4}
+                  placeholder="Enter descriptive text here..."
+                  className="resize-y"
+                />
+                {errors.pre_content && <p className="text-sm text-red-600">{errors.pre_content}</p>}
             </div>
 
             <div className="grid gap-3">

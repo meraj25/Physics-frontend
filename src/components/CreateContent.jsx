@@ -43,6 +43,7 @@ export function CreateContent({
   const [yearId, setYearId] = useState(propYearId ?? "")
   const [categoryId, setCategoryId] = useState(propCategoryId ?? "")
   const [topic, setTopic] = useState("2026-Theory")
+  const [pre_content, setPre_content] = useState("2026-Theory")
   const [link, setLink] = useState("https://example.com")
   const [assignment, setAssignment] = useState("Assignment")
   const [description, setDescription] = useState("Description of the content")
@@ -63,6 +64,7 @@ export function CreateContent({
     yearId: z.string().min(1, "Year is required"),
     categoryId: z.string().min(1, "Category is required"),
     topic: z.string().min(1, "Topic is required"),
+    pre_content: z.string().min(1, "Pre-content is required"),
     link: z.string().url("Link must be a valid URL").optional(),
     assignment: z.string().min(1, "Assignment is required"),
     description: z.string().min(1, "Description is required"),
@@ -119,6 +121,7 @@ export function CreateContent({
       yearId: String(yearId ?? "").trim(),
       categoryId: String(categoryId ?? "").trim(),
       topic: String(topic ?? "").trim(),
+      pre_content: String(pre_content ?? "").trim(),
       link: linkForValidation,
       assignment: String(assignment ?? "").trim(),
       description: String(description ?? "").trim(),
@@ -142,6 +145,7 @@ export function CreateContent({
         yearId: toValidate.yearId,
         categoryId: toValidate.categoryId,
         topic: toValidate.topic,
+        pre_content: toValidate.pre_content,
         link: toValidate.link,
         assignment: toValidate.assignment,
         description: toValidate.description,
@@ -153,6 +157,7 @@ export function CreateContent({
       await createContent(content).unwrap()
 
       setTopic("")
+      setPre_content("")
       setLink("")
       setAssignment("")
       setDescription("")
@@ -212,6 +217,21 @@ export function CreateContent({
               <Input id="topic" name="topic" value={topic} onChange={(e) => setTopic(e.target.value)} />
               {errors.topic && <p className="text-sm text-red-600">{errors.topic}</p>}
             </div>
+           
+            <div className="grid gap-3">
+              <Label htmlFor="pre_content">Pre-content</Label>
+               <Textarea
+                  id="pre_content"
+                  name="pre_content"
+                  value={pre_content}
+                  onChange={(e) => setPre_content(e.target.value)}
+                  rows={4}
+                  placeholder="Enter descriptive text here..."
+                  className="resize-y"
+                  />
+                  {errors.pre_content && <p className="text-sm text-red-600">{errors.pre_content}</p>}
+            </div>
+
 
             <div className="grid gap-3">
               <Label htmlFor="link">Link</Label>

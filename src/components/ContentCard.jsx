@@ -13,6 +13,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
   const [addResultForm, setAddResultForm] = useState({})
   const [adminUnlockInputs, setAdminUnlockInputs] = useState({})
   const [adminUnlockLoading, setAdminUnlockLoading] = useState({})
+  const [previewModal, setPreviewModal] = useState(null)
   const [deleteContent, { isLoading: deleting }] = useDeleteContentMutation()
   const [initiatePayment] = useInitiatePaymentMutation()
   const [addResult, { isLoading: addingResult }] = useAddResultMutation()
@@ -358,6 +359,17 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                   </>
                 )}
 
+                {isPaid && (   // ← add here
+                <button
+                  type="button"
+                  onClick={() => setPreviewModal(c)}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 bg-gray-100 text-gray-700 text-sm rounded font-medium hover:bg-gray-200 border border-gray-300"
+                >
+                  <Eye className="w-4 h-4" />
+                  Preview details
+                </button>
+              )}
+
                 {/* View Results button - show only for free or purchased */}
                 {(isFree || (isPaid && isPurchased)) && (
                   <button
@@ -455,6 +467,30 @@ function ContentCards({ contents, error, isLoading, refetch }) {
           </article>
         )
       })}
+      {previewModal && (   // ← add here
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+        onClick={() => setPreviewModal(null)}
+      >
+        <div
+          className="bg-white rounded-xl shadow-xl max-w-lg w-full mx-4 p-6 relative"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            onClick={() => setPreviewModal(null)}
+            className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl font-bold"
+            aria-label="Close"
+          >
+            ×
+          </button>
+          <h3 className="text-lg font-semibold text-gray-900 mb-1">{previewModal.topic}</h3>
+          <p className="text-xs text-gray-400 mb-4">What's inside this content</p>
+          <div className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed border-t pt-4">
+            {previewModal.pre_content || "No preview available."}
+          </div>
+        </div>
+      </div>
+    )}
     </div>
   )
 }

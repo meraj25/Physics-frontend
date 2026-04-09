@@ -1,6 +1,6 @@
 // ...existing code...
 import React, { useEffect, useState } from "react"
-import { z } from "zod"
+import { set, z } from "zod"
 import { Button } from "./ui/button"
 import {
   Dialog,
@@ -35,6 +35,7 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
   const [link, setLink] = useState("https://example.com")
   const [assignment, setAssignment] = useState("Assignment")
   const [topic, setTopic] = useState("Topic")
+  const [pre_content, setPre_content] = useState("Pre-content")
   const [paymentstatus, setPaymentstatus] = useState("Free")
   const [price, setPrice] = useState(0)
 
@@ -50,6 +51,7 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
     link: z.string().url("Link must be a valid URL").optional(),
     assignment: z.string().min(1, "Assignment is required"),
     topic: z.string().min(1, "Topic is required"),
+    pre_content: z.string().min(1, "Pre-content is required"),
     paymentstatus: z.string().min(1, "Payment status is required"),
     price: z.number().min(0, "Price must be 0 or greater"),
   })
@@ -99,6 +101,7 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
       heading: String(headingId ?? "").trim(),
       link: linkForValidation,
       topic: String(topic ?? "").trim(),
+      pre_content: String(pre_content ?? "").trim(),
       assignment: String(assignment ?? "").trim(),
       paymentstatus: String(paymentstatus ?? "").trim(),
       price: Number(price),
@@ -122,6 +125,7 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
         link: toValidate.link,
         assignment: toValidate.assignment,
         topic: toValidate.topic,
+        pre_content: toValidate.pre_content,
         paymentstatus: toValidate.paymentstatus,
         price: toValidate.price,
       }
@@ -132,6 +136,7 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
       // reset inputs
       setLink("https://example.com")
       setAssignment("Assignment")
+      setPre_content("Pre-content")
       setTopic("Topic")
       setPaymentstatus("Free")
       setPrice(0)
@@ -180,6 +185,21 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
                <Label htmlFor="topic">Topic</Label>
                <Input id="topic" name="topic" value={topic} onChange={(e) => setTopic(e.target.value)} />
                {errors.topic && <p className="text-sm text-red-600">{errors.topic}</p>}
+             </div>
+
+
+             <div className="grid gap-3">
+               <Label htmlFor="pre_content">Pre-content</Label>
+                <Textarea
+                    id="pre_content"
+                    name="pre_content"
+                    value={pre_content}
+                    onChange={(e) => setPre_content(e.target.value)}
+                    rows={4}
+                    placeholder="Enter descriptive text here..."
+                    className="resize-y"
+                />
+                {errors.pre_content && <p className="text-sm text-red-600">{errors.pre_content}</p>}
              </div>
 
 
