@@ -186,7 +186,7 @@ export function CreateContent({
         </button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[625px]">
+      <DialogContent className="sm:max-w-[625px] max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>Add content</DialogTitle>
           <DialogDescription>
@@ -194,8 +194,8 @@ export function CreateContent({
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={onSubmit}>
-          <div className="grid gap-4">
+        <form onSubmit={onSubmit} className="flex flex-col flex-1 overflow-hidden">
+          <div className="grid gap-4 overflow-y-auto flex-1 pr-1">
             {/* Year (read-only) */}
             <div className="grid gap-3">
               <Label htmlFor="year">Year</Label>
