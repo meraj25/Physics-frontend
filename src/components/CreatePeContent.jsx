@@ -161,7 +161,7 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
         </button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[625px]">
+     <DialogContent className="sm:max-w-[625px] max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>Create new Pre-Engineering content</DialogTitle>
           <DialogDescription>
@@ -170,8 +170,8 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
         </DialogHeader>
 
        
-        <form onSubmit={onSubmit}>
-          <div className="grid gap-4">
+        <form onSubmit={onSubmit}  className="flex flex-col flex-1 overflow-hidden">
+          <div className="grid gap-4 overflow-y-auto flex-1 pr-1">
             <div className="grid gap-3">
               <Label htmlFor="heading">Heading</Label>
               {/* display label but submit the id */}

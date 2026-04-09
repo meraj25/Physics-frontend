@@ -363,7 +363,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                 <button
                   type="button"
                   onClick={() => setPreviewModal(c)}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 bg-gray-100 text-gray-700 text-sm rounded font-medium hover:bg-gray-200 border border-gray-300"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 bg-blue-600 text-white text-sm rounded font-medium hover:bg-blue-700 border border-gray-300"
                 >
                   <Eye className="w-4 h-4" />
                   Preview details

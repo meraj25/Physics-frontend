@@ -8,7 +8,7 @@ import {
   useGetAllPurchasesQuery,
   useCreatePurchaseMutation,
 } from "@/lib/api"
-import { Unlock, Trash2, Lock, CheckCircle } from "lucide-react"
+import { Unlock, Trash2, Lock, CheckCircl,Eye } from "lucide-react"
 import { useUser } from "@clerk/clerk-react"
 import { initiatePayHerePayment } from "@/utils/payhere"
 
@@ -20,6 +20,7 @@ export default function PEContentCard({ contents, error, isLoading }) {
   const [addResultForm, setAddResultForm] = useState({})
   const [adminUnlockInputs, setAdminUnlockInputs] = useState({})
   const [adminUnlockLoading, setAdminUnlockLoading] = useState({})
+  const [previewModal, setPreviewModal] = useState(null) 
   const { data: headings } = useGetAllPreEngHeadingsQuery()
   const { data: results = [] } = useGetPEResultsQuery()
   const [deletePEContent, { isLoading: deleting }] = useDeletePEContentMutation()
@@ -380,6 +381,17 @@ export default function PEContentCard({ contents, error, isLoading }) {
                   </>
                 )}
 
+                 {isPaid && (   // ← add here
+                <button
+                  type="button"
+                  onClick={() => setPreviewModal(c)}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 bg-blue-600 text-white text-sm rounded font-medium hover:bg-blue-700 border border-gray-300"
+                >
+                  <Eye className="w-4 h-4" />
+                  preview details
+                </button>
+              )}
+
                 {/* View Results button - show only for free or purchased */}
                 {(isFree || (isPaid && isPurchased)) && (
                   <button
@@ -477,6 +489,30 @@ export default function PEContentCard({ contents, error, isLoading }) {
           </article>
         )
       })}
+      {previewModal && (   // ← add here
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+        onClick={() => setPreviewModal(null)}
+      >
+        <div
+          className="bg-white rounded-xl shadow-xl max-w-lg w-full mx-4 p-6 relative"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            onClick={() => setPreviewModal(null)}
+            className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl font-bold"
+            aria-label="Close"
+          >
+            ×
+          </button>
+          <h3 className="text-lg font-semibold text-gray-900 mb-1">{previewModal.topic}</h3>
+          <p className="text-xs text-gray-400 mb-4">What's inside this content</p>
+          <div className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed border-t pt-4">
+            {previewModal.pre_content || "No preview available."}
+          </div>
+        </div>
+      </div>
+    )}
     </div>
   )
 }
