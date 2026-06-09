@@ -26,6 +26,7 @@ import {
 import { useCreateContentMutation, useGetAllCategoriesQuery, useGetAllYearsQuery } from "../lib/api"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { CheckCircle2Icon } from "lucide-react"
+import ContentInputThumbnail from "./Content-Thumbnail"
 
 export function CreateContent({
   yearId: propYearId,
@@ -49,6 +50,7 @@ export function CreateContent({
   const [description, setDescription] = useState("Description of the content")
   const [paymentstatus, setPaymentstatus] = useState("Free")
   const [price, setPrice] = useState(0) // ADD THIS - default price is 0
+  const [thumbnail_url, setThumbnail_url] = useState("")
 
   // labels for display (read-only)
   const [yearLabel, setYearLabel] = useState(propYearName ?? "")
@@ -70,6 +72,7 @@ export function CreateContent({
     description: z.string().min(1, "Description is required"),
     paymentstatus: z.string().min(1, "Payment status is required"),
     price: z.number().min(0, "Price must be 0 or greater"), // ADD THIS
+    thumbnail_url: z.string().min(1, "Thumbnail is required"),
   })
 
   useEffect(() => {
@@ -127,6 +130,7 @@ export function CreateContent({
       description: String(description ?? "").trim(),
       paymentstatus: String(paymentstatus ?? "").trim(),
       price: Number(price), // ADD THIS - convert to number
+      thumbnail_url: String(thumbnail_url ?? "").trim(),
     }
 
     const result = schema.safeParse(toValidate)
@@ -150,6 +154,7 @@ export function CreateContent({
         assignment: toValidate.assignment,
         description: toValidate.description,
         paymentstatus: toValidate.paymentstatus,
+        thumbnail_url: toValidate.thumbnail_url,
         price: toValidate.price, // ADD THIS
       }
 
@@ -162,6 +167,7 @@ export function CreateContent({
       setAssignment("")
       setDescription("")
       setPaymentstatus("Free")
+      setThumbnail_url("")
       setPrice(0) // ADD THIS - reset price
 
       console.log("✅ Content created successfully")
@@ -249,6 +255,15 @@ export function CreateContent({
               <Label htmlFor="description">Description</Label>
               <Textarea id="description" name="description" value={description} onChange={(e) => setDescription(e.target.value)} />
               {errors.description && <p className="text-sm text-red-600">{errors.description}</p>}
+            </div>
+
+            <div className="grid gap-3">
+              <Label htmlFor="thumbnail_url">Thumbnail</Label>
+              <ContentInputThumbnail
+                onChange={(url) => setThumbnail_url(url)}
+                value={thumbnail_url}
+              />
+              {errors.thumbnail_url && <p className="text-sm text-red-600">{errors.thumbnail_url}</p>}
             </div>
 
             <div className="grid gap-3">

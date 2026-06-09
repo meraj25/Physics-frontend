@@ -14,9 +14,12 @@ import {
 } from "./ui/dialog"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
+import { Textarea } from "./ui/textarea"
 import { useCreatePEContentMutation, useGetAllPreEngHeadingsQuery } from "../lib/api"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { CheckCircle2Icon } from "lucide-react"
+import PEContentInputThumbnail from "./PEContent-Thumbnail"
+
 // ...existing code...
 
 export function CreatePEContent({ heading: propHeading, headingName: propHeadingName, headingId: propHeadingId }) {
@@ -36,6 +39,7 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
   const [assignment, setAssignment] = useState("Assignment")
   const [topic, setTopic] = useState("Topic")
   const [pre_content, setPre_content] = useState("Pre-content")
+  const [thumbnail_url, setThumbnail_url] = useState("")
   const [paymentstatus, setPaymentstatus] = useState("Free")
   const [price, setPrice] = useState(0)
 
@@ -48,10 +52,11 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
   // Zod schema (validation)
   const schema = z.object({
     heading: z.string().min(1, "Heading is required"),
-    link: z.string().url("Link must be a valid URL").optional(),
+    link: z.string().min(1, "Link is required").url("Link must be a valid URL"),
     assignment: z.string().min(1, "Assignment is required"),
     topic: z.string().min(1, "Topic is required"),
     pre_content: z.string().min(1, "Pre-content is required"),
+    thumbnail_url: z.string().min(1, "Thumbnail is required"),
     paymentstatus: z.string().min(1, "Payment status is required"),
     price: z.number().min(0, "Price must be 0 or greater"),
   })
@@ -102,6 +107,7 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
       link: linkForValidation,
       topic: String(topic ?? "").trim(),
       pre_content: String(pre_content ?? "").trim(),
+      thumbnail_url: String(thumbnail_url ?? "").trim(),
       assignment: String(assignment ?? "").trim(),
       paymentstatus: String(paymentstatus ?? "").trim(),
       price: Number(price),
@@ -126,6 +132,7 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
         assignment: toValidate.assignment,
         topic: toValidate.topic,
         pre_content: toValidate.pre_content,
+        thumbnail_url: toValidate.thumbnail_url,
         paymentstatus: toValidate.paymentstatus,
         price: toValidate.price,
       }
@@ -137,6 +144,7 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
       setLink("https://example.com")
       setAssignment("Assignment")
       setPre_content("Pre-content")
+      setThumbnail_url("")
       setTopic("Topic")
       setPaymentstatus("Free")
       setPrice(0)
@@ -202,6 +210,11 @@ export function CreatePEContent({ heading: propHeading, headingName: propHeading
                 {errors.pre_content && <p className="text-sm text-red-600">{errors.pre_content}</p>}
              </div>
 
+             <div className="grid gap-3">
+               <Label htmlFor="thumbnail_url">Thumbnail</Label>
+               <PEContentInputThumbnail value={thumbnail_url} onChange={setThumbnail_url} />
+               {errors.thumbnail_url && <p className="text-sm text-red-600">{errors.thumbnail_url}</p>}
+             </div>
 
             <div className="grid gap-3">
               <Label htmlFor="link">Link</Label>

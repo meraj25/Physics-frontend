@@ -264,7 +264,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
             key={id}
             className="rounded-lg overflow-hidden border shadow-sm bg-white hover:scale-105 hover:shadow-2xl transition-all duration-200"
           >
-            <div className="h-44 bg-gray-100 relative flex items-center justify-center">
+            <div className="h-44 bg-gray-100 relative flex items-center justify-center overflow-hidden">
               {/* Admin delete button overlay */}
               {isAdmin && (
                 <button
@@ -286,7 +286,11 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                 </div>
               )}
 
-              <img src={`/assets/images/cc.jpg`} alt={topic} className="h-full w-full object-cover" />
+              <img
+                src={c.thumbnail_url || `/assets/images/cc.jpg`}
+                alt={topic}
+                className="h-full w-full object-cover"
+              />
             </div>
 
             <div className="p-4">
@@ -467,7 +471,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
           </article>
         )
       })}
-      {previewModal && (   // ← add here
+      {previewModal && (
       <div
         className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
         onClick={() => setPreviewModal(null)}
@@ -483,6 +487,13 @@ function ContentCards({ contents, error, isLoading, refetch }) {
           >
             ×
           </button>
+          <div className="mb-4">
+            <img
+              src={previewModal.thumbnail_url || `/assets/images/cc.jpg`}
+              alt={previewModal.topic}
+              className="w-full max-h-96 object-contain rounded-lg"
+            />
+          </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-1">{previewModal.topic}</h3>
           <p className="text-xs text-gray-400 mb-4">What's inside this content</p>
           <div className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed border-t pt-4">

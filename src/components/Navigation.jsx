@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
+
 function Navigation() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);

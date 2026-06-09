@@ -14,9 +14,11 @@ import {
 } from "./ui/dialog"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
+import { Textarea } from "./ui/textarea"
 import { useCreateStudyPackMutation, useGetAllHeadingsQuery } from "../lib/api"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { CheckCircle2Icon } from "lucide-react"
+import StudyPackInputThumbnail from "./StudyPack-Thumbnail"
 // ...existing code...
 
 export function CreateSP({ heading: propHeading, headingName: propHeadingName, headingId: propHeadingId }) {
@@ -36,6 +38,7 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
   const [assignment, setAssignment] = useState("Assignment")
   const [topic, setTopic] = useState("Topic")
   const [pre_content, setPre_content] = useState("Pre-content")
+  const [thumbnail_url, setThumbnail_url] = useState("")
   const [paymentstatus, setPaymentstatus] = useState("Free")
   const [price, setPrice] = useState(0)
 
@@ -52,6 +55,7 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
     assignment: z.string().min(1, "Assignment is required"),
     topic: z.string().min(1, "Topic is required"),
     pre_content: z.string().min(1, "Pre-content is required"),
+    thumbnail_url: z.string().min(1, "Thumbnail is required"),
     paymentstatus: z.string().min(1, "Payment status is required"),
     price: z.number().min(0, "Price must be 0 or greater"),
   })
@@ -102,6 +106,7 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
       link: linkForValidation,
       topic: String(topic ?? "").trim(),
       pre_content: String(pre_content ?? "").trim(),
+      thumbnail_url: String(thumbnail_url ?? "").trim(),
       assignment: String(assignment ?? "").trim(),
       paymentstatus: String(paymentstatus ?? "").trim(),
       price: Number(price),
@@ -126,6 +131,7 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
         assignment: toValidate.assignment,
         topic: toValidate.topic,
         pre_content: toValidate.pre_content,
+        thumbnail_url: toValidate.thumbnail_url,
         paymentstatus: toValidate.paymentstatus,
         price: toValidate.price,
       }
@@ -138,6 +144,7 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
       setAssignment("Assignment")
       setTopic("Topic")
       setPre_content("Pre-content")
+      setThumbnail_url("")
       setPaymentstatus("Free")
       setPrice(0)
 
@@ -202,6 +209,11 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
                 {errors.pre_content && <p className="text-sm text-red-600">{errors.pre_content}</p>}
              </div>
 
+             <div className="grid gap-3">
+               <Label htmlFor="thumbnail_url">Thumbnail</Label>
+               <StudyPackInputThumbnail value={thumbnail_url} onChange={setThumbnail_url} />
+               {errors.thumbnail_url && <p className="text-sm text-red-600">{errors.thumbnail_url}</p>}
+             </div>
 
             <div className="grid gap-3">
               <Label htmlFor="link">Link</Label>

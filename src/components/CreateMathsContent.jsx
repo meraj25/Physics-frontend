@@ -14,9 +14,11 @@ import {
 } from "./ui/dialog"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
+import { Textarea } from "./ui/textarea"
 import { useCreateMathsContentMutation,useGetAllMathsHeadingsQuery } from "../lib/api"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { CheckCircle2Icon } from "lucide-react"
+import MathsContentInputThumbnail from "./MathsContent-Thumbnail"
 // ...existing code...
 
 export function CreateMathsContent({ heading: propHeading, headingName: propHeadingName, headingId: propHeadingId }) {
@@ -38,6 +40,7 @@ export function CreateMathsContent({ heading: propHeading, headingName: propHead
   const [pre_content, setPre_content] = useState("Pre-content")
   const [paymentstatus, setPaymentstatus] = useState("Free")
   const [price, setPrice] = useState(0)
+  const [thumbnail_url, setThumbnail_url] = useState("")
 
   // UI state
   const [showSuccess, setShowSuccess] = useState(false)
@@ -54,6 +57,7 @@ export function CreateMathsContent({ heading: propHeading, headingName: propHead
     pre_content: z.string().min(1, "Pre-content is required"),
     paymentstatus: z.string().min(1, "Payment status is required"),
     price: z.number().min(0, "Price must be 0 or greater"),
+    thumbnail_url: z.string().min(1, "Thumbnail is required"),
   })
 
   useEffect(() => {
@@ -105,6 +109,7 @@ export function CreateMathsContent({ heading: propHeading, headingName: propHead
       assignment: String(assignment ?? "").trim(),
       paymentstatus: String(paymentstatus ?? "").trim(),
       price: Number(price),
+      thumbnail_url: String(thumbnail_url ?? "").trim(),
     }
 
     const result = schema.safeParse(toValidate)
@@ -128,6 +133,7 @@ export function CreateMathsContent({ heading: propHeading, headingName: propHead
         pre_content: toValidate.pre_content,
         paymentstatus: toValidate.paymentstatus,
         price: toValidate.price,
+        thumbnail_url: toValidate.thumbnail_url,
       }
 
       console.log("create payload:", mathsContent)
@@ -140,6 +146,7 @@ export function CreateMathsContent({ heading: propHeading, headingName: propHead
       setPre_content("Pre-content")
       setPaymentstatus("Free")
       setPrice(0)
+      setThumbnail_url("")
 
       setShowSuccess(true)
       setTimeout(() => setShowSuccess(false), 3500)
@@ -216,6 +223,14 @@ export function CreateMathsContent({ heading: propHeading, headingName: propHead
               {errors.assignment && <p className="text-sm text-red-600">{errors.assignment}</p>}
             </div>
 
+            <div className="grid gap-3">
+              <Label htmlFor="thumbnail_url">Thumbnail</Label>
+              <MathsContentInputThumbnail
+                onChange={(url) => setThumbnail_url(url)}
+                value={thumbnail_url}
+              />
+              {errors.thumbnail_url && <p className="text-sm text-red-600">{errors.thumbnail_url}</p>}
+            </div>
 
             <div className="grid gap-3">
               <Label htmlFor="paymentStatus">Payment status</Label>

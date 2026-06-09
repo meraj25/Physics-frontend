@@ -300,7 +300,7 @@ function McontentCards({ contents, error, isLoading }) {
               )}
 
               <img
-                src={`/assets/images/cc.jpg`}
+                src={c.thumbnail_url || `/assets/images/cc.jpg`}
                 alt={topic}
                 className="h-full w-full object-cover"
               />
@@ -509,7 +509,7 @@ function McontentCards({ contents, error, isLoading }) {
           </article>
         )
       })}
-       {previewModal && (   // ← add here
+       {previewModal && (
       <div
         className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
         onClick={() => setPreviewModal(null)}
@@ -525,6 +525,13 @@ function McontentCards({ contents, error, isLoading }) {
           >
             ×
           </button>
+          <div className="mb-4">
+            <img
+              src={previewModal.thumbnail_url || `/assets/images/cc.jpg`}
+              alt={previewModal.topic}
+              className="w-full max-h-96 object-contain rounded-lg"
+            />
+          </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-1">{previewModal.topic}</h3>
           <p className="text-xs text-gray-400 mb-4">What's inside this content</p>
           <div className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed border-t pt-4">

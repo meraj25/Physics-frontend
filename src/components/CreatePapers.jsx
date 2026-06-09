@@ -17,6 +17,7 @@ import { Label } from "./ui/label"
 import { useCreateStudyPackMutation, useGetAllHeadingsQuery } from "../lib/api"
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { CheckCircle2Icon } from "lucide-react"
+import PapersInputThumbnail from "./Papers-Thumbnail"
 // ...existing code...
 
 export function CreateSP({ heading: propHeading, headingName: propHeadingName, headingId: propHeadingId }) {
@@ -36,6 +37,8 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
   const [assignment, setAssignment] = useState("Assignment")
   const [topic, setTopic] = useState("Topic")
   const [paymentstatus, setPaymentstatus] = useState("Free")
+  const [price, setPrice] = useState(0)
+  const [thumbnail_url, setThumbnail_url] = useState("")
 
   // UI state
   const [showSuccess, setShowSuccess] = useState(false)
@@ -50,6 +53,8 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
     assignment: z.string().min(1, "Assignment is required"),
     topic: z.string().min(1, "Topic is required"),
     paymentstatus: z.string().min(1, "Payment status is required"),
+    price: z.number().min(0, "Price must be 0 or greater"),
+    thumbnail_url: z.string().min(1, "Thumbnail is required"),
   })
 
   useEffect(() => {
@@ -99,6 +104,8 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
       topic: String(topic ?? "").trim(),
       assignment: String(assignment ?? "").trim(),
       paymentstatus: String(paymentstatus ?? "").trim(),
+      price: Number(price),
+      thumbnail_url: String(thumbnail_url ?? "").trim(),
     }
 
     const result = schema.safeParse(toValidate)
@@ -120,6 +127,8 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
         assignment: toValidate.assignment,
         topic: toValidate.topic,
         paymentstatus: toValidate.paymentstatus,
+        price: toValidate.price,
+        thumbnail_url: toValidate.thumbnail_url,
       }
 
       console.log("create payload:", studyPack)
@@ -130,6 +139,8 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
       setAssignment("Assignment")
       setTopic("Topic")
       setPaymentstatus("Free")
+      setPrice(0)
+      setThumbnail_url("")
 
       setShowSuccess(true)
       setTimeout(() => setShowSuccess(false), 3500)
@@ -190,6 +201,14 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
               {errors.assignment && <p className="text-sm text-red-600">{errors.assignment}</p>}
             </div>
 
+            <div className="grid gap-3">
+              <Label htmlFor="thumbnail_url">Thumbnail</Label>
+              <PapersInputThumbnail
+                onChange={(url) => setThumbnail_url(url)}
+                value={thumbnail_url}
+              />
+              {errors.thumbnail_url && <p className="text-sm text-red-600">{errors.thumbnail_url}</p>}
+            </div>
 
             <div className="grid gap-3">
               <Label htmlFor="paymentStatus">Payment status</Label>
@@ -205,6 +224,23 @@ export function CreateSP({ heading: propHeading, headingName: propHeadingName, h
               </select>
               {errors.paymentstatus && <p className="text-sm text-red-600">{errors.paymentstatus}</p>}
             </div>
+
+            {paymentstatus === "Paid" && (
+              <div className="grid gap-3">
+                <Label htmlFor="price">Price (LKR)</Label>
+                <Input
+                  id="price"
+                  name="price"
+                  type="number"
+                  min="0"
+                  step="100"
+                  value={price}
+                  onChange={(e) => setPrice(Number(e.target.value))}
+                  placeholder="Enter price in LKR"
+                />
+                {errors.price && <p className="text-sm text-red-600">{errors.price}</p>}
+              </div>
+            )}
           </div>
 
 

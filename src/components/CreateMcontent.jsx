@@ -26,6 +26,7 @@ import { useCreateMcontentMutation, useGetAllCategoriesQuery, useGetAllYearsQuer
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert"
 import { CheckCircle2Icon } from "lucide-react"
 import { Textarea } from "./ui/textarea"
+import MContentInputThumbnail from "./MContent-Thumbnail"
 
 export function CreateMcontent({
   yearId: propYearId,
@@ -49,6 +50,7 @@ export function CreateMcontent({
   const [pre_content, setPre_content] = useState("Pre-content")
   const [paymentstatus, setPaymentstatus] = useState("Free")
   const [price, setPrice] = useState(0) // ADD THIS - default price is 0
+  const [thumbnail_url, setThumbnail_url] = useState("")
 
   // labels for display (read-only)
   const [yearLabel, setYearLabel] = useState(propYearName ?? "")
@@ -70,6 +72,7 @@ export function CreateMcontent({
     pre_content: z.string().min(1, "Pre-content is required"),
     paymentstatus: z.string().min(1, "Payment status is required"),
     price: z.number().min(0, "Price must be 0 or greater"), // ADD THIS
+    thumbnail_url: z.string().min(1, "Thumbnail is required"),
   })
 
   useEffect(() => {
@@ -127,6 +130,7 @@ export function CreateMcontent({
       pre_content: String(pre_content ?? "").trim(),
       paymentstatus: String(paymentstatus ?? "").trim(),
       price: Number(price), // ADD THIS - convert to number
+      thumbnail_url: String(thumbnail_url ?? "").trim(),
     }
 
     const result = schema.safeParse(toValidate)
@@ -151,6 +155,7 @@ export function CreateMcontent({
         pre_content: toValidate.pre_content,
         paymentstatus: toValidate.paymentstatus,
         price: toValidate.price, // ADD THIS
+        thumbnail_url: toValidate.thumbnail_url,
       }
 
       console.log("create payload:", content)
@@ -162,6 +167,7 @@ export function CreateMcontent({
       setDescription("")
       setPaymentstatus("Free")
       setPrice(0) // ADD THIS - reset price
+      setThumbnail_url("")
 
       console.log("✅ Content created successfully")
 
@@ -247,6 +253,15 @@ export function CreateMcontent({
                   className="resize-y"
                 />
                 {errors.pre_content && <p className="text-sm text-red-600">{errors.pre_content}</p>}
+            </div>
+
+            <div className="grid gap-3">
+              <Label htmlFor="thumbnail_url">Thumbnail</Label>
+              <MContentInputThumbnail
+                onChange={(url) => setThumbnail_url(url)}
+                value={thumbnail_url}
+              />
+              {errors.thumbnail_url && <p className="text-sm text-red-600">{errors.thumbnail_url}</p>}
             </div>
 
             <div className="grid gap-3">

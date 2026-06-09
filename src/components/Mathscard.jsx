@@ -266,7 +266,7 @@ export default function MathsCard({ contents, error, isLoading }) {
             className="rounded-lg overflow-hidden border shadow-sm bg-white hover:scale-105 hover:shadow-2xl transition-transform"
           >
             {/* Image section with delete icon overlay */}
-            <div className="h-44 bg-gray-100 relative flex items-center justify-center">
+            <div className="h-44 bg-gray-100 relative flex items-center justify-center overflow-hidden">
               {isAdmin && (
                 <button
                   onClick={() => handleDelete(id)}
@@ -288,7 +288,7 @@ export default function MathsCard({ contents, error, isLoading }) {
               )}
 
               <img
-                src={`/assets/images/sp.jpg`}
+                src={sp.thumbnail_url || `/assets/images/sp.jpg`}
                 alt={headingName}
                 className="h-full w-full object-cover"
               />
@@ -383,12 +383,11 @@ export default function MathsCard({ contents, error, isLoading }) {
                   </>
                 )}
 
-                {isPaid && (   // ← add here
+                {isPaid && (
                 <button
                   type="button"
-                  onClick={() => setPreviewModal(c)}
+                  onClick={() => setPreviewModal(sp)}
                   className="inline-flex items-center gap-1.5 px-3 py-2 bg-blue-600 text-white text-sm rounded font-medium hover:bg-blue-700 border border-gray-300"
-                
                 >
                   <Eye className="w-4 h-4" />
                   Preview details
@@ -492,7 +491,7 @@ export default function MathsCard({ contents, error, isLoading }) {
           </article>
         )
       })}
-      {previewModal && (   // ← add here
+      {previewModal && (
       <div
         className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
         onClick={() => setPreviewModal(null)}
@@ -508,6 +507,13 @@ export default function MathsCard({ contents, error, isLoading }) {
           >
             ×
           </button>
+          <div className="mb-4">
+            <img
+              src={previewModal.thumbnail_url || `/assets/images/sp.jpg`}
+              alt={previewModal.topic || previewModal.topic}
+              className="w-full max-h-96 object-contain rounded-lg"
+            />
+          </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-1">{previewModal.topic}</h3>
           <p className="text-xs text-gray-400 mb-4">What's inside this content</p>
           <div className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed border-t pt-4">
