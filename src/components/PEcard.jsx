@@ -8,7 +8,7 @@ import {
   useGetAllPurchasesQuery,
   useCreatePurchaseMutation,
 } from "@/lib/api"
-import { Unlock, Trash2, Lock, CheckCircl,Eye } from "lucide-react"
+import { Unlock, Trash2, Lock, CheckCircle,Eye } from "lucide-react"
 import { useUser } from "@clerk/clerk-react"
 import { initiatePayHerePayment } from "@/utils/payhere"
 
