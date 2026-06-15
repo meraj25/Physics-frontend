@@ -48,7 +48,14 @@ const topics = [
     subtitle: 'Oscillations and Waves',
     content: '',
     links: [
+      { label: "සරල අනුවර්තී චලිතය", url: '/studypack/සරල-අනුවර්තී-චලිතය' },
+      { label: "තරංග", url: '/studypack/තරංග' },
+      { label: "ඩොප්ලර් ආචරණය", url: '/studypack/ඩොප්ලර්-ආචරණය' },
+      { label: "ධ්වනිය", url: '/studypack/ධ්වනිය' },
+      { label: "විද්‍යුත් චුම්භක තරංග", url: '/studypack/විද්‍යුත්-චුම්භක-තරංග' },
+      { label: "ආලෝකය", url: '/studypack/ආලෝකය' },
       
+
     ],
   },
   {
@@ -57,34 +64,41 @@ const topics = [
     subtitle: 'Thermal Physics',
     content: 'Study of heat and temperature.',
     links: [
-  
+      { label: "තාප ප්‍රසාරණය", url: '/studypack/තාප-ප්‍රසාරණය' },
+      { label: "වායු නියම", url: '/studypack/වායු-නියම' },
+      { label: "නිවුටන්ගේ සිසිලන නියමය", url: '/studypack/නිවුටන්ගේ-සිසිලන-නියමය' },
+      { label: "තාප මිතිය", url: '/studypack/තාප-මිතිය' },
+      { label: "වාෂ්ප", url: '/studypack/වාෂ්ප' },
+      { label: "තාප සංක්‍රමණ ක්‍රියාවලි", url: '/studypack/තාප-සංක්‍රමණ-ක්‍රියාවලි' },
+      { label: "උෂ්ණත්ව මිතිය", url: '/studypack/උෂ්ණත්ව-මිතිය' },
+      { label: "තාප ගති විද්‍යාව", url: '/studypack/තාප-ගති-විද්‍යාව' },
     ],
   },
   {
     id: '5',
-    title: '05. ගුරුත්වීය ස්ථිතීය - studypack',
+    title: '05. විද්‍යුත් ක්ෂේත්‍ර - Electric Field',
     subtitle: 'studypack',
     content: '.',
     links: [
-    
+      { label: "විද්‍යුත් ක්ෂේත්‍ර", url: '/studypack/විද්‍යුත්-ක්ෂේත්‍ර' },
     ],
   },
   {
     id: '6',
-    title: '06. ස්ථිති විද්‍යුත් ක්ෂේත්‍රය- studypack',
+    title: '06. ගුරුත්වජ ක්ෂේත්‍ර- Gravitational Field',
     subtitle: 'studypack',
     content: '.',
     links: [
-     
+      { label: "ගුරුත්වජ ක්ෂේත්‍ර", url: '/studypack/ගුරුත්වජ-ක්ෂේත්‍ර' },
     ],
   },
   {
     id: '7',
-    title: '07. - චුම්භක ක්ෂේත්‍රය - Magnetic Fields',
+    title: '07. චුම්භක ක්ෂේත්‍ර - Magnetic Fields',
     subtitle: 'Magnetic Fields',
     content: '',
     links: [
-     
+     { label: "චුම්භක ක්ෂේත්‍ර", url: '/studypack/චුම්භක-ක්ෂේත්‍ර' },
     ],
   },
   {
@@ -93,7 +107,7 @@ const topics = [
     subtitle: 'Current Electricity',
     content: '',
     links: [
-     
+     { label: "ධාරා විද්‍යුතය", url: '/studypack/ධාරා-විද්‍යුතය' },
     ],
   },
   {
@@ -102,7 +116,7 @@ const topics = [
     subtitle: 'Electronics',
     content: '',
     links: [
-    
+    { label: "ඉලෙක්ට්‍රොනික විද්‍යාව", url: '/studypack/ඉලෙක්ට්‍රොනික-විද්‍යාව' },
     ],
   },
   {
@@ -111,6 +125,10 @@ const topics = [
     subtitle: 'Mechanical Properties of Matter',
     content: '',
     links: [
+    { label: "ප්‍රත්‍යස්ථතාව", url: '/studypack/ප්‍රත්‍යස්ථතාව' },
+    { label: "දුස්රාවිතාව", url: '/studypack/දුස්රාවිතාව' },
+    { label: "පෘෂ්ඨික ආතතිය", url: '/studypack/පෘෂ්ඨික-ආතතිය' },
+    
     
     ],
   },
@@ -120,6 +138,11 @@ const topics = [
     subtitle: 'Matter and Radiation',
     content: '',
     links: [
+      { label: "කෘෂ්ණ වස්තු විකිරණය", url: '/studypack/කෘෂ්ණ-වස්තු-විකිරණය' },  
+      { label: "ප්‍රකාශ විද්‍යුත් ආචරණය", url: '/studypack/ප්‍රකාශ-විද්‍යුත්-ආචරණය' },
+      { label: "තරංග අංශු ද්වෛතය", url: '/studypack/තරංග-අංශු-ද්වෛතය' },
+      { label: "X කිරණ", url: '/studypack/X-කිරණ' },
+      { label: "විකිරණශීලතාවය", url: '/studypack/විකිරණශීලතාවය' },
 
     ],
   },
