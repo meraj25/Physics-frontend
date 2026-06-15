@@ -1,5 +1,5 @@
 export const uploadthumbnail = async ({ file }) => {
-  const res = await fetch(`https://sanjayasuriya.online/api/mcontents/thumbnail`, {
+  const res = await fetch(`https://api.sanjayasuriya.online/api/mcontents/thumbnail`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
