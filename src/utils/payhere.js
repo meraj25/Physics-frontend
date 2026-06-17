@@ -37,7 +37,7 @@ export const initiatePayHerePayment = async ({
       merchant_id: merchantId,
       return_url: `${window.location.origin}/payment/success`,
       cancel_url: `${window.location.origin}/payment/cancel`,
-      notify_url: 'https://sanjayasuriya.online/api/api/payments/notify', // Your backend notify URL
+      notify_url: 'https://api.sanjayasuriya.online/api/payments/notify', // Your backend notify URL
       order_id: orderId,
       items: contentTopic,
       amount: amount.toFixed(2),
