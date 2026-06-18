@@ -12,7 +12,7 @@ export const Api = createApi({
       return new Promise((resolve) => {
         async function checkToken() {
           const clerk = window.Clerk;
-          if (clerk) {
+          if (clerk && clerk.session) {
             const token = await clerk.session?.getToken();
             headers.set("Authorization", `Bearer ${token}`);
             resolve(headers);
