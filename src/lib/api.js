@@ -25,33 +25,62 @@ export const Api = createApi({
     },
 
    }),
-  
+
+  tagTypes: [
+    'Content',
+    'Category',
+    'Year',
+    'StudyPack',
+    'Purchase',
+    'Heading',
+    'MathsHeading',
+    'PreEngHeading',
+    'MathsContent',
+    'PEContent',
+    'Papers',
+    'Mcontent',
+    'Result',
+    'SPResult',
+    'MathsResult',
+    'MSPResult',
+    'PEResult',
+  ],
+
   endpoints: (build) => ({
 
     getAllContent: build.query({
       query: () => `/contents`,
+      providesTags: ['Content'],
     }),
-     createContent: build.mutation({
+    createContent: build.mutation({
       query: (content) => ({
         url: "/contents",
         method: "POST",
         body: content,
       }),
+      invalidatesTags: ['Content'],
     }),
-        deleteContent: build.mutation({
-     query: (id) => ({
-       url: `/contents/${id}`,
+    deleteContent: build.mutation({
+      query: (id) => ({
+        url: `/contents/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ['Content'],
     }),
+
     getAllCategories: build.query({
       query: () => `/categories`,
+      providesTags: ['Category'],
     }),
+
     getAllYears: build.query({
       query: () => `/years`,
+      providesTags: ['Year'],
     }),
+
     getAllStudyPacks: build.query({
       query: () => `/studyPacks`,
+      providesTags: ['StudyPack'],
     }),
     createStudyPack: build.mutation({
       query: (studypack) => ({
@@ -59,15 +88,16 @@ export const Api = createApi({
         method: "POST",
         body: studypack,
       }),
+      invalidatesTags: ['StudyPack'],
     }),
-    
     deleteStudyPack: build.mutation({
-     query: (id) => ({
-       url: `/studyPacks/${id}`,
+      query: (id) => ({
+        url: `/studyPacks/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ['StudyPack'],
     }),
-    
+
     initiatePayment: build.mutation({
       query: (contentId) => ({
         url: '/payments/initiate',
@@ -89,160 +119,179 @@ export const Api = createApi({
       providesTags: ['Purchase'],
     }),
 
-   getAllHeadings: build.query({
+    getAllHeadings: build.query({
       query: () => `/headings`,
+      providesTags: ['Heading'],
     }),
-    
+
     getAllMathsHeadings: build.query({
       query: () => `/maths_headings`,
+      providesTags: ['MathsHeading'],
     }),
-    
+
     getAllPreEngHeadings: build.query({
       query: () => `/pre_eng_headings`,
+      providesTags: ['PreEngHeading'],
     }),
 
     getAllMathsContent: build.query({
       query: () => `/mathscontents`,
+      providesTags: ['MathsContent'],
     }),
-     createMathsContent: build.mutation({
+    createMathsContent: build.mutation({
       query: (content) => ({
         url: "/mathscontents",
         method: "POST",
         body: content,
       }),
+      invalidatesTags: ['MathsContent'],
     }),
-        deleteMathsContent: build.mutation({
-     query: (id) => ({
-       url: `/mathscontents/${id}`,
+    deleteMathsContent: build.mutation({
+      query: (id) => ({
+        url: `/mathscontents/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ['MathsContent'],
     }),
 
     getAllPEContent: build.query({
       query: () => `/pecontents`,
+      providesTags: ['PEContent'],
     }),
-     createPEContent: build.mutation({
+    createPEContent: build.mutation({
       query: (content) => ({
         url: "/pecontents",
         method: "POST",
         body: content,
       }),
+      invalidatesTags: ['PEContent'],
     }),
-        deletePEContent: build.mutation({
-     query: (id) => ({
-       url: `/pecontents/${id}`,
+    deletePEContent: build.mutation({
+      query: (id) => ({
+        url: `/pecontents/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ['PEContent'],
     }),
 
-    
-   getAllPapers: build.query({
+    getAllPapers: build.query({
       query: () => `/papers`,
+      providesTags: ['Papers'],
     }),
-     createPapers: build.mutation({
+    createPapers: build.mutation({
       query: (content) => ({
         url: "/papers",
         method: "POST",
         body: content,
       }),
+      invalidatesTags: ['Papers'],
     }),
-        deletePapers: build.mutation({
-     query: (id) => ({
-       url: `/papers/${id}`,
+    deletePapers: build.mutation({
+      query: (id) => ({
+        url: `/papers/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ['Papers'],
     }),
 
-     getAllMcontent: build.query({
+    getAllMcontent: build.query({
       query: () => `/mcontents`,
+      providesTags: ['Mcontent'],
     }),
-     createMcontent: build.mutation({
+    createMcontent: build.mutation({
       query: (content) => ({
         url: "/mcontents",
         method: "POST",
         body: content,
       }),
+      invalidatesTags: ['Mcontent'],
     }),
-        deleteMcontent: build.mutation({
-     query: (id) => ({
-       url: `/mcontents/${id}`,
+    deleteMcontent: build.mutation({
+      query: (id) => ({
+        url: `/mcontents/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ['Mcontent'],
     }),
 
-  GetResults: build.query({
+    GetResults: build.query({
       query: () => `/results`,
+      providesTags: ['Result'],
     }),
-     AddResult: build.mutation({
+    AddResult: build.mutation({
       query: (content) => ({
         url: "/results",
         method: "POST",
         body: content,
       }),
+      invalidatesTags: ['Result'],
     }),
-  
 
-
-  GetSPResults: build.query({
+    GetSPResults: build.query({
       query: () => `/spresults`,
+      providesTags: ['SPResult'],
     }),
-     AddSPResult: build.mutation({
+    AddSPResult: build.mutation({
       query: (content) => ({
         url: "/spresults",
         method: "POST",
         body: content,
       }),
+      invalidatesTags: ['SPResult'],
     }),
 
-    
-  GetMathsResults: build.query({
+    GetMathsResults: build.query({
       query: () => `/mathsresults`,
+      providesTags: ['MathsResult'],
     }),
-     AddMathsResult: build.mutation({
+    AddMathsResult: build.mutation({
       query: (content) => ({
         url: "/mathsresults",
         method: "POST",
         body: content,
       }),
+      invalidatesTags: ['MathsResult'],
     }),
 
-  GetMSPResults: build.query({
+    GetMSPResults: build.query({
       query: () => `/mspresults`,
+      providesTags: ['MSPResult'],
     }),
-     AddMSPResult: build.mutation({
+    AddMSPResult: build.mutation({
       query: (content) => ({
         url: "/mspresults",
         method: "POST",
         body: content,
       }),
+      invalidatesTags: ['MSPResult'],
     }),
 
     GetPEResults: build.query({
       query: () => `/peresults`,
+      providesTags: ['PEResult'],
     }),
-     AddPEResult: build.mutation({
+    AddPEResult: build.mutation({
       query: (content) => ({
         url: "/peresults",
         method: "POST",
         body: content,
       }),
+      invalidatesTags: ['PEResult'],
     }),
 
-
-     getAllPurchases: build.query({
+    getAllPurchases: build.query({
       query: () => `/purchases`,
+      providesTags: ['Purchase'],
     }),
 
-     createPurchase: build.mutation({
+    createPurchase: build.mutation({
       query: (content) => ({
         url: "/purchases",
         method: "POST",
         body: content,
       }),
+      invalidatesTags: ['Purchase'],
     }),
-
-
-
 
   }),
 })
