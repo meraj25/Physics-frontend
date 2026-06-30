@@ -38,7 +38,7 @@ function Maths2026Page() {
     contentType: contentTypeMap[selectedOption]
   })) || [];
 
-  console.log("Filtered Contents:", contentsWithType);
+  
 
 
 

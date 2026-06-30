@@ -39,7 +39,7 @@ function Maths2028Page() {
     contentType: contentTypeMap[selectedOption]
   })) || [];
 
-  console.log("Filtered Contents:", contentsWithType);
+
 
 
   const isAdmin = user?.publicMetadata?.role === "admin";

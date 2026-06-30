@@ -134,7 +134,7 @@ export default function StudyPackCards({ contents, error, isLoading }) {
     if (!confirm("Delete this study pack? This cannot be undone.")) return
     try {
       await deleteStudyPack(id).unwrap()
-      console.log("Deleted:", id)
+      
       setRemovedMap((m) => ({ ...m, [id]: true }))
     } catch (err) {
       console.error("Delete failed", err)

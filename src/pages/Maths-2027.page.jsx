@@ -39,8 +39,7 @@ function Maths2027Page() {
     contentType: contentTypeMap[selectedOption]
   })) || [];
 
-  console.log("Filtered Contents:", contentsWithType);
-
+  
   const isAdmin = user?.publicMetadata?.role === "admin";
 
   // scroll to top when page mounts (fixes landing mid-page after navigation)

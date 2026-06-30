@@ -16,7 +16,7 @@ function PapersInputThumbnail({ onChange, value }) {
       //const url = "https://via.placeholder.com/150";
       const publicUrl = await uploadthumbnail({ file });
 
-      console.log(publicUrl);
+      
      
       onChange(publicUrl);
      

@@ -39,7 +39,7 @@ function Physics2026Page() {
     contentType: contentTypeMap[selectedOption]
   })) || [];
 
-  console.log("Filtered Contents:", contentsWithType);
+
 
   const isAdmin = user?.publicMetadata?.role === "admin";
 

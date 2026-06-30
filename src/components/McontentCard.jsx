@@ -52,11 +52,7 @@ function McontentCards({ contents, error, isLoading }) {
       return
     }
 
-     console.log("🔵 Attempting payment for Math Content")
-  console.log("Content ID:", contentId)
-  console.log("Content ID type:", typeof contentId)
-  console.log("User ID:", user?.id)
-  console.log("Content Topic:", contentTopic)
+    
 
     setProcessingPayment((prev) => ({ ...prev, [contentId]: true }))
 
@@ -64,11 +60,7 @@ function McontentCards({ contents, error, isLoading }) {
       const response = await initiatePayment(contentId).unwrap()
 
       // ADD THESE CONSOLE LOGS
-      console.log("🟢 Backend Response:", response)
-      console.log("Merchant ID:", response.merchantId)
-      console.log("Hash:", response.hash)
-      console.log("Order ID:", response.orderId)
-      console.log("Amount:", response.amount)
+     
 
       if (response.alreadyPurchased) {
         alert("You have already purchased this content!")

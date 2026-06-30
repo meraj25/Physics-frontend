@@ -51,11 +51,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
     try {
       const response = await initiatePayment(contentId).unwrap()
 
-      console.log("🟢 Backend Response:", response)
-      console.log("Merchant ID:", response.merchantId)
-      console.log("Hash:", response.hash)
-      console.log("Order ID:", response.orderId)
-      console.log("Amount:", response.amount)
+ 
 
       if (response.alreadyPurchased) {
         alert("You have already purchased this content!")
