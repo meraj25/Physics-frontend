@@ -1,4 +1,4 @@
-'use client';
+/*'use client';
 
 import React, { useEffect } from 'react';
 import {
@@ -14,16 +14,14 @@ import {
   Quote,
 } from 'lucide-react';
 
-/* -------------------------------------------------------------------------- */
-/*  Fade-in-on-scroll hook – adds the classes only once per element          */
-/* -------------------------------------------------------------------------- */
+
 function useFadeInOnScroll() {
   useEffect(() => {
     const els = document.querySelectorAll('.fade-in');
 
     if (!els.length) return;
 
-    // initial hidden state
+    
     els.forEach((el) => {
       el.classList.add(
         'opacity-0',
@@ -53,23 +51,21 @@ function useFadeInOnScroll() {
   }, []);
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Main About component                                                      */
-/* -------------------------------------------------------------------------- */
+
 export default function About() {
   useFadeInOnScroll();
 
   return (
     <div className="mt-10">
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50">
-        {/* ====================== HERO SECTION ====================== */}
+        
         <section className="fade-in relative overflow-hidden rounded-4xl bg-gradient-to-r from-blue-600 to-blue-800 text-white mx-8">
           <div className="absolute inset-0 bg-black opacity-10"></div>
           <div className="absolute top-16 left-8 w-80 h-80 bg-blue-400 rounded-full filter blur-3xl opacity-20 animate-pulse"></div>
           <div className="absolute bottom-16 right-8 w-96 h-96 bg-cyan-400 rounded-full filter blur-3xl opacity-20 animate-pulse animation-delay-2000"></div>
 
           <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Left – Text */}
+          
             <div className="relative container mx-auto px-4 py-20">
               <div className="max-w-4xl mx-auto text-center">
                 <div className="inline-flex items-center gap-2 bg-blue-700 bg-opacity-50 rounded-full px-5 py-2 text-sm mb-6">
@@ -94,7 +90,7 @@ export default function About() {
               </div>
             </div>
 
-            {/* Right – Stats */}
+           
             <div className="space-y-8 px-4 md:px-0">
               {[
                 { num: '500+', label: 'Students Helped' },
@@ -115,10 +111,9 @@ export default function About() {
           </div>
         </section>
 
-        {/* ====================== ACADEMIC & EXPERIENCE ====================== */}
         <section className="py-20 container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12">
-            {/* ----- Qualifications ----- */}
+            
             <div className="fade-in">
               <h2 className="text-4xl font-bold text-gray-800 mb-8">
                 Academic <span className="text-blue-600">Qualifications</span>
@@ -168,7 +163,7 @@ export default function About() {
               </div>
             </div>
 
-            {/* ----- Teaching Experience ----- */}
+        
             <div className="fade-in">
               <h2 className="text-4xl font-bold text-gray-800 mb-8">
                 Teaching <span className="text-blue-600">Experience</span>
@@ -221,3 +216,4 @@ export default function About() {
     </div>
   );
 }
+  */
