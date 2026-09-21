@@ -59,7 +59,7 @@ createRoot(document.getElementById('root')).render(
              <Route path="/physics-study-pack" element={<PhysicsStudyPackPage />} />
              <Route path="/pre-engineering" element={<PreEngPage />} />
              </Route>
-            <Route path="/about" element={<About/>}/>
+            {/* <Route path="/about" element={<About/>}/> */}
             <Route path="/contact" element={<ContactPage/>}/>
             
            
