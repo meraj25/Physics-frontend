@@ -359,7 +359,7 @@ function ContentCards({ contents, error, isLoading, refetch }) {
                   </>
                 )}
 
-                {isPaid && (   // ← add here
+                {(isFree || isPaid) && (
                 <button
                   type="button"
                   onClick={() => setPreviewModal(c)}

@@ -1,18 +1,19 @@
 import { useState, useEffect } from "react";
-import { CreateMcontent } from "@/components/CreateMcontent";
-import McontentCards from "@/components/McontentCard";
-import { useGetAllMcontentQuery } from "@/lib/api";
+import { CreateContent } from "@/components/CreateContent";
+import ContentCards from "@/components/ContentCard";
+import { useGetAllContentQuery } from "@/lib/api";
 import { useGetAllCategoriesQuery } from "@/lib/api";
 import { useGetAllYearsQuery } from "@/lib/api";
 import { useUser } from "@clerk/clerk-react";
 
-function Maths2026Page() {
+function Physics2029Page() {
   const { user, isLoaded } = useUser();
 
   const [selectedOption, setSelectedOption] = useState('Theory');
   const options = ['Theory', 'Revision', 'Papers'];
 
-  const { data : contents, error, isLoading } = useGetAllMcontentQuery();
+  // ✅ ADD refetch here
+  const { data: contents, error, isLoading, refetch } = useGetAllContentQuery();
   const { data: categories } = useGetAllCategoriesQuery();
   const { data: years } = useGetAllYearsQuery();
 
@@ -20,7 +21,7 @@ function Maths2026Page() {
   console.log("years:", years); 
 
   const filteredCategory = categories?.find((cat) => cat.name === selectedOption);
-  const filteredYear = years?.find((yr) => yr.name === '2026');
+  const filteredYear = years?.find((yr) => yr.name === '2029');
   const filteredContents = contents?.filter((content) =>
     filteredCategory && filteredYear
       ? content.categoryId === filteredCategory._id &&
@@ -37,8 +38,6 @@ function Maths2026Page() {
     ...content,
     contentType: contentTypeMap[selectedOption]
   })) || [];
-
-  
 
 
 
@@ -80,7 +79,7 @@ function Maths2026Page() {
         <div className="max-w-6xl mx-auto">
           <section className="mb-16">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">2026 Mathematics</h2>
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">2029 Physics</h2>
               <br/>
               <div className="flex justify-center gap-4 flex-wrap">
                 {options.map((option) => (
@@ -103,15 +102,21 @@ function Maths2026Page() {
             {/* ✅ Show CreateContent only for admins */}
             {isLoaded && isAdmin && (
               <div className="flex justify-center">
-                <CreateMcontent
-                  yearName={"2026"}
+                <CreateContent
+                  yearName={"2029"}
                   categoryName={selectedOption}
                 />
               </div>
             )}
 
             <div className="mb-8">
-              <McontentCards contents={contentsWithType} error={error} isLoading={isLoading} />
+              {/* ✅ PASS refetch to ContentCards */}
+              <ContentCards 
+                contents={contentsWithType} 
+                error={error} 
+                isLoading={isLoading}
+                refetch={refetch}
+              />
             </div>
           </section>
         </div>
@@ -119,4 +124,4 @@ function Maths2026Page() {
     </div>
   );
 }
-export default Maths2026Page;
+export default Physics2029Page;

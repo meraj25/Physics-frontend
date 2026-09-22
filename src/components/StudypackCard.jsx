@@ -351,7 +351,7 @@ export default function StudyPackCards({ contents, error, isLoading }) {
                   </button>
                 )}
 
-                 {isPaid && (
+                 {(isFree || isPaid) && (
                 <button
                   type="button"
                   onClick={() => setPreviewModal(sp)}

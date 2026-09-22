@@ -383,7 +383,7 @@ export default function MathsCard({ contents, error, isLoading }) {
                   </>
                 )}
 
-                {isPaid && (
+                {(isFree || isPaid) && (
                 <button
                   type="button"
                   onClick={() => setPreviewModal(sp)}

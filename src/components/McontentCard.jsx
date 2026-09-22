@@ -393,7 +393,7 @@ function McontentCards({ contents, error, isLoading }) {
                   </>
                 )}
 
-                {isPaid && (   // ← add here
+                {(isFree || isPaid) && (
                 <button
                   type="button"
                   onClick={() => setPreviewModal(c)}

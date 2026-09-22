@@ -43,8 +43,8 @@ export function CreateContent({
   // controlled form state
   const [yearId, setYearId] = useState(propYearId ?? "")
   const [categoryId, setCategoryId] = useState(propCategoryId ?? "")
-  const [topic, setTopic] = useState("2026-Theory")
-  const [pre_content, setPre_content] = useState("2026-Theory")
+  const [topic, setTopic] = useState("2029-Theory")
+  const [pre_content, setPre_content] = useState("2029-Theory")
   const [link, setLink] = useState("https://example.com")
   const [assignment, setAssignment] = useState("Assignment")
   const [description, setDescription] = useState("Description of the content")
